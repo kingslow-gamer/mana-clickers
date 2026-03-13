@@ -1,2 +1,2 @@
-# cookie-tappers
+# Mana Clickers is...
 Stil being worked on
