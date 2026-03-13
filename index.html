@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Loading</title>
+    <title>Mana Clickers</title>
 
     <!-- Preload local fonts for better performance -->
     <link rel="prefetch" href="1.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="prefetch" href="2.ttf" as="font" type="font/ttf" crossorigin>
 
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl7kpss-efb9b50c-edb4-41ea-ac4e-ca3f93c6c189.png/v1/fit/w_800,h_800/cookie_tappers_icon_by_unknown9394998_dl7kpss-414w-2x.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9ODAwIiwicGF0aCI6Ii9mL2FmOGJjMTEzLWQ5YTQtNDBjZi05MDc3LTA2YjY3M2M1ODNlMC9kbDdrcHNzLWVmYjliNTBjLWVkYjQtNDFlYS1hYzRlLWNhM2Y5M2M2YzE4OS5wbmciLCJ3aWR0aCI6Ijw9ODAwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.YfBN1PGTuSr7LJEBdAMnkWYoB_tXkvt9KvwOa-fCT9E">
+    <link rel="icon" type="image/png" href="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dlnkg1y-a553d17e-4f9d-4cd7-9489-baca3a383e83.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGxua2cxeS1hNTUzZDE3ZS00ZjlkLTRjZDctOTQ4OS1iYWNhM2EzODNlODMucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.jskAyV7PHHYDLdKZ0cW-eDYF2Sqd6Oi7ShsGfzUcKX4">
 </head>
 <body>
     <div class="loading-screen" role="status" aria-live="polite">
@@ -18,17 +18,23 @@
         <svg viewBox="0 0 50 50" aria-hidden="true" focusable="false">
             <circle cx="25" cy="25" r="20"></circle>
         </svg>
-        Loading
+        Loading...
         <div class="version">Work in progress</div>
     </div>
     <div class="container">
         <div id="cookie-count"></div>
         <div id="per-second">0.0/s</div>
         <div class="cookie-section">
-            <img id="cookie" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dlari1p-8299c654-c60e-4599-ad02-9b855760cb90.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGxhcmkxcC04Mjk5YzY1NC1jNjBlLTQ1OTktYWQwMi05Yjg1NTc2MGNiOTAucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.No9AqL4z1s9AiBtq7VqRdEYWFMW5BdqHxpZ_ViRiKnc" alt="Cookie">
+            <!-- main cookie image changed to Mana-Click.svg -->
+            <img id="cookie" src="Mana-Click.svg" alt="Mana Click">
         </div>
         <div class="segmented-control" role="tablist" aria-label="Tabs">
-            <button id="buildings-button" class="selected" aria-pressed="true">🏡</button>
+            <!-- Replaced home emoji with inline SVG. Accessible label kept. -->
+            <button id="buildings-button" class="selected" aria-pressed="true" aria-label="Buildings">
+                <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24" role="img" aria-hidden="true">
+                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+                </svg>
+            </button>
             <button id="upgrades-button" aria-pressed="false">⬆️</button>
             <button id="stats-button" aria-pressed="false">📈</button>
             <button id="changelog-button" aria-pressed="false">🛠</button>
@@ -37,14 +43,23 @@
 
         <!-- UPGRADE (Buildings) CONTAINER -->
         <div class="upgrade-container" id="upgrade-container">
-            <div class="panel-title">Buildings</div>
+            <div class="panel-title">Autoclicks</div>
+
+            <!-- NEW Clickboost upgrade moved to the top as requested -->
+            <div class="upgrade-item" id="clickboost-upgrade">
+                <img id="clickboost-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dln55wo-1b54f0bf-4537-4a0e-b8c7-a44efe0c41dd.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGxuNTV3by0xYjU0ZjBiZi00NTM3LTRhMGUtYjhjNy1hNDRlZmUwYzQxZGQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.pQw1vr_d95D05NGM8gotRML22RY5-ghV9jEl4v84no8" alt="Clickboost">
+                <div class="label tooltip" id="clickboost-label"><strong>Clickboost: 0</strong><span class="subtitle">+0.02/click</span>
+                    <span class="tooltiptext" id="clickboost-tooltip">Gives 0.02 per upgrade</span>
+                </div>
+                <button id="clickboost-button"></button>
+            </div>
 
             <div class="upgrade-item">
                 <img id="autotap-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl0u8ut-2ce4b58c-d1cb-45f8-aacb-aa985ba75add.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGwwdTh1dC0yY2U0YjU4Yy1kMWNiLTQ1ZjgtYWFjYi1hYTk4NWJhNzVhZGQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.YFN4vM6ZWaYbVFiRgCv5BUhO8GWPofIZ4Y_R57chuTI" alt="Autotap">
                 <div class="label tooltip" id="autotap-label"><strong>Autotap: 0</strong><span class="subtitle">+0.2/s</span>
                     <span class="tooltiptext" id="autotap-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
-                <button id="upgrade-button"><!-- JS will insert cookie icon + cost --> </button>
+                <button id="upgrade-button"><!-- JS will insert mana icon + cost --> </button>
             </div>
 
             <div class="upgrade-item" id="pickaxe-upgrade" style="display: none;">
@@ -115,7 +130,7 @@
         <div class="stats-container" id="stats-container">
             <div class="panel-title">Stats</div>
 
-            <div class="stats-label">Cookies accumulated</div>
+            <div class="stats-label">Mana accumulated</div>
             <div class="stat-row" id="total-cookies-row"></div>
 
             <!-- NEW: Clicks row -->
@@ -139,7 +154,7 @@
             <div class="changelog-row">- New features coming soon!</div>
         </div>
         <div class="settings-container" id="settings-container">
-            <div class="settings-label">Options</div>
+            <div class="settings-label">Settings</div>
             <h1>Audio</h1>
             <div class="settings-row">
                 <span class="settings-slider-label">🎵 Music</span>
@@ -173,7 +188,7 @@
                     <div id="numberformatDropdown" class="dropdown-content" role="menu" aria-hidden="true">
                         <button role="menuitem" data-format="normal">Normal</button>
                         <button role="menuitem" data-format="engineering">Engineering</button>
-                        <button role="menuitem" data-format="emojis">Emojis</button>
+                        <button role="menuitem" data-format="emojis">Letters</button>
                     </div>
                 </div>
             </div>
@@ -195,7 +210,7 @@
             <input id="username-input" type="text" maxLength="15" aria-label="Username">
             <label for="username-input" class="floating-label">Username</label>
         </div>
-        <div class="username-note">You can change it soon</div>
+        <div class="username-note">You can change your name later in Menu -> Settings</div>
         <!-- id changed to notify-btn so it can be used to trigger toast permission as part of click gesture -->
         <button id="notify-btn">Play</button>
     </div>
