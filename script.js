@@ -1276,11 +1276,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     showTab('buildings');
 
-    setTimeout(() => {
-        if (loadingScreen) loadingScreen.style.display = 'none';
-        if (usernameContainer) usernameContainer.style.display = 'block';
-        if (musicAudio) musicAudio.pause();
-    }, 2000);
+    // NOTE: The loading overlay remains visible initially. It will be automatically removed
+    // when the fixed target time (March 21, 2026 09:00 local) is reached.
 
     const usernameInput = document.querySelector('.username-container input');
 
@@ -1334,12 +1331,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    notifyButton && notifyButton.addEventListener('click', async () => {
+    const notifyButtonAction = async () => {
         const val = usernameInput ? usernameInput.value || '' : '';
         // Request notification permission & show welcome notification (must be from user gesture)
         requestPermissionAndNotify('Notification', 'Welcome!');
         await enterGame(val);
-    });
+    };
+    notifyButton && notifyButton.addEventListener('click', notifyButtonAction);
 
     // Auto-save every 3s if username input has a value
     setInterval(() => {
@@ -1485,6 +1483,69 @@ document.addEventListener('DOMContentLoaded', function () {
     wireTooltipsInBuildings();
 
     // ---------------------------
+    // LOADING SCREEN TIMER (fixed target)
+    // ---------------------------
+    // The timer targets the fixed local time: March 21, 2026 at 09:00 (local timezone).
+    // When the timer reaches zero it stops and finishLoading() is called which hides the loading screen
+    // and shows the username/play UI.
+    const loadingTimerEl = document.getElementById('loading-timer');
+
+    // Target: March 21, 2026 09:00 (local time). Month is 0-based (2 = March).
+    const loadingEndTimestamp = new Date(2026, 2, 21, 9, 0, 0).getTime();
+
+    function formatLoadingRemaining(msRemaining) {
+        const totalSec = Math.max(0, Math.floor(msRemaining / 1000));
+        const days = Math.floor(totalSec / 86400);
+        const hours = Math.floor((totalSec % 86400) / 3600);
+        const mins = Math.floor((totalSec % 3600) / 60);
+        const secs = totalSec % 60;
+
+        if (days >= 1) {
+            return `Beta opens in ${days}d ${hours}h`;
+        } else if (hours >= 1) {
+            return `Beta opens in ${hours}h ${mins}m`;
+        } else {
+            return `Beta opens in ${mins}m ${secs}s`;
+        }
+    }
+
+    let loadingIntervalId = null;
+
+    function finishLoading() {
+        // Hide the loading screen and reveal the username container so the user can play.
+        try {
+            if (loadingIntervalId) {
+                clearInterval(loadingIntervalId);
+                loadingIntervalId = null;
+            }
+            if (loadingScreen) loadingScreen.style.display = 'none';
+            if (usernameContainer) usernameContainer.style.display = 'block';
+            // focus the username input for convenience
+            try { if (usernameInput) usernameInput.focus(); } catch (e) {}
+        } catch (e) {
+            // swallow any errors
+            console.error('finishLoading error', e);
+        }
+    }
+
+    function updateLoadingTimerNow() {
+        if (!loadingTimerEl) return;
+        const now = Date.now();
+        const rem = loadingEndTimestamp - now;
+        if (rem <= 0) {
+            loadingTimerEl.textContent = formatLoadingRemaining(0);
+            // stop and finish loading immediately
+            finishLoading();
+            return;
+        }
+        loadingTimerEl.textContent = formatLoadingRemaining(rem);
+    }
+
+    // Update immediately and then every second
+    updateLoadingTimerNow();
+    loadingIntervalId = setInterval(updateLoadingTimerNow, 1000);
+
+    // ---------------------------
     // Start interval & title updater
     // ---------------------------
     startInterval();
@@ -1504,6 +1565,9 @@ document.addEventListener('DOMContentLoaded', function () {
         hideTooltipForWrapper,
         createNotification,
         requestPermissionAndNotify,
-        animateNumber
+        animateNumber,
+        // debugging helpers for loading
+        _loadingEndTimestamp: loadingEndTimestamp,
+        _finishLoading: finishLoading
     };
 });
