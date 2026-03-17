@@ -115,8 +115,8 @@ body.dark-mode {
 
 .loading-screen .version {
     position: absolute;
-    bottom: 356px;
-    left: 40.02%;
+    bottom: 10px;
+    left: 10px;
     color: #ffffff;
     font-size: 20px;
 }
