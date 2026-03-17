@@ -936,7 +936,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= pickaxeCost) {
             manaCount -= pickaxeCost;
             ownedPickaxes++;
-            pickaxeCost = (pickaxeCost * 1.25);
+            pickaxeCost = (pickaxeCost * 1.5);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
