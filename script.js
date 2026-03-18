@@ -100,12 +100,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // ---------------------------
     let manaCount = 0;
     let totalMana = 0;
-    // cookiesPerClick will be computed from base + boosts (see below)
     let cookiesPerClick = 0.01;
     let upgradeCost = 2.50;
     let pickaxeCost = 500;
     let farmCost = 150e3;
-    let mineCost = 4600;
+    let mineCost = 60e6;
     let factoryCost = 31000;
     let bankCost = 79900;
     let templeCost = 250000;
@@ -114,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let autotapCps = 0.10;
     let pickaxeCps = 16;
     let farmCps = 2560;
-    let mineCps = 79;
+    let mineCps = 409600;
     let factoryCps = 490;
     let bankCps = 2500;
     let templeCps = 16000;
@@ -936,7 +935,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= pickaxeCost) {
             manaCount -= pickaxeCost;
             ownedPickaxes++;
-            pickaxeCost = (pickaxeCost * 1.25);
+            pickaxeCost = (pickaxeCost * 1.5);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -948,7 +947,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= farmCost) {
             manaCount -= farmCost;
             ownedFarms++;
-            farmCost = (farmCost * 1.25);
+            farmCost = (farmCost * 1.7);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
