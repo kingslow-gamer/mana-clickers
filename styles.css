@@ -73,44 +73,53 @@ body.dark-mode {
     font-family: 'Game Font', sans-serif;
 }
 
-.loading-screen svg {
-    width: 3.25em;
-    transform-origin: center;
-    animation: rotate4 1.5s linear infinite;
-    display: block;
-    margin-bottom: 18px;
+/* REPLACED: SVG spinner removed in favor of the jumping-dot loader.
+   New loader styles below. */
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  gap: 8px;
 }
 
-.loading-screen circle {
-    fill: none;
-    stroke: #ff8800;
-    stroke-width: 5;
-    stroke-dasharray: 1, 200;
-    stroke-dashoffset: 0;
-    stroke-linecap: round;
-    animation: dash4 1.5s ease-in-out infinite;
+.box {
+  width: 20px;
+  height: 20px;
+  margin: 0 8px;
+  border-radius: 50%;
+  animation: jump_4123 1s ease-in-out infinite;
 }
 
-@keyframes rotate4 {
-    100% {
-        transform: rotate(360deg);
-    }
+.box:nth-child(1) {
+  background-color: #fab25f;
+  animation-delay: 0.2s;
 }
 
-@keyframes dash4 {
-    0% {
-        stroke-dasharray: 1, 200;
-        stroke-dashoffset: 0;
-    }
+.box:nth-child(2) {
+  background-color: #ff8800;
+  animation-delay: 0.4s;
+}
 
-    50% {
-        stroke-dasharray: 90, 200;
-        stroke-dashoffset: -35px;
-    }
+.box:nth-child(3) {
+  background-color: #fab25f;
+  animation-delay: 0.6s;
+}
 
-    100% {
-        stroke-dashoffset: -125px;
-    }
+.box:nth-child(4) {
+  background-color: #ff8800;
+  animation-delay: 0.8s;
+}
+
+@keyframes jump_4123 {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-30px);
+  }
 }
 
 .loading-screen .version {
@@ -120,6 +129,36 @@ body.dark-mode {
     color: #ffffff;
     font-size: 20px;
 }
+
+/* Loading timer container & icon */
+.loading-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-top: 12px;
+}
+
+/* Loading SVG icon styling */
+.loading-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    vertical-align: middle;
+    fill: #fab25f; /* decorative color */
+}
+.loading-icon path {
+    fill: #fab25f;
+}
+
+/* Dark mode tweak for the loading icon */
+body.dark-mode .loading-icon path {
+    fill: #ffffff;
+}
+
+/* Keep older styles below unchanged... */
 
 .container {
     display: none;

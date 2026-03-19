@@ -1500,11 +1500,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const secs = totalSec % 60;
 
         if (days >= 1) {
-            return `Beta opens in ${days}d ${hours}h`;
+            return `${days}d ${hours}h`;
         } else if (hours >= 1) {
-            return `Beta opens in ${hours}h ${mins}m`;
+            return `${hours}h ${mins}m`;
         } else {
-            return `Beta opens in ${mins}m ${secs}s`;
+            return `${mins}m ${secs}s`;
         }
     }
 
@@ -1531,13 +1531,22 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!loadingTimerEl) return;
         const now = Date.now();
         const rem = loadingEndTimestamp - now;
+        const textTarget = (rem <= 0) ? formatLoadingRemaining(0) : formatLoadingRemaining(rem);
+
+        // Update only the .loading-text span so the SVG prefix remains intact
+        const textSpan = loadingTimerEl.querySelector('.loading-text');
+        if (textSpan) {
+            textSpan.textContent = textTarget;
+        } else {
+            // fallback (legacy): replace whole element textContent
+            loadingTimerEl.textContent = textTarget;
+        }
+
         if (rem <= 0) {
-            loadingTimerEl.textContent = formatLoadingRemaining(0);
             // stop and finish loading immediately
             finishLoading();
             return;
         }
-        loadingTimerEl.textContent = formatLoadingRemaining(rem);
     }
 
     // Update immediately and then every second
