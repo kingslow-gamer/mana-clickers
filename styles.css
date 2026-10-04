@@ -1,0 +1,1356 @@
+:root {
+    --bg: hsl(0,0%,100%);
+    --transDur: 0.3s;
+    --primary: rgba(148,118,255,0.95);
+    /* Accent color for buttons (light mode) */
+    --accent: #00c8ff;
+    --accent-2: #2eff8f; /* lighter accent for gradients and highlights */
+}
+
+/* Dark-mode variable overrides */
+body.dark-mode {
+    --accent: #80e3ff;
+    --accent-2: #116618;
+}
+
+/* Load local OTF font (gamefont.otf) and bold TTF (gamefont-bold.ttf) */
+@font-face {
+    font-family: 'Game Font';
+    src: url('1.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+h1 {
+    display: block;
+    font-size: 0.95em;
+    margin-block-start: -0.33em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: 400;
+    unicode-bidi: isolate;
+    color: black;
+    transition: all 0.19s ease-in-out;
+}
+
+body.dark-mode h1 {
+    display: block;
+    font-size: 0.95em;
+    margin-block-start: -0.33em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: 400;
+    unicode-bidi: isolate;
+    color: white;
+}
+
+h4 {
+    display: block;
+    font-size: 1.15em;
+    margin-block-start: -0.33em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: 700;
+    unicode-bidi: isolate;
+    color: #ff8800;
+}
+
+/* New bold face for 'Game Font' */
+@font-face {
+    font-family: 'Game Font';
+    src: url('2.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    font-family: 'Game Font', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    background-size: cover;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    letter-spacing: 0.5px;
+    transition: all 0.19s ease-in-out;
+}
+
+/* Dark mode overrides added via .dark-mode on body */
+body.dark-mode {
+    background: #2f2f2f;
+    color: white;
+}
+
+.loading-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #121212;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 30px;
+    z-index: 1000;
+    font-family: 'Game Font', sans-serif;
+}
+
+/* REPLACED: SVG spinner removed in favor of the jumping-dot loader.
+   New loader styles below. */
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+  gap: 8px;
+}
+
+.box {
+  width: 20px;
+  height: 20px;
+  margin: 0 8px;
+  border-radius: 50%;
+  animation: jump_4123 1s ease-in-out infinite;
+}
+
+.box:nth-child(1) {
+  background-color: var(--accent-2);
+  animation-delay: 0.2s;
+}
+
+.box:nth-child(2) {
+  background-color: var(--accent);
+  animation-delay: 0.4s;
+}
+
+.box:nth-child(3) {
+  background-color: var(--accent-2);
+  animation-delay: 0.6s;
+}
+
+.box:nth-child(4) {
+  background-color: var(--accent);
+  animation-delay: 0.8s;
+}
+
+@keyframes jump_4123 {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+.loading-screen .version {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+/* Loading timer container & icon */
+.loading-timer {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-top: 12px;
+
+}
+
+/* Loading SVG icon styling */
+.loading-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    vertical-align: middle;
+    fill: var(--accent-2); /* decorative color */
+}
+.loading-icon path {
+    fill: var(--accent-2);
+}
+
+/* Dark mode tweak for the loading icon */
+body.dark-mode .loading-icon path {
+    fill: var(--accent);
+}
+
+/* Keep older styles below unchanged... */
+
+.container {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-family: 'Game Font', sans-serif;
+}
+
+/* Cookie (mana) counter: show emoji & number as an aligned inline-flex group so the mana
+   icon always vertically centers with the number regardless of font/emoji metrics. */
+#cookie-count {
+    position: absolute;
+    top: 30px;
+    left: 170px;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 20px;
+    transition: all 0.19s ease-in-out;
+    color: black;
+    width: 400px;
+
+    /* alignment fix: use inline-flex to keep emoji & number aligned */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* per-second unchanged layout but ensure it's readable */
+#per-second {
+    position: absolute;
+    top: 90px;
+    left: 240px;
+    text-align: center;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 20px;
+    color: black;
+    width: 300px;
+    font-weight: 700;
+    transition: all 0.19s ease-in-out;
+}
+
+.cookie-section {
+    position: absolute;
+    top: 250px;
+    left: 320px;
+}
+
+/* Make the Mana click image black in light mode and white in dark mode.
+   Uses CSS filters so the external SVG/img will recolor without inlining the SVG.
+   The transition makes the change smooth when switching themes. */
+#cookie {
+    width: 200px;
+    height: 200px;
+    margin-left: -120px;
+    cursor: pointer;
+    transition: transform 0.3s, filter 0.18s ease-in-out;
+    /* Force a solid black render in light mode */
+    transition: all 0.19s ease-in-out;
+}
+
+body.dark-mode #cookie {
+    filter: invert(0) brightness(1) saturate(100%);
+}
+#cookie:hover {
+    transform: scale(1.1);
+}
+
+.segmented-control {
+    position: absolute;
+    top: 92px;
+    left: 800px;
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    transition: all 0.19s ease-in-out;
+}
+
+.segmented-control button {
+    padding: 6px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 0;
+    font-family: 'Game Font', sans-serif;
+    border-radius: 30px;
+    margin: 4px;
+    transition: all 0.19s ease-in-out;
+}
+
+.segmented-control button.selected {
+    background-color: var(--accent-2);
+    color: white;
+    border-radius: 30px;
+}
+
+/* Home icon color (white in light mode, black in dark mode) */
+.home-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.home-icon path {
+    fill: white;
+    transition: fill 0.15s ease-in-out;
+}
+body.dark-mode .home-icon path {
+    fill: black;
+}
+
+/* New rule: style inline segmented icons (upgrades & stats) */
+.segmented-control .seg-icon {
+    width: 18px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.segmented-control .seg-icon path {
+    fill: white;
+    transition: fill 0.15s ease-in-out;
+}
+body.dark-mode .segmented-control .seg-icon path {
+    fill: black;
+}
+
+/* === UPGRADE CONTAINER (updated visual style to resemble the provided mock) === */
+.upgrade-container {
+    position: absolute;
+    top: 160px;
+    left: 800px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: #ffffffc9;
+    border-radius: 30px;
+    padding: 16px;
+    height: auto;
+    overflow-y: auto;
+    backdrop-filter: blur(7px);
+    color: black;
+    width: auto;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    gap: 10px;
+    max-height: auto;
+}
+
+.upgrade-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.upgrade-container::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 40px;
+}
+
+/* Panel title (requested: bold white) */
+.panel-title {
+    color: black;
+    font-weight: 800;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+/* upgrade-item box */
+.upgrade-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--accent);
+    padding: 15px 12px;
+    border-radius: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 12px;
+    width: 420px;
+    box-shadow: 0 2px 12px rgb(177 172 172 / 60%);
+}
+
+.upgrade-item img {
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+    border-radius: 6px;
+    flex: 0 0 48px;
+    object-fit: cover;
+    cursor: pointer; /* so hovering image feels interactive */
+}
+
+/* label will also host the tooltip wrapper (see .tooltip below) */
+.upgrade-item .label {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-right: 8px;
+    flex: 1 1 auto;
+    min-width: 0;
+    color: white;
+}
+.upgrade-item .label strong {
+    font-size: 15px;
+    color: #333;
+    line-height: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: white;
+}
+.upgrade-item .label .subtitle {
+    font-size: 12px;
+    color: white;
+    margin-top: 4px;
+    line-height: 1;
+    opacity: 0.95;
+}
+
+/* -----------------------------
+   NEW pill-style upgrade button + ripple
+   ----------------------------- */
+.upgrade-item button {
+    position: relative; /* required for ripple */
+    overflow: hidden;   /* hide ripple overflow */
+    background: linear-gradient(90deg, var(--accent-2), var(--accent)); /* pill gradient */
+    box-shadow: 0 8px 18px rgba(11,87,208,0.14), 0 2px 8px rgba(0,0,0,0.08);
+    border-radius: 20px;
+    padding: 12px 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 160px; /* matches screenshot width feel */
+    height: 56px;
+    color: white;
+    font-weight: 700;
+    font-family: 'Game Font';
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+    border: none;
+    flex: 0 0 auto;
+}
+
+/* Slight press feedback */
+.upgrade-item button:active {
+    transform: translateY(1px) scale(0.998);
+}
+
+/* left small icon holder (optional) */
+.upgrade-item button .btn-left-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    color: white;
+    font-size: 18px;
+    flex: 0 0 auto;
+    margin-right: 6px;
+}
+
+/* right side cost (water icon + number) */
+.upgrade-item button .btn-cost {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 18px;
+    color: white;
+    flex: 0 0 auto;
+}
+
+
+/* make the mana emoji / inline cookie consistent */
+.upgrade-item button .btn-cost .inline-cookie {
+    font-size: 1.1em;
+    margin-right: 0;
+}
+
+/* Ripple element */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    opacity: 0.32;
+    background: rgba(255,255,255,0.85); /* light ripple on the colored pill */
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+
+/* animation when added */
+.ripple.ripple-active {
+    transform: scale(1);
+    opacity: 0;
+    transition: transform 560ms cubic-bezier(.2,.8,.2,1), opacity 560ms cubic-bezier(.2,.8,.2,1);
+}
+
+/* slightly different ripple colors for dark mode for contrast */
+body.dark-mode .ripple {
+    background: rgba(0,0,0,0.12);
+}
+
+/* make sure the button's default .cost .num-suffix inherits white on the button */
+.upgrade-item button .cost .num-suffix,
+.upgrade-item button .btn-cost .cost {
+    color: white;
+}
+
+body.dark-mode .upgrade-item button .cost .num-suffix,
+body.dark-mode .upgrade-item button .btn-cost .cost {
+    color: black;
+}
+
+/* Ensure the existing .cost class (used by JS) matches the .btn-cost usage */
+.upgrade-item button .cost {
+    font-weight: 700;
+}
+
+/* Clicker clone */
+.clicker-clone {
+    position: absolute;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.5s, transform 0.2s;
+    font-size: 18px;
+    font-weight: normal;
+    font-family: 'Game Font', sans-serif;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: var(--accent);
+}
+
+.golden-cookie {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: transform 0.3s;
+    border-radius: 50%;
+}
+
+.golden-cookie:hover {
+    transform: scale(1.2);
+}
+
+.autotap {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+}
+
+/* -----------------------------
+   NEW tooltip UI (replaces old one)
+   ----------------------------- */
+/* Keep label's layout (don't override display:flex) so layout & accessibility stay intact.
+   Only set position:relative and cursor. */
+.tooltip {
+  position: relative;
+  /* do NOT set display here — .label uses display:flex and we must not override it */
+  border-bottom: 0; /* keep label readable */
+  cursor: default;
+}
+
+/* Base tooltip box */
+.tooltiptext {
+  pointer-events: none;  
+  visibility: hidden;
+  width: 240px;
+  background-color: #000000;
+  color: #ffffff;
+  text-align: left;
+  border-radius: 20px;
+  padding: 6px 8px;
+  position: absolute;
+  z-index: 1;
+  height: auto;
+  left: 0;
+  top: 3px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: normal;
+  transition: visibility 0s linear .06s, opacity .12s ease;
+  opacity: 0;
+  top: -50px;
+
+  /* IMPORTANT: prevent the tooltip from capturing pointer events so a tooltip won't
+     block the pointer and cause mouseleave/mouseenter loops (fixes flashing). */
+  pointer-events: none;
+  will-change: opacity, transform, left, top;
+}
+
+/* When JS positions tooltips as fixed on the page (so they don't cause hover loops),
+   ensure the tooltip uses fixed positioning so it's removed from the wrapper's flow. */
+.tooltiptext.fixed-position {
+  position: fixed;
+  /* keep pointer-events disabled unless explicitly made interactive */
+  pointer-events: none;
+}
+
+/* If in the future you need interactive content inside a tooltip, add .tooltiptext.interactive
+   (JS can toggle that) to allow pointer events. */
+.tooltiptext.interactive {
+  pointer-events: auto;
+}
+
+/* show on hover/focus of the label (original behavior) */
+.tooltip:hover .tooltiptext,
+.tooltip:focus-within .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+/* show tooltip when hovering / focusing the building image as well (Buildings container only)
+   Use general sibling (~) and direct sibling (+) to be tolerant of small markup differences,
+   and scope the rule to .upgrade-container so it only affects images inside Buildings. */
+.upgrade-container .upgrade-item img:hover ~ .label .tooltiptext,
+.upgrade-container .upgrade-item img:focus ~ .label .tooltiptext,
+.upgrade-container .upgrade-item img:hover + .label .tooltiptext,
+.upgrade-container .upgrade-item img:focus + .label .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+/* show tooltip when script adds .tooltip-hover to the label (JS-assisted) */
+.tooltip-hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+/* small adjustments for dark mode */
+body.dark-mode .tooltiptext {
+  background-color: white;
+  color: black;
+}
+
+/* Keep tooltip text readable on small screens */
+@media (max-width: 480px) {
+  .tooltiptext { width: 260px; left: 0; }
+}
+
+.tooltiptext .small-muted {
+  color: #bdbdbd;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* Username and other containers */
+.username-container {
+    display: none;
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: black;
+    font-family: 'Game Font', sans-serif;
+}
+
+/* Input wrapper for floating label */
+.username-container .input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: calc(78% - 40px);
+    text-align: left;
+    left: -19px;
+}
+
+/* Slightly taller padding to make room for label */
+.username-container input {
+    padding: 5px 47px 16px 20px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    text-align: left;
+    color: black;
+    font-family:'Game Font', sans-serif;
+    background-color: white;
+    backdrop-filter: blur(7px);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    letter-spacing: 1px;
+    transition: box-shadow .18s ease;
+    position: relative;
+    left: 8px;
+    top: 0px;
+}
+
+/* Floating label */
+.username-container .floating-label {
+    position: absolute;
+    left: 22px;
+    top: 11px;
+    font-size: 16px;
+    color: #8a8a8a;
+    pointer-events: none;
+    /* Removed smooth animation so the label moves instantly */
+    transition: none !important;
+    background: transparent;
+    padding: 0 6px;
+    border-radius: 12px;
+}
+
+/* When the input has focus or the wrapper has a value, float label up (no animation) */
+.username-container .input-wrapper.has-value .floating-label,
+.username-container .input-wrapper input:focus + .floating-label {
+    transform: translateY(-135%);
+    font-size: 13px;
+    color: var(--accent);
+    top: 1px;
+}
+
+/* Focused input shadow */
+.username-container input:focus {
+    box-shadow: 0 6px 18px rgba(158,168,219,0.18);
+}
+
+.username-container h2 {
+    font-size: 20px;
+    margin-bottom: 45px;
+}
+
+.username-container .username-note {
+    font-size: 15px;
+    margin-top: -80px;
+    color: black;
+    left: 0px;
+    position: relative;
+}
+
+/* In dark mode we show the note as black (per request) */
+body.dark-mode .username-container .username-note {
+    color: white;
+}
+
+.username-container button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--accent);
+    color: white;
+    margin-top: 20px;
+    width: calc(78% - 40px);
+    font-family: 'Game Font', sans-serif;
+    backdrop-filter: blur(7px);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    letter-spacing: 1px;
+    right: -3px;
+    position: relative;
+    top: 64px;
+}
+
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: black;
+    font-family: 'Game Font', sans-serif;
+    transition: all 0.19s ease-in-out;
+    background-color: white;
+    border-radius: 30px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.user-info img {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: white;
+}
+
+/* Building Stats button (placed next to username) */
+.user-info .building-stats-btn {
+    margin-left: 12px;
+    padding: 8px 24px;
+    font-size: 16px;
+    border-radius: 30px;
+    background-color: var(--accent); /* same base color as .segmented-control buttons */
+    color: white;
+    border: none;
+    cursor: not-allowed;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    font-family: 'Game Font', sans-serif;
+    transition: opacity 0.18s ease;
+    margin: 4px;
+    transition: all 0.19s ease-in-out;
+}
+
+.user-info .building-stats-btn:disabled {
+    opacity: 0.85;
+}
+
+/* Dark mode variant for the Building Stats button */
+body.dark-mode .user-info .building-stats-btn {
+    background-color: var(--accent);
+    color: black;
+    cursor: not-allowed;
+}
+
+/* Stats Container Styles */
+.stats-container {
+    position: absolute;
+    top: 160px;
+    left: 800px;
+    display: none;
+    flex-direction: column;
+    background-color: #ffffffc9;
+    border-radius: 30px;
+    padding: 20px;
+    max-height: 580px;
+    height: 580px;
+    color: black;
+    width: 420px;
+    backdrop-filter: blur(7px);
+    font-family: 'Game Font', sans-serif;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1)
+}
+.stats-container .stats-label {
+    font-weight: bold;
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: grey;
+}
+.stats-container .stat-row {
+    font-size: 18px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+/* Changelog Styles */
+.changelog-container {
+    position: absolute;
+    top: 160px;
+    left: 800px;
+    display: none;
+    flex-direction: column;
+    background-color: #ffffffc9;
+    border-radius: 30px;
+    padding: 20px;
+    max-height: 380px;
+    width: 350px;
+    color: black;
+    backdrop-filter: blur(7px);
+    font-family: 'Game Font', sans-serif;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    
+}
+.changelog-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.changelog-row {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* --- Settings tab styles --- */
+.settings-container {
+    position: absolute;
+    top: 160px;
+    left: 800px;
+    display: none;
+    flex-direction: column;
+    background-color: #ffffffc9;
+    border-radius: 30px;
+    padding: 24px 24px 18px 24px;
+    max-height: 580px;
+    width: 390px;
+    color: black;
+    backdrop-filter: blur(7px);
+    font-family: 'Game Font', sans-serif;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    transition: all 0.19s ease-in-out;
+    overflow-y: auto;
+    height: 580px;
+}
+
+/* scrollbar for settings panel */
+.settings-container::-webkit-scrollbar {
+    width: 10px;
+}
+.settings-container::-webkit-scrollbar-thumb {
+    background: grey;
+    border-radius: 40px;
+}
+
+.settings-label {
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 18px;
+}
+.settings-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 18px;
+    justify-content: space-between;
+}
+.settings-slider-label {
+    font-weight: 400;
+}
+
+/* The visible track (we will update inline style with JS to show partial fill) */
+.settings-slider {
+    -webkit-appearance: none;
+    width: 180px;
+    height: 8px;
+    border-radius: 30px;
+    background: #ededed; /* default grey, JS will replace with gradient showing filled portion */
+    outline: none;
+    transition: background 0.2s;
+    margin-right: 10px;
+    margin-left: 18px;
+}
+.settings-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    cursor: pointer;
+    border: 2px solid white;
+}
+.settings-slider::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    cursor: pointer;
+    border: 2px solid white;
+}
+.settings-value {
+    font-family: 'Game Font', sans-serif;
+    font-size: 17px;
+    min-width: 38px;
+    font-weight: regular;
+    color: #333;
+    text-align: center;
+    transition: all 0.19s ease-in-out;
+}
+/* For Firefox */
+.settings-slider::-moz-range-track {
+    background: #ededed;
+    height: 8px;
+    border-radius: 30px;
+}
+
+.settings-slider:focus {
+    outline: none;
+}
+/* Hide default FF vertical bar */
+input[type=range]::-ms-fill-lower {
+    background: #ededed;
+}
+input[type=range]::-ms-fill-upper {
+    background: #ededed;
+}
+input[type=range]::-ms-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #9ea8db;
+    border: 2px solid white;
+}
+
+/* Dark mode specific styles */
+body.dark-mode #cookie-count,
+body.dark-mode #per-second {
+    background-color: transparent;
+    color: white !important;
+}
+
+body.dark-mode .panel-title {
+    color: white;
+}
+
+body.dark-mode .upgrade-container,
+body.dark-mode .stats-container,
+body.dark-mode .changelog-container,
+body.dark-mode .settings-container {
+    background-color: #1d1919c9;
+    color: white;
+}
+
+/* upgrade-item dark mode: inner box becomes black with white text */
+body.dark-mode .upgrade-item {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+body.dark-mode .upgrade-item .label strong {
+    color: #ffffff;
+}
+body.dark-mode .upgrade-item .label .subtitle {
+    color: white; /* slightly brighter green for contrast */
+}
+
+body.dark-mode .upgrade-container .changelog-row,
+body.dark-mode .changelog-container .changelog-row {
+    color: #ddd;
+}
+
+body.dark-mode .segmented-control {
+    background-color: #000000;
+}
+
+body.dark-mode .segmented-control button {
+    background-color: var(--accent);
+    color: black;
+}
+
+body.dark-mode .segmented-control button.selected {
+    background-color: var(--accent-2);
+    color: black;
+}
+
+body.dark-mode .segmented-control button:hover:not(.selected) {
+    background-color: var(--accent-2);
+}
+
+body.dark-mode .upgrade-item button {
+    background-color: var(--accent);
+    color: white;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .username-container,
+body.dark-mode .user-info,
+body.dark-mode .username-container input,
+body.dark-mode .username-container button {
+    color: white;
+}
+
+body.dark-mode .username-container input {
+    background-color: black;
+    color: white;
+}
+
+body.dark-mode .user-info {
+    color: white;
+    background-color: black;
+}
+
+/* Make settings-value white in dark mode (this is the fix you asked for) */
+body.dark-mode .settings-value,
+body.dark-mode #music-volume-val,
+body.dark-mode #sfx-volume-val {
+    color: #ffffff !important;
+}
+
+/* Inline mana image / emoji style (used to replace the 🍪 emoji)
+   - Use flex alignment to ensure it's baseline-aligned with the number */
+.inline-cookie {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
+    line-height: 1;
+    font-size: 1.15em; /* make emoji a little larger to match number size */
+}
+
+/* Slightly larger mana icon in the main counter */
+#cookie-count .inline-cookie {
+    font-size: 1.25em;
+    margin-right: 6px;
+}
+
+/* Keep the small image sizing for img elements inside .inline_cookie usage
+   (explicit sizing for image-based inline-cookie usage inside upgrade buttons) */
+.upgrade-container button .inline-cookie img,
+.upgrade-item button .inline-cookie img {
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+}
+
+/* ensure span-based inline-cookie is not clipped in buttons */
+.upgrade-item button .inline-cookie {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ------------------------------------------------------------------
+   New switch styles (From Uiverse.io by nikk7007) scoped to .switch
+   NOTE: switch is kept in CSS for backwards compatibility, but the UI
+   now uses a rounded dropdown control instead of the checkbox switch.
+   ------------------------------------------------------------------ */
+.switch {
+  --false: #fff;
+  --true: #fff;
+  display: inline-block;
+}
+
+.switch input[type=checkbox] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2rem;
+  width: 3.5rem;
+  background-color: #9ea8db;
+  position: relative;
+  border-radius: 1.5em;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all 0.19s ease-in-out;
+}
+
+.switch input[type=checkbox]::before {
+  content: '';
+  display: block;
+  height: 1.9em;
+  width: 1.9em;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: calc(1.9em/2 + .3em);
+  background-color: var(--false);
+  border-radius: 1.5em;
+  transition: .3s ease;
+}
+
+.switch input[type=checkbox]:checked::before {
+  background-color: var(--true);
+  left: calc(100% - (1.9em/2 + .3em));
+}
+
+/* ensure high contrast in dark mode */
+body.dark-mode .switch input[type=checkbox] {
+  background-color: #2b3246;
+}
+
+/* New theme dropdown (replaces the old inline switch)
+   - rounded 30px as requested; keyboard/ARIA friendly */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  font-family: 'Game Font', sans-serif;
+}
+
+.dropbtn {
+  background-color: var(--accent);
+  color: white;
+  padding: 8px 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 30px; /* requested rounded corners */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Game Font';
+  transition: all 0.19s ease-in-out;
+}
+
+/* based on the snippet you provided, but rounded to 30px */
+.dropdown-content {
+   position: absolute;
+  right: 0;
+  top: 45px;
+
+  background-color: #ffffff87;
+  backdrop-filter: blur(5px);
+  min-width: 160px;
+  padding: 6px;
+  border-radius: 20px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1002;
+
+  /* animation setup */
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  pointer-events: none;
+
+  transition:
+    opacity var(--transDur) ease,
+    transform var(--transDur) cubic-bezier(0.46, 2, 0.5, 2);
+}
+
+.dropdown-content button,
+.dropdown-content a {
+  background: transparent;
+  border: none;
+  color: black;
+  padding: 8px 7px;
+  text-decoration: none;
+  display: block;
+  width: 95%;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 12px;
+  font-family: 'Game Font';
+  margin: 5px;
+}
+
+.dropdown-content button:hover,
+.dropdown-content a:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+body.dark-mode .dropdown-content button:hover,
+body.dark-mode .dropdown-content a:hover {
+  background-color: var(--accent-2);
+  color: black;
+}
+
+/* show/hide modifiers toggled by JS */
+.dropdown.open .dropdown-content {
+  display: block;
+  top: 45px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* small adjustments for dark mode */
+body.dark-mode .dropbtn {
+  background-color: var(--accent);
+  color: black;
+}
+body.dark-mode .dropdown-content {
+  background-color: #1d1919c9;
+  backdrop-filter: blur(5px);
+}
+body.dark-mode .dropdown-content button,
+body.dark-mode .dropdown-content a {
+  color: white;
+}
+
+/* --------------------
+   Suffix color styles
+   --------------------
+   Color applied to the abbreviated suffix span inserted by the JS formatters.
+   Light mode: #3b4a8f
+   Dark mode:  #9faded
+*/
+.num-suffix {
+    color: #3b4a8f;
+    font-weight: 700;
+    margin-left: 2px;
+    /* make suffix slightly smaller so number stands out */
+    font-size: 0.95em;
+}
+
+body.dark-mode .num-suffix {
+    color: #9faded;
+}
+
+body.dark-mode .upgrades-container {
+    background-color: #1d1919c9;
+}
+
+body.dark-mode .upgrades-container .nothing {
+    color: white;
+}
+
+/* Ensure nested suffix in .cost or other elements inherit/override correctly */
+.upgrade-item button .cost .num-suffix,
+.upgrade-item .label .num-suffix,
+#cookie-count .num-suffix,
+#per-second .num-suffix,
+.stats-container .stat-row .num-suffix {
+    font-weight: 700;
+}
+
+/* Upgrades container uses the same visual style as upgrade-container */
+.upgrades-container {
+    position: absolute;
+    top: 160px;
+    left: 800px;
+    display: none;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: #ffffffc9;
+    border-radius: 30px;
+    padding: 16px;
+    max-height: 580px;
+    overflow-y: auto;
+    backdrop-filter: blur(7px);
+    color: black;
+    width: 390px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    gap: 10px;
+    height: 580px;
+}
+
+.upgrades-container .nothing {
+    color: #333;
+    font-size: 16px;
+}
+
+/* ------------------------------------------------------------------
+   Number animation helper styles
+   - .animating-number is applied while JS tween runs to give a subtle
+     scale/brightness hint on changes.
+   ------------------------------------------------------------------ */
+.animating-number {
+    display: inline-block;
+    transform-origin: 50% 50%;
+    transition: transform 0.12s ease, filter 0.12s ease;
+    transform: scale(1.03);
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.08));
+}
+
+/* Slightly different effect in dark mode for better contrast */
+body.dark-mode .animating-number {
+    transform: scale(1.025);
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
+}
+
+/* Large desktop / ultra-wide improvements (optional polish) */
+ .upgrade-container, .upgrades-container {
+    width: 420px;
+    height: 580px;
+    max-height: 580px;
+    overflow-y: auto;
+  }
+
+  .cookie-section #cookie {
+    width: 400px;
+    height: 400px;
+  }
+
+  #cookie-count {
+    width: 420px;
+    left: 169px;
+  }
+}
+
+/* Ensure tooltip positioning still works when panels are fixed or moved */
+.tooltiptext.fixed-position {
+  /* small tweak so tooltips won't overflow on narrow screens */
+  max-width: calc(100vw - 16px);
+  word-break: break-word;
+}
