@@ -149,7 +149,7 @@ body {
 .loading-icon {
     width: 36px;
     height: 36px;
-    display: inline-block;
+    display: none;
     vertical-align: middle;
     fill: var(--accent-2);
 }
@@ -217,8 +217,8 @@ body {
 }
 
 button {
-    border: 10px solid black !important;
-    box-shadow: 0 4px 12px rgba(128,128,128,0.8);
+    border: 3px solid black !important;
+    box-shadow: none;
 }
 
 .segmented-control {
@@ -363,7 +363,7 @@ button {
     position: relative;
     overflow: hidden;
     background: linear-gradient(90deg, var(--accent-2), var(--accent));
-    box-shadow: 0 4px 12px rgba(128,128,128,0.8), 0 8px 18px rgba(11,87,208,0.14), 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: none;
     border-radius: 20px;
     padding: 12px 16px;
     display: inline-flex;
@@ -377,7 +377,7 @@ button {
     font-family: 'Game Font';
     cursor: pointer;
     transition: transform .12s ease, box-shadow .12s ease;
-    border: 10px solid black;
+    border: 3px solid black;
     flex: 0 0 auto;
 }
 
@@ -545,13 +545,37 @@ button {
 
 .username-container {
     display: none;
-    position: absolute;
-    top: 48%;
+    position: fixed;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
     color: black;
     font-family: 'Game Font', sans-serif;
+    background-color: #ffffffc9;
+    border-radius: 30px;
+    padding: 40px 30px;
+    backdrop-filter: blur(7px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    z-index: 2000;
+    max-width: 90%;
+    width: auto;
+}
+
+.username-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: -1;
+    display: none;
+}
+
+.username-container.modal::before {
+    display: block;
 }
 
 .username-container .input-wrapper {
@@ -623,7 +647,7 @@ button {
     padding: 10px 20px;
     font-size: 18px;
     border-radius: 30px;
-    border: 4px solid black;
+    border: 3px solid black;
     cursor: pointer;
     background-color: var(--accent);
     color: white;
@@ -631,7 +655,7 @@ button {
     width: calc(78% - 40px);
     font-family: 'Game Font', sans-serif;
     backdrop-filter: blur(7px);
-    box-shadow: 0 4px 12px rgba(128,128,128,0.8);
+    box-shadow: none;
     letter-spacing: 1px;
     right: -3px;
     position: relative;
@@ -668,12 +692,12 @@ button {
     border-radius: 30px;
     background-color: var(--accent);
     color: white;
-    border: 4px solid black;
+    border: 3px solid black;
     cursor: not-allowed;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(128,128,128,0.8);
+    box-shadow: none;
     font-family: 'Game Font', sans-serif;
     transition: opacity 0.18s ease;
     margin: 4px;
@@ -896,7 +920,7 @@ input[type=range]::-ms-thumb {
 .upgrade-item button {
     background: linear-gradient(90deg, var(--accent-2), var(--accent));
     color: white;
-    box-shadow: 0 4px 12px rgba(128,128,128,0.8), 0 8px 18px rgba(11,87,208,0.14), 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: none;
 }
 
 .username-container,
@@ -997,156 +1021,4 @@ input[type=range]::-ms-thumb {
   color: white;
   padding: 8px 16px;
   font-size: 16px;
-  border: 10px solid black;
-  cursor: pointer;
-  border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(128,128,128,0.8);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Game Font';
-  transition: all 0.19s ease-in-out;
-}
-
-.dropdown-content {
-   position: absolute;
-  right: 0;
-  top: 45px;
-
-  background-color: #ffffff87;
-  backdrop-filter: blur(5px);
-  min-width: 160px;
-  padding: 6px;
-  border-radius: 20px;
-  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
-  z-index: 1002;
-
-  opacity: 0;
-  transform: translateY(-8px) scale(0.98);
-  pointer-events: none;
-
-  transition:
-    opacity var(--transDur) ease,
-    transform var(--transDur) cubic-bezier(0.46, 2, 0.5, 2);
-}
-
-.dropdown-content button,
-.dropdown-content a {
-  background: transparent;
-  border: none;
-  color: black;
-  padding: 8px 7px;
-  text-decoration: none;
-  display: block;
-  width: 95%;
-  text-align: left;
-  cursor: pointer;
-  border-radius: 12px;
-  font-family: 'Game Font';
-  margin: 5px;
-}
-
-.dropdown-content button:hover,
-.dropdown-content a:hover {
-  background-color: var(--accent);
-  color: white;
-}
-
-.dropdown.open .dropdown-content {
-  display: block;
-  top: 45px;
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-}
-
-.dropbtn {
-  background-color: var(--accent);
-  color: white;
-}
-.dropdown-content {
-  background-color: #ffffffc9;
-  backdrop-filter: blur(5px);
-}
-.dropdown-content button,
-.dropdown-content a {
-  color: black;
-}
-
-.num-suffix {
-    color: #3b4a8f;
-    font-weight: 700;
-    margin-left: 2px;
-    font-size: 0.95em;
-}
-
-.upgrades-container {
-    background-color: #ffffffc9;
-}
-
-.upgrades-container .nothing {
-    color: black;
-}
-
-.upgrade-item button .cost .num-suffix,
-.upgrade-item .label .num-suffix,
-#cookie-count .num-suffix,
-#per-second .num-suffix,
-.stats-container .stat-row .num-suffix {
-    font-weight: 700;
-}
-
-.upgrades-container {
-    position: absolute;
-    top: 160px;
-    left: 800px;
-    display: none;
-    align-items: flex-start;
-    flex-direction: column;
-    background-color: #ffffffc9;
-    border-radius: 30px;
-    padding: 16px;
-    max-height: 580px;
-    overflow-y: auto;
-    backdrop-filter: blur(7px);
-    color: black;
-    width: 390px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-    gap: 10px;
-    height: 580px;
-}
-
-.upgrades-container .nothing {
-    color: #333;
-    font-size: 16px;
-}
-
-.animating-number {
-    display: inline-block;
-    transform-origin: 50% 50%;
-    transition: transform 0.12s ease, filter 0.12s ease;
-    transform: scale(1.03);
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.08));
-}
-
- .upgrade-container, .upgrades-container {
-    width: 420px;
-    height: 580px;
-    max-height: 580px;
-    overflow-y: auto;
-  }
-
-  .cookie-section #cookie {
-    width: 400px;
-    height: 400px;
-  }
-
-  #cookie-count {
-    width: 420px;
-    left: 169px;
-  }
-
-.tooltiptext.fixed-position {
-  max-width: calc(100vw - 16px);
-  word-break: break-word;
-}
+  border: 3px solid black;
