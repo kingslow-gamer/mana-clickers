@@ -10,7 +10,7 @@
     <link rel="prefetch" href="2.ttf" as="font" type="font/ttf" crossorigin>
 
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dlyaw4q-d833fce0-a051-4f2b-a0b1-30040deb598f.png?token=ey[...]
+    <link rel="icon" type="image/png" href="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dlyaw4q-d833fce0-a051-4f2b-a0b1-30040deb598f.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGx5YXc0cS1kODMzZmNlMC1hMDUxLTRmMmItYTBiMS0zMDA0MGRlYjU5OGYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.OTIffvHPCM0DvR9blhPZJyvsnPVTYASReG6bNp9SQV4">
 </head>
 <body>
     <div class="loading-screen" role="status" aria-live="polite">
@@ -23,23 +23,26 @@
         </div>
         <!-- Loading timer (replaces the plain "Loading..." text). script.js updates the .loading-text element. -->
         <div id="loading-timer" class="loading-timer" aria-live="polite">
-            <!-- Decorative SVG prefix for the timer is now hidden -->
-            <span class="loading-text">Game is loading...</span>
+            <!-- Decorative SVG prefix for the timer (kept as an inline SVG so it isn't replaced by text updates) -->
+            <svg class="loading-icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="36" height="36" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
+                <path d="M 12 2 C 6.4889971 2 2 6.4889971 2 12 C 2 17.511003 6.4889971 22 12 22 C 17.511003 22 22 17.511003 22 12 C 22 6.4889971 17.511003 2 12 2 z M 12 4 C 16.430123 4 20 7.5698774 20 12 C 20 16.430123 16.430123 20 12 20 C 7.5698774 20 4 16.430123 4 12 C 4 7.5698774 7.5698774 4 12 4 z M 11 6 L 11 12.414062 L 15.292969 16.707031 L 16.707031 15.292969 L 13 11.585938 L 13 6 L 11 6 z"></path>
+            </svg>
+            <span class="loading-text">loading</span>
         </div>
-        <div class="version">In development</div>
+        <div class="version">Version 0.0.320</div>
     </div>
     <div class="container">
         <div id="cookie-count"></div>
         <div id="per-second">0.0/s</div>
         <div class="cookie-section">
             <!-- main cookie image changed to the provided Mana PNG -->
-            <img id="cookie" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eff096d8-b43d-416f-b75c-61bba49442fd/dm8zj5k-964ae260-de3c-499e-9a4d-b90b4ab6a219.png?token=eyJ0eXAiOiJK[...]
+            <img id="cookie" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eff096d8-b43d-416f-b75c-61bba49442fd/dm8zj5k-964ae260-de3c-499e-9a4d-b90b4ab6a219.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9lZmYwOTZkOC1iNDNkLTQxNmYtYjc1Yy02MWJiYTQ5NDQyZmQvZG04emo1ay05NjRhZTI2MC1kZTNjLTQ5OWUtOWE0ZC1iOTBiNGFiNmEyMTkucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.zkfPKU5wECzoTUoUpqgiEW3Tu8V-wrwQ5ximjANlL-U" alt="Mana Click">
         </div>
         <div class="segmented-control" role="tablist" aria-label="Tabs">
             <!-- Replaced home emoji with inline SVG. Accessible label kept. -->
             <button id="buildings-button" class="selected" aria-pressed="true" aria-label="Buildings">
                 <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24" role="img" aria-hidden="true">
-                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20[...]
+                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
                 </svg>
             </button>
 
@@ -47,7 +50,7 @@
             <button id="upgrades-button" aria-pressed="false" aria-label="Upgrades">
                 <svg class="seg-icon seg-up" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115.4 122.88" width="12" height="12" role="img" aria-hidden="true" focusable="false">
                     <title>up-arrow</title>
-                    <path d="M24.94,67.88A14.66,14.66,0,0,1,4.38,47L47.83,4.21a14.66,14.66,0,0,1,20.56,0L111,46.15A14.66,14.66,0,0,1,90.46,67.06l-18-17.69-.29,59.17c-.10,19.28-29.42,19-29.33-.25L4[...]
+                    <path d="M24.94,67.88A14.66,14.66,0,0,1,4.38,47L47.83,4.21a14.66,14.66,0,0,1,20.56,0L111,46.15A14.66,14.66,0,0,1,90.46,67.06l-18-17.69-.29,59.17c-.10,19.28-29.42,19-29.33-.25L43.14,50,24.94,67.88Z"/>
                 </svg>
             </button>
 
@@ -56,7 +59,7 @@
                 <svg class="seg-icon seg-stats" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 68.04" width="20" height="20" role="img" aria-hidden="true" focusable="false">
                     <title>stats</title>
                     <g>
-                        <path d="M2.03,56.52c-2.66,2.58-2.72,6.83-0.13,9.49c2.58,2.66,6.83,2.72,9.49,0.13l27.65-26.98l23.12,22.31 c2.67,2.57,6.92,2.49,9.49-0.18l37.77-38.22v19.27c0,3.72,3.01,6.73,[...]
+                        <path d="M2.03,56.52c-2.66,2.58-2.72,6.83-0.13,9.49c2.58,2.66,6.83,2.72,9.49,0.13l27.65-26.98l23.12,22.31 c2.67,2.57,6.92,2.49,9.49-0.18l37.77-38.22v19.27c0,3.72,3.01,6.73,6.73,6.73s6.73-3.01,6.73-6.73V6.71h-0.02 c0-1.74-0.67-3.47-2-4.78c-1.41-1.39-3.29-2.03-5.13-1.91H82.4c-3.72,0-6.73,3.01-6.73,6.73c0,3.72,3.01,6.73,6.73,6.73h17.63 L66.7,47.2L43.67,24.97c-2.6-2.5-6.73-2.51-9.33,0.03L2.03,56.52L2.03,56.52z"/>
                     </g>
                 </svg>
             </button>
@@ -70,7 +73,7 @@
 
             <!-- NEW Clickboost upgrade moved to the top as requested -->
             <div class="upgrade-item" id="clickboost-upgrade">
-                <img id="clickboost-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eff096d8-b43d-416f-b75c-61bba49442fd/dmi0zxg-ef7448f1-d206-4dba-9926-94abc5f6cc92.png?toke[...]
+                <img id="clickboost-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eff096d8-b43d-416f-b75c-61bba49442fd/dmi0zxg-ef7448f1-d206-4dba-9926-94abc5f6cc92.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9lZmYwOTZkOC1iNDNkLTQxNmYtYjc1Yy02MWJiYTQ5NDQyZmQvZG1pMHp4Zy1lZjc0NDhmMS1kMjA2LTRkYmEtOTkyNi05NGFiYzVmNmNjOTIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.cxf57ZGMnFF_7h0-NFf3O0H720colw7Gjjr0zcbE4zw" alt="Clickboost">
                 <div class="label tooltip" id="clickboost-label"><strong>Clickboost: 0</strong><span class="subtitle">+0.02/click</span>
                     <span class="tooltiptext" id="clickboost-tooltip">Gives 0.02 per upgrade</span>
                 </div>
@@ -78,7 +81,7 @@
             </div>
 
             <div class="upgrade-item">
-                <img id="autotap-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eff096d8-b43d-416f-b75c-61bba49442fd/dmi11lh-f18357fd-4d93-4230-98b8-49397de8ee86.png?token=e[...]
+                <img id="autotap-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eff096d8-b43d-416f-b75c-61bba49442fd/dmi11lh-f18357fd-4d93-4230-98b8-49397de8ee86.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9lZmYwOTZkOC1iNDNkLTQxNmYtYjc1Yy02MWJiYTQ5NDQyZmQvZG1pMTFsaC1mMTgzNTdmZC00ZDkzLTQyMzAtOThiOC00OTM5N2RlOGVlODYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.fthf27sPwC_7H2nPhupefdl2HyGkYt0tMxQMF_ykF2k" alt="Autotap">
                 <div class="label tooltip" id="autotap-label"><strong>Autotap: 0</strong><span class="subtitle">+0.2/s</span>
                     <span class="tooltiptext" id="autotap-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
@@ -86,7 +89,7 @@
             </div>
 
             <div class="upgrade-item" id="pickaxe-upgrade" style="display: none;">
-                <img id="pickaxe-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl0u9zr-6ea65aed-c1af-48f8-9493-d05f1b152ca4.png?token=e[...]
+                <img id="pickaxe-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl0u9zr-6ea65aed-c1af-48f8-9493-d05f1b152ca4.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGwwdTl6ci02ZWE2NWFlZC1jMWFmLTQ4ZjgtOTQ5My1kMDVmMWIxNTJjYTQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.6rO1C2diBdMBVXxJXLJ4es4hUwHFrDNeC-XD7fc7swQ" alt="Pickaxe">
                 <div class="label tooltip" id="pickaxe-label"><strong>Pickaxe (0)</strong><span class="subtitle">+1.5/s</span>
                     <span class="tooltiptext" id="pickaxe-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
@@ -94,7 +97,7 @@
             </div>
 
             <div class="upgrade-item" id="farm-upgrade" style="display: none;">
-                <img id="farm-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl47c32-b5619189-c091-4640-b1fe-a978b1e8f094.png?token=eyJ[...]
+                <img id="farm-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl47c32-b5619189-c091-4640-b1fe-a978b1e8f094.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGw0N2MzMi1iNTYxOTE4OS1jMDkxLTQ2NDAtYjFmZS1hOTc4YjFlOGYwOTQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.aXycWSU80CJ55SWPeUbE6cIVPTRmTfMnUnh3trqp2t4" alt="Farm">
                 <div class="label tooltip" id="farm-label"><strong>Shovel: 0</strong><span class="subtitle">+7/s</span>
                     <span class="tooltiptext" id="farm-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
@@ -102,7 +105,7 @@
             </div>
 
             <div class="upgrade-item" id="mine-upgrade" style="display: none;">
-                <img id="mine-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl47f1q-200fbe33-0d51-4a78-80a6-9f7b0ae55263.png?token=eyJ[...]
+                <img id="mine-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl47f1q-200fbe33-0d51-4a78-80a6-9f7b0ae55263.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGw0N2YxcS0yMDBmYmUzMy0wZDUxLTRhNzgtODBhNi05ZjdiMGFlNTUyNjMucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.OtTs-tsRV4vGniwOTVZ5k3_3FHBe5xY7oHCEeYUM_zc" alt="Mine">
                 <div class="label tooltip" id="mine-label"><strong>Crystal: 0</strong><span class="subtitle">+54/s</span>
                     <span class="tooltiptext" id="mine-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
@@ -110,7 +113,7 @@
             </div>
 
             <div class="upgrade-item" id="factory-upgrade" style="display: none;">
-                <img id="factory-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl47gyd-7f66d6a9-4550-49a9-82f0-24dbe94b0a5d.png?token=[...]
+                <img id="factory-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl47gyd-7f66d6a9-4550-49a9-82f0-24dbe94b0a5d.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGw0N2d5ZC03ZjY2ZDZhOS00NTUwLTQ5YTktODJmMC0yNGRiZTk0YjBhNWQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.8X86sdDf8OaFSeJ7PLO7LFAGpfHjzgc3YNbx4o-iLH4" alt="Factory">
                 <div class="label tooltip" id="factory-label"><strong>Factory: 0</strong><span class="subtitle">+280/s</span>
                     <span class="tooltiptext" id="factory-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
@@ -118,7 +121,7 @@
             </div>
 
             <div class="upgrade-item" id="bank-upgrade" style="display: none;">
-                <img id="bank-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl47hov-ebbc9e6d-2137-4648-864a-e16b4b2809fc.png?token=eyJ[...]
+                <img id="bank-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl47hov-ebbc9e6d-2137-4648-864a-e16b4b2809fc.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGw0N2hvdi1lYmJjOWU2ZC0yMTM3LTQ2NDgtODY0YS1lMTZiNGIyODA5ZmMucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.CQ0iKFEXwvsbw7v719_4SFXc4u-kCuFlp4CgIUtyFtw" alt="Bank">
                 <div class="label tooltip" id="bank-label"><strong>Shield: 0</strong><span class="subtitle">+1.7k/s</span>
                     <span class="tooltiptext" id="bank-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
@@ -126,7 +129,7 @@
             </div>
 
             <div class="upgrade-item" id="temple-upgrade" style="display: none;">
-                <img id="temple-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl5in5y-7c1d358e-086c-4bbf-97a6-d98fa4c3ca26.png?token=e[...]
+                <img id="temple-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl5in5y-7c1d358e-086c-4bbf-97a6-d98fa4c3ca26.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGw1aW41eS03YzFkMzU4ZS0wODZjLTRiYmYtOTdhNi1kOThmYTRjM2NhMjYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.3pe6bk3A5O3nw1ahjXYNPdL-nyyPGcgyhVWMloEeeFc" alt="Temple">
                 <div class="label tooltip" id="temple-label"><strong>Temple (0)</strong><span class="subtitle">+7,800 /sec</span>
                     <span class="tooltiptext" id="temple-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
@@ -134,7 +137,7 @@
             </div>
 
             <div class="upgrade-item" id="wizard-upgrade" style="display: none;">
-                <img id="wizard-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl5isz8-c7a36a21-9587-44b8-b201-f14d943d04b2.png?token=e[...]
+                <img id="wizard-image" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl5isz8-c7a36a21-9587-44b8-b201-f14d943d04b2.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGw1aXN6OC1jN2EzNmEyMS05NTg3LTQ0YjgtYjIwMS1mMTRkOTQzZDA0YjIucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.lhYyFE5zaT9OvBKt3S4AanZ9KGZFMPQK_PEYjO1hjGk" alt="Wizard Tower">
                 <div class="label tooltip" id="wizard-label"><strong>Gametower (0)</strong><span class="subtitle">+39,000 /sec</span>
                     <span class="tooltiptext" id="wizard-tooltip">0.00% of cps<br>0 produced so far</span>
                 </div>
@@ -230,7 +233,7 @@
             <button id="building-stats-btn" class="building-stats-btn" disabled aria-disabled="true" title="Coming soon">≡</button>
         </div>
     </div>
-    <div class="username-container modal">
+    <div class="username-container">
         <h2>Enter username (Max 15 chars)</h2>
         <div class="input-wrapper">
             <input id="username-input" type="text" maxLength="15" aria-label="Username">

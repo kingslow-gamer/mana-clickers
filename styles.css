@@ -7,6 +7,12 @@
     --accent-2: #2eff8f; /* lighter accent for gradients and highlights */
 }
 
+/* Dark-mode variable overrides */
+body.dark-mode {
+    --accent: #80e3ff;
+    --accent-2: #116618;
+}
+
 /* Load local OTF font (gamefont.otf) and bold TTF (gamefont-bold.ttf) */
 @font-face {
     font-family: 'Game Font';
@@ -27,6 +33,18 @@ h1 {
     unicode-bidi: isolate;
     color: black;
     transition: all 0.19s ease-in-out;
+}
+
+body.dark-mode h1 {
+    display: block;
+    font-size: 0.95em;
+    margin-block-start: -0.33em;
+    margin-block-end: 0.67em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: 400;
+    unicode-bidi: isolate;
+    color: white;
 }
 
 h4 {
@@ -65,6 +83,12 @@ body {
     transition: all 0.19s ease-in-out;
 }
 
+/* Dark mode overrides added via .dark-mode on body */
+body.dark-mode {
+    background: #2f2f2f;
+    color: white;
+}
+
 .loading-screen {
     position: absolute;
     top: 0;
@@ -81,6 +105,9 @@ body {
     z-index: 1000;
     font-family: 'Game Font', sans-serif;
 }
+
+/* REPLACED: SVG spinner removed in favor of the jumping-dot loader.
+   New loader styles below. */
 
 .loader {
   display: flex;
@@ -136,6 +163,7 @@ body {
     font-size: 20px;
 }
 
+/* Loading timer container & icon */
 .loading-timer {
     display: inline-flex;
     align-items: center;
@@ -144,18 +172,27 @@ body {
     font-weight: 700;
     color: white;
     margin-top: 12px;
+
 }
 
+/* Loading SVG icon styling */
 .loading-icon {
     width: 36px;
     height: 36px;
-    display: none;
+    display: inline-block;
     vertical-align: middle;
-    fill: var(--accent-2);
+    fill: var(--accent-2); /* decorative color */
 }
 .loading-icon path {
     fill: var(--accent-2);
 }
+
+/* Dark mode tweak for the loading icon */
+body.dark-mode .loading-icon path {
+    fill: var(--accent);
+}
+
+/* Keep older styles below unchanged... */
 
 .container {
     display: none;
@@ -165,6 +202,8 @@ body {
     font-family: 'Game Font', sans-serif;
 }
 
+/* Cookie (mana) counter: show emoji & number as an aligned inline-flex group so the mana
+   icon always vertically centers with the number regardless of font/emoji metrics. */
 #cookie-count {
     position: absolute;
     top: 30px;
@@ -177,12 +216,15 @@ body {
     transition: all 0.19s ease-in-out;
     color: black;
     width: 400px;
+
+    /* alignment fix: use inline-flex to keep emoji & number aligned */
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
 }
 
+/* per-second unchanged layout but ensure it's readable */
 #per-second {
     position: absolute;
     top: 90px;
@@ -203,22 +245,24 @@ body {
     left: 320px;
 }
 
+/* Make the Mana click image black in light mode and white in dark mode.
+   Uses CSS filters so the external SVG/img will recolor without inlining the SVG.
+   The transition makes the change smooth when switching themes. */
 #cookie {
     width: 200px;
     height: 200px;
     margin-left: -120px;
     cursor: pointer;
     transition: transform 0.3s, filter 0.18s ease-in-out;
+    /* Force a solid black render in light mode */
     transition: all 0.19s ease-in-out;
 }
 
+body.dark-mode #cookie {
+    filter: invert(0) brightness(1) saturate(100%);
+}
 #cookie:hover {
     transform: scale(1.1);
-}
-
-button {
-    border: 3px solid black !important;
-    box-shadow: none;
 }
 
 .segmented-control {
@@ -239,6 +283,9 @@ button {
     cursor: pointer;
     background-color: var(--accent);
     color: white;
+    border: none;
+    border-radius: 0;
+    font-family: 'Game Font', sans-serif;
     border-radius: 30px;
     margin: 4px;
     transition: all 0.19s ease-in-out;
@@ -250,6 +297,7 @@ button {
     border-radius: 30px;
 }
 
+/* Home icon color (white in light mode, black in dark mode) */
 .home-icon {
     width: 18px;
     height: 18px;
@@ -260,7 +308,11 @@ button {
     fill: white;
     transition: fill 0.15s ease-in-out;
 }
+body.dark-mode .home-icon path {
+    fill: black;
+}
 
+/* New rule: style inline segmented icons (upgrades & stats) */
 .segmented-control .seg-icon {
     width: 18px;
     height: 16px;
@@ -271,7 +323,11 @@ button {
     fill: white;
     transition: fill 0.15s ease-in-out;
 }
+body.dark-mode .segmented-control .seg-icon path {
+    fill: black;
+}
 
+/* === UPGRADE CONTAINER (updated visual style to resemble the provided mock) === */
 .upgrade-container {
     position: absolute;
     top: 160px;
@@ -301,6 +357,7 @@ button {
     border-radius: 40px;
 }
 
+/* Panel title (requested: bold white) */
 .panel-title {
     color: black;
     font-weight: 800;
@@ -308,6 +365,7 @@ button {
     margin-bottom: 8px;
 }
 
+/* upgrade-item box */
 .upgrade-item {
     display: flex;
     align-items: center;
@@ -329,9 +387,10 @@ button {
     border-radius: 6px;
     flex: 0 0 48px;
     object-fit: cover;
-    cursor: pointer;
+    cursor: pointer; /* so hovering image feels interactive */
 }
 
+/* label will also host the tooltip wrapper (see .tooltip below) */
 .upgrade-item .label {
     display: flex;
     flex-direction: column;
@@ -359,32 +418,37 @@ button {
     opacity: 0.95;
 }
 
+/* -----------------------------
+   NEW pill-style upgrade button + ripple
+   ----------------------------- */
 .upgrade-item button {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(90deg, var(--accent-2), var(--accent));
-    box-shadow: none;
+    position: relative; /* required for ripple */
+    overflow: hidden;   /* hide ripple overflow */
+    background: linear-gradient(90deg, var(--accent-2), var(--accent)); /* pill gradient */
+    box-shadow: 0 8px 18px rgba(11,87,208,0.14), 0 2px 8px rgba(0,0,0,0.08);
     border-radius: 20px;
     padding: 12px 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
-    width: 160px;
+    width: 160px; /* matches screenshot width feel */
     height: 56px;
     color: white;
     font-weight: 700;
     font-family: 'Game Font';
     cursor: pointer;
     transition: transform .12s ease, box-shadow .12s ease;
-    border: 3px solid black;
+    border: none;
     flex: 0 0 auto;
 }
 
+/* Slight press feedback */
 .upgrade-item button:active {
     transform: translateY(1px) scale(0.998);
 }
 
+/* left small icon holder (optional) */
 .upgrade-item button .btn-left-icon {
     display: inline-flex;
     align-items: center;
@@ -399,6 +463,7 @@ button {
     margin-right: 6px;
 }
 
+/* right side cost (water icon + number) */
 .upgrade-item button .btn-cost {
     margin-left: auto;
     display: inline-flex;
@@ -410,36 +475,53 @@ button {
     flex: 0 0 auto;
 }
 
+
+/* make the mana emoji / inline cookie consistent */
 .upgrade-item button .btn-cost .inline-cookie {
     font-size: 1.1em;
     margin-right: 0;
 }
 
+/* Ripple element */
 .ripple {
     position: absolute;
     border-radius: 50%;
     transform: scale(0);
     opacity: 0.32;
-    background: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.85); /* light ripple on the colored pill */
     pointer-events: none;
     will-change: transform, opacity;
 }
 
+/* animation when added */
 .ripple.ripple-active {
     transform: scale(1);
     opacity: 0;
     transition: transform 560ms cubic-bezier(.2,.8,.2,1), opacity 560ms cubic-bezier(.2,.8,.2,1);
 }
 
+/* slightly different ripple colors for dark mode for contrast */
+body.dark-mode .ripple {
+    background: rgba(0,0,0,0.12);
+}
+
+/* make sure the button's default .cost .num-suffix inherits white on the button */
 .upgrade-item button .cost .num-suffix,
 .upgrade-item button .btn-cost .cost {
     color: white;
 }
 
+body.dark-mode .upgrade-item button .cost .num-suffix,
+body.dark-mode .upgrade-item button .btn-cost .cost {
+    color: black;
+}
+
+/* Ensure the existing .cost class (used by JS) matches the .btn-cost usage */
 .upgrade-item button .cost {
     font-weight: 700;
 }
 
+/* Clicker clone */
 .clicker-clone {
     position: absolute;
     pointer-events: none;
@@ -471,12 +553,19 @@ button {
     left: 0;
 }
 
+/* -----------------------------
+   NEW tooltip UI (replaces old one)
+   ----------------------------- */
+/* Keep label's layout (don't override display:flex) so layout & accessibility stay intact.
+   Only set position:relative and cursor. */
 .tooltip {
   position: relative;
-  border-bottom: 0;
+  /* do NOT set display here — .label uses display:flex and we must not override it */
+  border-bottom: 0; /* keep label readable */
   cursor: default;
 }
 
+/* Base tooltip box */
 .tooltiptext {
   pointer-events: none;  
   visibility: hidden;
@@ -498,19 +587,28 @@ button {
   transition: visibility 0s linear .06s, opacity .12s ease;
   opacity: 0;
   top: -50px;
+
+  /* IMPORTANT: prevent the tooltip from capturing pointer events so a tooltip won't
+     block the pointer and cause mouseleave/mouseenter loops (fixes flashing). */
   pointer-events: none;
   will-change: opacity, transform, left, top;
 }
 
+/* When JS positions tooltips as fixed on the page (so they don't cause hover loops),
+   ensure the tooltip uses fixed positioning so it's removed from the wrapper's flow. */
 .tooltiptext.fixed-position {
   position: fixed;
+  /* keep pointer-events disabled unless explicitly made interactive */
   pointer-events: none;
 }
 
+/* If in the future you need interactive content inside a tooltip, add .tooltiptext.interactive
+   (JS can toggle that) to allow pointer events. */
 .tooltiptext.interactive {
   pointer-events: auto;
 }
 
+/* show on hover/focus of the label (original behavior) */
 .tooltip:hover .tooltiptext,
 .tooltip:focus-within .tooltiptext {
   visibility: visible;
@@ -518,6 +616,9 @@ button {
   transition-delay: 0s;
 }
 
+/* show tooltip when hovering / focusing the building image as well (Buildings container only)
+   Use general sibling (~) and direct sibling (+) to be tolerant of small markup differences,
+   and scope the rule to .upgrade-container so it only affects images inside Buildings. */
 .upgrade-container .upgrade-item img:hover ~ .label .tooltiptext,
 .upgrade-container .upgrade-item img:focus ~ .label .tooltiptext,
 .upgrade-container .upgrade-item img:hover + .label .tooltiptext,
@@ -527,12 +628,20 @@ button {
   transition-delay: 0s;
 }
 
+/* show tooltip when script adds .tooltip-hover to the label (JS-assisted) */
 .tooltip-hover .tooltiptext {
   visibility: visible;
   opacity: 1;
   transition-delay: 0s;
 }
 
+/* small adjustments for dark mode */
+body.dark-mode .tooltiptext {
+  background-color: white;
+  color: black;
+}
+
+/* Keep tooltip text readable on small screens */
 @media (max-width: 480px) {
   .tooltiptext { width: 260px; left: 0; }
 }
@@ -543,41 +652,19 @@ button {
   margin-top: 6px;
 }
 
+/* Username and other containers */
 .username-container {
     display: none;
-    position: fixed;
-    top: 50%;
+    position: absolute;
+    top: 48%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
     color: black;
     font-family: 'Game Font', sans-serif;
-    background-color: #ffffffc9;
-    border-radius: 30px;
-    padding: 40px 30px;
-    backdrop-filter: blur(7px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    z-index: 2000;
-    max-width: 90%;
-    width: auto;
 }
 
-.username-container::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    z-index: -1;
-    display: none;
-}
-
-.username-container.modal::before {
-    display: block;
-}
-
+/* Input wrapper for floating label */
 .username-container .input-wrapper {
     position: relative;
     display: inline-block;
@@ -586,6 +673,7 @@ button {
     left: -19px;
 }
 
+/* Slightly taller padding to make room for label */
 .username-container input {
     padding: 5px 47px 16px 20px;
     font-size: 18px;
@@ -605,6 +693,7 @@ button {
     top: 0px;
 }
 
+/* Floating label */
 .username-container .floating-label {
     position: absolute;
     left: 22px;
@@ -612,12 +701,14 @@ button {
     font-size: 16px;
     color: #8a8a8a;
     pointer-events: none;
+    /* Removed smooth animation so the label moves instantly */
     transition: none !important;
     background: transparent;
     padding: 0 6px;
     border-radius: 12px;
 }
 
+/* When the input has focus or the wrapper has a value, float label up (no animation) */
 .username-container .input-wrapper.has-value .floating-label,
 .username-container .input-wrapper input:focus + .floating-label {
     transform: translateY(-135%);
@@ -626,6 +717,7 @@ button {
     top: 1px;
 }
 
+/* Focused input shadow */
 .username-container input:focus {
     box-shadow: 0 6px 18px rgba(158,168,219,0.18);
 }
@@ -643,11 +735,16 @@ button {
     position: relative;
 }
 
+/* In dark mode we show the note as black (per request) */
+body.dark-mode .username-container .username-note {
+    color: white;
+}
+
 .username-container button {
     padding: 10px 20px;
     font-size: 18px;
     border-radius: 30px;
-    border: 3px solid black;
+    border: none;
     cursor: pointer;
     background-color: var(--accent);
     color: white;
@@ -655,7 +752,7 @@ button {
     width: calc(78% - 40px);
     font-family: 'Game Font', sans-serif;
     backdrop-filter: blur(7px);
-    box-shadow: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
     letter-spacing: 1px;
     right: -3px;
     position: relative;
@@ -685,19 +782,20 @@ button {
     background-color: white;
 }
 
+/* Building Stats button (placed next to username) */
 .user-info .building-stats-btn {
     margin-left: 12px;
     padding: 8px 24px;
     font-size: 16px;
     border-radius: 30px;
-    background-color: var(--accent);
+    background-color: var(--accent); /* same base color as .segmented-control buttons */
     color: white;
-    border: 3px solid black;
+    border: none;
     cursor: not-allowed;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    box-shadow: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     font-family: 'Game Font', sans-serif;
     transition: opacity 0.18s ease;
     margin: 4px;
@@ -708,6 +806,14 @@ button {
     opacity: 0.85;
 }
 
+/* Dark mode variant for the Building Stats button */
+body.dark-mode .user-info .building-stats-btn {
+    background-color: var(--accent);
+    color: black;
+    cursor: not-allowed;
+}
+
+/* Stats Container Styles */
 .stats-container {
     position: absolute;
     top: 160px;
@@ -737,6 +843,7 @@ button {
     margin-bottom: 6px;
 }
 
+/* Changelog Styles */
 .changelog-container {
     position: absolute;
     top: 160px;
@@ -752,6 +859,7 @@ button {
     backdrop-filter: blur(7px);
     font-family: 'Game Font', sans-serif;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    
 }
 .changelog-title {
     font-size: 18px;
@@ -764,6 +872,7 @@ button {
     color: #333;
 }
 
+/* --- Settings tab styles --- */
 .settings-container {
     position: absolute;
     top: 160px;
@@ -784,6 +893,7 @@ button {
     height: 580px;
 }
 
+/* scrollbar for settings panel */
 .settings-container::-webkit-scrollbar {
     width: 10px;
 }
@@ -808,12 +918,13 @@ button {
     font-weight: 400;
 }
 
+/* The visible track (we will update inline style with JS to show partial fill) */
 .settings-slider {
     -webkit-appearance: none;
     width: 180px;
     height: 8px;
     border-radius: 30px;
-    background: #ededed;
+    background: #ededed; /* default grey, JS will replace with gradient showing filled portion */
     outline: none;
     transition: background 0.2s;
     margin-right: 10px;
@@ -846,6 +957,7 @@ button {
     text-align: center;
     transition: all 0.19s ease-in-out;
 }
+/* For Firefox */
 .settings-slider::-moz-range-track {
     background: #ededed;
     height: 8px;
@@ -855,6 +967,7 @@ button {
 .settings-slider:focus {
     outline: none;
 }
+/* Hide default FF vertical bar */
 input[type=range]::-ms-fill-lower {
     background: #ededed;
 }
@@ -869,95 +982,110 @@ input[type=range]::-ms-thumb {
     border: 2px solid white;
 }
 
-#cookie-count,
-#per-second {
+/* Dark mode specific styles */
+body.dark-mode #cookie-count,
+body.dark-mode #per-second {
     background-color: transparent;
-    color: black !important;
+    color: white !important;
 }
 
-.panel-title {
-    color: black;
+body.dark-mode .panel-title {
+    color: white;
 }
 
-.upgrade-container,
-.stats-container,
-.changelog-container,
-.settings-container {
-    background-color: #ffffffc9;
-    color: black;
+body.dark-mode .upgrade-container,
+body.dark-mode .stats-container,
+body.dark-mode .changelog-container,
+body.dark-mode .settings-container {
+    background-color: #1d1919c9;
+    color: white;
 }
 
-.upgrade-item {
-    background-color: var(--accent);
+/* upgrade-item dark mode: inner box becomes black with white text */
+body.dark-mode .upgrade-item {
+    background-color: #1f1f1f;
     color: #ffffff;
-    box-shadow: 0 2px 12px rgba(177 172 172 / 60%);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.6);
 }
-.upgrade-item .label strong {
+body.dark-mode .upgrade-item .label strong {
     color: #ffffff;
 }
-.upgrade-item .label .subtitle {
-    color: white;
+body.dark-mode .upgrade-item .label .subtitle {
+    color: white; /* slightly brighter green for contrast */
 }
 
-.segmented-control {
-    background-color: #ffffff;
+body.dark-mode .upgrade-container .changelog-row,
+body.dark-mode .changelog-container .changelog-row {
+    color: #ddd;
 }
 
-.segmented-control button {
+body.dark-mode .segmented-control {
+    background-color: #000000;
+}
+
+body.dark-mode .segmented-control button {
+    background-color: var(--accent);
+    color: black;
+}
+
+body.dark-mode .segmented-control button.selected {
+    background-color: var(--accent-2);
+    color: black;
+}
+
+body.dark-mode .segmented-control button:hover:not(.selected) {
+    background-color: var(--accent-2);
+}
+
+body.dark-mode .upgrade-item button {
     background-color: var(--accent);
     color: white;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.3);
 }
 
-.segmented-control button.selected {
-    background-color: var(--accent-2);
+body.dark-mode .username-container,
+body.dark-mode .user-info,
+body.dark-mode .username-container input,
+body.dark-mode .username-container button {
     color: white;
 }
 
-.segmented-control button:hover:not(.selected) {
-    background-color: var(--accent-2);
-}
-
-.upgrade-item button {
-    background: linear-gradient(90deg, var(--accent-2), var(--accent));
+body.dark-mode .username-container input {
+    background-color: black;
     color: white;
-    box-shadow: none;
 }
 
-.username-container,
-.user-info,
-.username-container input,
-.username-container button {
-    color: black;
+body.dark-mode .user-info {
+    color: white;
+    background-color: black;
 }
 
-.username-container input {
-    background-color: white;
-    color: black;
+/* Make settings-value white in dark mode (this is the fix you asked for) */
+body.dark-mode .settings-value,
+body.dark-mode #music-volume-val,
+body.dark-mode #sfx-volume-val {
+    color: #ffffff !important;
 }
 
-.user-info {
-    color: black;
-    background-color: white;
-}
-
-.settings-value {
-    color: #333 !important;
-}
-
+/* Inline mana image / emoji style (used to replace the 🍪 emoji)
+   - Use flex alignment to ensure it's baseline-aligned with the number */
 .inline-cookie {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-right: 0;
     line-height: 1;
-    font-size: 1.15em;
+    font-size: 1.15em; /* make emoji a little larger to match number size */
 }
 
+/* Slightly larger mana icon in the main counter */
 #cookie-count .inline-cookie {
     font-size: 1.25em;
     margin-right: 6px;
 }
 
+/* Keep the small image sizing for img elements inside .inline_cookie usage
+   (explicit sizing for image-based inline-cookie usage inside upgrade buttons) */
 .upgrade-container button .inline-cookie img,
 .upgrade-item button .inline-cookie img {
     width: 18px;
@@ -965,12 +1093,18 @@ input[type=range]::-ms-thumb {
     object-fit: contain;
 }
 
+/* ensure span-based inline-cookie is not clipped in buttons */
 .upgrade-item button .inline-cookie {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
+/* ------------------------------------------------------------------
+   New switch styles (From Uiverse.io by nikk7007) scoped to .switch
+   NOTE: switch is kept in CSS for backwards compatibility, but the UI
+   now uses a rounded dropdown control instead of the checkbox switch.
+   ------------------------------------------------------------------ */
 .switch {
   --false: #fff;
   --true: #fff;
@@ -1010,6 +1144,13 @@ input[type=range]::-ms-thumb {
   left: calc(100% - (1.9em/2 + .3em));
 }
 
+/* ensure high contrast in dark mode */
+body.dark-mode .switch input[type=checkbox] {
+  background-color: #2b3246;
+}
+
+/* New theme dropdown (replaces the old inline switch)
+   - rounded 30px as requested; keyboard/ARIA friendly */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -1021,4 +1162,195 @@ input[type=range]::-ms-thumb {
   color: white;
   padding: 8px 16px;
   font-size: 16px;
-  border: 3px solid black;
+  border: none;
+  cursor: pointer;
+  border-radius: 30px; /* requested rounded corners */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Game Font';
+  transition: all 0.19s ease-in-out;
+}
+
+/* based on the snippet you provided, but rounded to 30px */
+.dropdown-content {
+   position: absolute;
+  right: 0;
+  top: 45px;
+
+  background-color: #ffffff87;
+  backdrop-filter: blur(5px);
+  min-width: 160px;
+  padding: 6px;
+  border-radius: 20px;
+  box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+  z-index: 1002;
+
+  /* animation setup */
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  pointer-events: none;
+
+  transition:
+    opacity var(--transDur) ease,
+    transform var(--transDur) cubic-bezier(0.46, 2, 0.5, 2);
+}
+
+.dropdown-content button,
+.dropdown-content a {
+  background: transparent;
+  border: none;
+  color: black;
+  padding: 8px 7px;
+  text-decoration: none;
+  display: block;
+  width: 95%;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 12px;
+  font-family: 'Game Font';
+  margin: 5px;
+}
+
+.dropdown-content button:hover,
+.dropdown-content a:hover {
+  background-color: var(--accent);
+  color: white;
+}
+
+body.dark-mode .dropdown-content button:hover,
+body.dark-mode .dropdown-content a:hover {
+  background-color: var(--accent-2);
+  color: black;
+}
+
+/* show/hide modifiers toggled by JS */
+.dropdown.open .dropdown-content {
+  display: block;
+  top: 45px;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* small adjustments for dark mode */
+body.dark-mode .dropbtn {
+  background-color: var(--accent);
+  color: black;
+}
+body.dark-mode .dropdown-content {
+  background-color: #1d1919c9;
+  backdrop-filter: blur(5px);
+}
+body.dark-mode .dropdown-content button,
+body.dark-mode .dropdown-content a {
+  color: white;
+}
+
+/* --------------------
+   Suffix color styles
+   --------------------
+   Color applied to the abbreviated suffix span inserted by the JS formatters.
+   Light mode: #3b4a8f
+   Dark mode:  #9faded
+*/
+.num-suffix {
+    color: #3b4a8f;
+    font-weight: 700;
+    margin-left: 2px;
+    /* make suffix slightly smaller so number stands out */
+    font-size: 0.95em;
+}
+
+body.dark-mode .num-suffix {
+    color: #9faded;
+}
+
+body.dark-mode .upgrades-container {
+    background-color: #1d1919c9;
+}
+
+body.dark-mode .upgrades-container .nothing {
+    color: white;
+}
+
+/* Ensure nested suffix in .cost or other elements inherit/override correctly */
+.upgrade-item button .cost .num-suffix,
+.upgrade-item .label .num-suffix,
+#cookie-count .num-suffix,
+#per-second .num-suffix,
+.stats-container .stat-row .num-suffix {
+    font-weight: 700;
+}
+
+/* Upgrades container uses the same visual style as upgrade-container */
+.upgrades-container {
+    position: absolute;
+    top: 160px;
+    left: 800px;
+    display: none;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: #ffffffc9;
+    border-radius: 30px;
+    padding: 16px;
+    max-height: 580px;
+    overflow-y: auto;
+    backdrop-filter: blur(7px);
+    color: black;
+    width: 390px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    gap: 10px;
+    height: 580px;
+}
+
+.upgrades-container .nothing {
+    color: #333;
+    font-size: 16px;
+}
+
+/* ------------------------------------------------------------------
+   Number animation helper styles
+   - .animating-number is applied while JS tween runs to give a subtle
+     scale/brightness hint on changes.
+   ------------------------------------------------------------------ */
+.animating-number {
+    display: inline-block;
+    transform-origin: 50% 50%;
+    transition: transform 0.12s ease, filter 0.12s ease;
+    transform: scale(1.03);
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.08));
+}
+
+/* Slightly different effect in dark mode for better contrast */
+body.dark-mode .animating-number {
+    transform: scale(1.025);
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.18));
+}
+
+/* Large desktop / ultra-wide improvements (optional polish) */
+ .upgrade-container, .upgrades-container {
+    width: 420px;
+    height: 580px;
+    max-height: 580px;
+    overflow-y: auto;
+  }
+
+  .cookie-section #cookie {
+    width: 400px;
+    height: 400px;
+  }
+
+  #cookie-count {
+    width: 420px;
+    left: 169px;
+  }
+}
+
+/* Ensure tooltip positioning still works when panels are fixed or moved */
+.tooltiptext.fixed-position {
+  /* small tweak so tooltips won't overflow on narrow screens */
+  max-width: calc(100vw - 16px);
+  word-break: break-word;
+}
