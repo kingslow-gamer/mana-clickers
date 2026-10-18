@@ -313,9 +313,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const emojiSuffixMap = {
         k: 'k',
-        M: 'M',
-        B: 'B',
-        T: 'T',
+        M: 'm',
+        B: 'b',
+        T: 't',
         Qa: 'aa',
         Qi: 'ab',
         Sx: 'ac',
@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        if (perSecondElement) perSecondElement.innerHTML = `🕒${formatPerSecond(cookiesPerSecond)} Mana per second`;
+        if (perSecondElement) perSecondElement.innerHTML = `${formatPerSecond(cookiesPerSecond)}/s`;
 
         const labels = [
             { id: 'autotap-label', text: `Autotap: ${ownedAutotaps}`, cps: autotapCps, owned: ownedAutotaps, produced: producedAutotaps, tooltipId: 'autotap-tooltip' },
@@ -772,8 +772,8 @@ document.addEventListener('DOMContentLoaded', function () {
         setCost(clickboostButtonElement, clickBoostCost);
 
         if (totalCookiesRow) totalCookiesRow.innerHTML = `${manaEmoji} ${formatNumber(Math.floor(totalMana))}`;
-        if (clicksRow) clicksRow.innerHTML = `👆 ${formatNumber(Math.floor(clickCount))}`;
-        if (totalBuildingsRow) totalBuildingsRow.innerHTML = ` 🏗️ ${formatNumber(Math.floor(computeTotalBuildings()))}`;
+        if (clicksRow) clicksRow.innerHTML = `${formatNumber(Math.floor(clickCount))}`;
+        if (totalBuildingsRow) totalBuildingsRow.innerHTML = `${formatNumber(Math.floor(computeTotalBuildings()))}`;
 
         // Update the new Audio & Appearance rows
         if (musicStatRow) {
@@ -856,21 +856,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const totalTick = autoContrib + pickContrib + farmContrib + mineContrib + factoryContrib + bankContrib + templeContrib + wizardContrib;
 
-            manaCount += totalTick / 30;
-            totalMana += totalTick / 30;
+            manaCount += totalTick / 60;
+            totalMana += totalTick / 60;
 
-            producedAutotaps += autoContrib / 30;
-            producedPickaxes += pickContrib / 30;
-            producedFarms += farmContrib / 30;
-            producedMines += mineContrib / 30;
-            producedFactories += factoryContrib / 30;
-            producedBanks += bankContrib / 30;
-            producedTemples += templeContrib / 30;
-            producedWizards += wizardContrib / 30;
+            producedAutotaps += autoContrib / 60;
+            producedPickaxes += pickContrib / 60;
+            producedFarms += farmContrib / 60;
+            producedMines += mineContrib / 60;
+            producedFactories += factoryContrib / 60;
+            producedBanks += bankContrib / 60;
+            producedTemples += templeContrib / 60;
+            producedWizards += wizardContrib / 60;
 
             updateDisplay();
             checkUpgrades();
-        }, 1000 / 30);
+        }, 1000 / 60);
     }
 
     function checkUpgrades() {
