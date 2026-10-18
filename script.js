@@ -856,21 +856,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const totalTick = autoContrib + pickContrib + farmContrib + mineContrib + factoryContrib + bankContrib + templeContrib + wizardContrib;
 
-            manaCount += totalTick / 1;
-            totalMana += totalTick / 1;
+            manaCount += totalTick / 30;
+            totalMana += totalTick / 30;
 
-            producedAutotaps += autoContrib / 1;
-            producedPickaxes += pickContrib / 1;
-            producedFarms += farmContrib / 1;
-            producedMines += mineContrib / 1;
-            producedFactories += factoryContrib / 1;
-            producedBanks += bankContrib / 1;
-            producedTemples += templeContrib / 1;
-            producedWizards += wizardContrib / 1;
+            producedAutotaps += autoContrib / 30;
+            producedPickaxes += pickContrib / 30;
+            producedFarms += farmContrib / 30;
+            producedMines += mineContrib / 30;
+            producedFactories += factoryContrib / 30;
+            producedBanks += bankContrib / 30;
+            producedTemples += templeContrib / 30;
+            producedWizards += wizardContrib / 30;
 
             updateDisplay();
             checkUpgrades();
-        }, 1000 / 1);
+        }, 1000 / 30);
     }
 
     function checkUpgrades() {
