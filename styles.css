@@ -206,16 +206,19 @@ body.dark-mode .loading-icon path {
    icon always vertically centers with the number regardless of font/emoji metrics. */
 #cookie-count {
     position: absolute;
-    top: 30px;
+    top: 68px;
     left: 170px;
     text-align: center;
-    font-size: 25px;
+    font-size: 36px;
     font-weight: bold;
     padding: 10px 16px;
     border-radius: 20px;
     transition: all 0.19s ease-in-out;
     color: black;
     width: 400px;
+    -webkit-text-stroke: 4px black;
+    paint-order: stroke fill;
+    filter: drop-shadow(0px 1px 0px #000000);
 
     /* alignment fix: use inline-flex to keep emoji & number aligned */
     display: inline-flex;
@@ -227,10 +230,10 @@ body.dark-mode .loading-icon path {
 /* per-second unchanged layout but ensure it's readable */
 #per-second {
     position: absolute;
-    top: 90px;
+    top: 141px;
     left: 240px;
     text-align: center;
-    font-size: 16px;
+    font-size: 25px;
     padding: 10px;
     border-radius: 20px;
     color: black;
@@ -251,7 +254,7 @@ body.dark-mode .loading-icon path {
 #cookie {
     width: 200px;
     height: 200px;
-    margin-left: -120px;
+    margin-left: -40px;
     cursor: pointer;
     transition: transform 0.3s, filter 0.18s ease-in-out;
     /* Force a solid black render in light mode */
@@ -424,8 +427,8 @@ body.dark-mode .segmented-control .seg-icon path {
 .upgrade-item button {
     position: relative; /* required for ripple */
     overflow: hidden;   /* hide ripple overflow */
-    background: linear-gradient(90deg, var(--accent-2), var(--accent)); /* pill gradient */
-    box-shadow: 0 8px 18px rgba(11,87,208,0.14), 0 2px 8px rgba(0,0,0,0.08);
+    background: #142775; /* pill gradient */
+    box-shadow: 0 3px 0px #000000, 0 2px 0px #000000;
     border-radius: 20px;
     padding: 12px 16px;
     display: inline-flex;
@@ -456,7 +459,7 @@ body.dark-mode .segmented-control .seg-icon path {
     width: 34px;
     height: 34px;
     border-radius: 10px;
-    background: rgba(255,255,255,0.12);
+    background: transparent;
     color: white;
     font-size: 18px;
     flex: 0 0 auto;
@@ -1338,8 +1341,8 @@ body.dark-mode .animating-number {
   }
 
   .cookie-section #cookie {
-    width: 400px;
-    height: 400px;
+    width: 240px;
+    height: 340px;
   }
 
   #cookie-count {
