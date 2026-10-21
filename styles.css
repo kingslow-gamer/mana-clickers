@@ -428,7 +428,7 @@ body.dark-mode .segmented-control .seg-icon path {
     position: relative; /* required for ripple */
     overflow: hidden;   /* hide ripple overflow */
     background: #142775; /* pill gradient */
-    box-shadow: 0 3px 0px #000000, 0 2px 0px #000000;
+    box-shadow: 0 3px 0px #081132, 0 2px 0px #081132;
     border-radius: 20px;
     padding: 12px 16px;
     display: inline-flex;
