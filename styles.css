@@ -251,7 +251,7 @@ body.dark-mode .loading-icon path {
 #cookie {
     width: 200px;
     height: 200px;
-    margin-left: -120px;
+    margin-left: -27px;
     cursor: pointer;
     transition: transform 0.3s, filter 0.18s ease-in-out;
     /* Force a solid black render in light mode */
@@ -1338,11 +1338,11 @@ body.dark-mode .animating-number {
   }
 
   .cookie-section #cookie {
-    width: 400px;
-    height: 400px;
+    width: 200px;
+    height: 300px;
   }
 
-  #cookie-count {
+  -count {
     width: 420px;
     left: 169px;
   }
