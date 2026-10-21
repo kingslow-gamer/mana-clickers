@@ -214,7 +214,7 @@ body.dark-mode .loading-icon path {
     padding: 10px 16px;
     border-radius: 20px;
     transition: all 0.19s ease-in-out;
-    color: black;
+    color: white;
     width: 400px;
     -webkit-text-stroke: 4px black;
     paint-order: stroke fill;
