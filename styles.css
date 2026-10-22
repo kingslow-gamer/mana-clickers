@@ -206,16 +206,19 @@ body.dark-mode .loading-icon path {
    icon always vertically centers with the number regardless of font/emoji metrics. */
 #cookie-count {
     position: absolute;
-    top: 30px;
+    top: 50px;
     left: 170px;
     text-align: center;
-    font-size: 25px;
+    font-size: 40px;
     font-weight: bold;
     padding: 10px 16px;
     border-radius: 20px;
     transition: all 0.19s ease-in-out;
-    color: black;
+    color: white;
     width: 400px;
+    paint-order: stroke fill;
+    -webkit-text-stroke: 5px black;
+    filter: drop-shadow(0px 1.5px 0px #000000);
 
     /* alignment fix: use inline-flex to keep emoji & number aligned */
     display: inline-flex;
@@ -227,7 +230,7 @@ body.dark-mode .loading-icon path {
 /* per-second unchanged layout but ensure it's readable */
 #per-second {
     position: absolute;
-    top: 90px;
+    top: 140px;
     left: 240px;
     text-align: center;
     font-size: 16px;
