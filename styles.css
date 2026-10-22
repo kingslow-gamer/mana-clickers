@@ -823,7 +823,7 @@ body.dark-mode .user-info .building-stats-btn {
     background-color: #ffffffc9;
     border-radius: 30px;
     padding: 20px;
-    max-height: 580px
+    max-height: 580px;
     height: 420px;;
     color: black;
     width: 420px;
@@ -1295,7 +1295,7 @@ body.dark-mode .upgrades-container .nothing {
     background-color: #ffffffc9;
     border-radius: 30px;
     padding: 16px;
-    max-height: 580px
+    max-height: 580px;
     overflow-y: auto;
     backdrop-filter: blur(7px);
     color: black;
@@ -1333,7 +1333,7 @@ body.dark-mode .animating-number {
  .upgrade-container, .upgrades-container {
     width: 420px;
     height: 420px;
-    max-height: 580px
+    max-height: 580px;
     overflow-y: auto;
   }
 
