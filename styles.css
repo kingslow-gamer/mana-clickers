@@ -882,7 +882,7 @@ body.dark-mode .user-info .building-stats-btn {
     background-color: #ffffffc9;
     border-radius: 30px;
     padding: 24px 24px 18px 24px;
-    max-height: 580px
+    max-height: 580px;
     width: 390px;
     color: black;
     backdrop-filter: blur(7px);
