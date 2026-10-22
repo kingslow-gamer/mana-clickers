@@ -824,7 +824,7 @@ body.dark-mode .user-info .building-stats-btn {
     border-radius: 30px;
     padding: 20px;
     max-height: 580px
-    height: 420px
+    height: 420px;;
     color: black;
     width: 420px;
     backdrop-filter: blur(7px);
@@ -890,7 +890,7 @@ body.dark-mode .user-info .building-stats-btn {
     box-shadow: 0 2px 15px rgba(0,0,0,0.1);
     transition: all 0.19s ease-in-out;
     overflow-y: auto;
-    height: 420px
+    height: 420px;
 }
 
 /* scrollbar for settings panel */
@@ -1302,7 +1302,7 @@ body.dark-mode .upgrades-container .nothing {
     width: 390px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.08);
     gap: 10px;
-    height: 420px
+    height: 420px;
 }
 
 .upgrades-container .nothing {
@@ -1332,7 +1332,7 @@ body.dark-mode .animating-number {
 /* Large desktop / ultra-wide improvements (optional polish) */
  .upgrade-container, .upgrades-container {
     width: 420px;
-    height: 420px
+    height: 420px;
     max-height: 580px
     overflow-y: auto;
   }
