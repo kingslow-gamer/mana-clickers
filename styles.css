@@ -3,8 +3,8 @@
     --transDur: 0.3s;
     --primary: rgba(148,118,255,0.95);
     /* Accent color for buttons (light mode) */
-    --accent: #00c8ff;
-    --accent-2: #2eff8f; /* lighter accent for gradients and highlights */
+    --accent: #2c1163;
+    --accent-2: #1d1275; /* lighter accent for gradients and highlights */
 }
 
 /* Dark-mode variable overrides */
@@ -692,7 +692,7 @@ body.dark-mode .tooltiptext {
     letter-spacing: 1px;
     transition: box-shadow .18s ease;
     position: relative;
-    left: 8px;
+    left: 12px;
     top: 0px;
 }
 
@@ -759,7 +759,7 @@ body.dark-mode .username-container .username-note {
     letter-spacing: 1px;
     right: -3px;
     position: relative;
-    top: 64px;
+    top: 0px;
 }
 
 .user-info {
