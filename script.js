@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        if (perSecondElement) perSecondElement.innerHTML = `🕒${formatPerSecond(cookiesPerSecond)} Mana per second`;
+        if (perSecondElement) perSecondElement.innerHTML = `${formatPerSecond(cookiesPerSecond)} mps`;
 
         const labels = [
             { id: 'autotap-label', text: `Autotap: ${ownedAutotaps}`, cps: autotapCps, owned: ownedAutotaps, produced: producedAutotaps, tooltipId: 'autotap-tooltip' },
@@ -724,7 +724,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Clickboost: special tooltip showing the formatted click-add per upgrade
                     el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formatCookieValue(clickBoostAdd)}/click</span><span class="tooltiptext" id="${l.tooltipId}">Gives ${formatCookieValue(clickBoostAdd)} per upgrade</span>`;
                 } else {
-                    el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formattedCps}/s</span><span class="tooltiptext" id="${l.tooltipId}">${percent}% of Mps<br>${manaEmoji}<span class="produced-number" data-value="${producedVal}">${formatNumber(producedVal)}</span> produced<br>Producing <span class="producing-number" data-value="${producingVal}">${formatCookieValue(producingVal)}</span>${manaEmoji}/s</span>`;
+                    el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formattedCps}/s</span><span class="tooltiptext" id="${l.tooltipId}">${percent}% of mps<br>${manaEmoji}<span class="produced-number" data-value="${producedVal}">${formatNumber(producedVal)}</span> produced<br>Producing <span class="producing-number" data-value="${producingVal}">${formatCookieValue(producingVal)}</span>${manaEmoji}/s</span>`;
                 }
 
                 const tooltipEl = document.getElementById(l.tooltipId);
