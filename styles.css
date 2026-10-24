@@ -354,6 +354,8 @@ body.dark-mode .segmented-control .seg-icon path {
     color: black;
     width: auto;
     box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    border: solid;
+    border-width: 5px;
     gap: 10px;
     max-height: auto;
     box-shadow: inset 0px -4px 0px 0px #00000080;
