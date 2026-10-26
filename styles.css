@@ -431,6 +431,40 @@ body.dark-mode .segmented-control .seg-icon path {
     opacity: 0.95;
 }
 
+/* replace the old emoji styling with an image icon */
+.inline-cookie,
+.cookie-number,
+#cookie-count .inline-cookie,
+#cookie-count .cookie-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+.mana-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    filter: drop-shadow(0 2px 0 rgba(0,0,0,0.25));
+    user-select: none;
+    pointer-events: none;
+}
+
+#cookie-count .mana-icon {
+    width: 34px;
+    height: 34px;
+    transform: translateY(-1px);
+}
+
+#per-second .mana-icon {
+    width: 20px;
+    height: 20px;
+    transform: translateY(-1px);
+}
+
 /* -----------------------------
    NEW pill-style upgrade button + ripple
    ----------------------------- */
