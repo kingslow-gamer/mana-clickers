@@ -443,8 +443,8 @@ body.dark-mode .segmented-control .seg-icon path {
 }
 
 .mana-icon {
-    width: 32px;
-    height: 32px;
+    width: 18px;
+    height: 18px;
     object-fit: contain;
     display: inline-block;
     vertical-align: middle;
@@ -454,14 +454,14 @@ body.dark-mode .segmented-control .seg-icon path {
 }
 
 #cookie-count .mana-icon {
-    width: 34px;
-    height: 34px;
+    width: 22px;
+    height: 22px;
     transform: translateY(-1px);
 }
 
 #per-second .mana-icon {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     transform: translateY(-1px);
 }
 
