@@ -154,7 +154,9 @@ document.addEventListener('DOMContentLoaded', function () {
     let cursorMultiplier = 1;
 
     const suffixes = ["k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", "Udc", "Ddc", "Tdc", "Qadc"];
-    const manaEmoji = '💧';
+    // near the top of the file, replace the old emoji variable
+    const manaIconUrl = 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dlyaxmt-560e69d6-5c7f-4398-a1c2-185ea8492e09.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGx5YXhtdC01NjBlNjlkNi01YzdmLTQzOTgtYTFjMi0xODVlYTg0OTJlMDkucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.evf-Y9_EM8dsSuCkPY9RQ2z0n55A9y5sDLTWWaj8PoE';
+    const manaEmoji = `<img src="${manaIconUrl}" alt="Mana" class="mana-icon" />`;
 
     // DOM refs
     const loadingScreen = document.querySelector('.loading-screen');
@@ -677,24 +679,26 @@ document.addEventListener('DOMContentLoaded', function () {
     // ---------------------------
     function updateDisplay() {
         // Mana count: display with one decimal place like per-second
+        // in updateDisplay()
         if (cookieCountElement) {
-            // ensure container has inline cookie and numeric span
             const existingNumber = cookieCountElement.querySelector('.cookie-number');
             const targetMana = manaCount;
-            if (!existingNumber) {
-                cookieCountElement.innerHTML = `<span class="inline-cookie">${manaEmoji}</span><span class="cookie-number" data-value="${targetMana}">${formatCookieValue(targetMana)}</span>`;
-                const el = cookieCountElement.querySelector('.cookie-number');
-                if (el) {
-                    el._displayedValue = targetMana;
-                    if (el.dataset) el.dataset.value = String(targetMana);
-                }
-            } else {
-                // Immediate update (no animation) for main mana counter, show 1 decimal if needed
-                existingNumber._displayedValue = Math.floor(targetMana);
-                if (existingNumber.dataset) existingNumber.dataset.value = String(Math.floor(targetMana));
-                existingNumber.innerHTML = formatCookieValue(targetMana);
-            }
+        if (!existingNumber) {
+            cookieCountElement.innerHTML = `
+                <span class="inline-cookie">${manaEmoji}</span>
+                <span class="cookie-number" data-value="${targetMana}">${formatCookieValue(targetMana)}</span>
+            `;
+        const el = cookieCountElement.querySelector('.cookie-number');
+        if (el) {
+            el._displayedValue = targetMana;
+            if (el.dataset) el.dataset.value = String(targetMana);
         }
+    } else {
+        existingNumber._displayedValue = Math.floor(targetMana);
+        if (existingNumber.dataset) existingNumber.dataset.value = String(Math.floor(targetMana));
+        existingNumber.innerHTML = formatCookieValue(targetMana);
+    }
+}
 
         if (perSecondElement) perSecondElement.innerHTML = `${formatPerSecond(cookiesPerSecond)} mps`;
 
