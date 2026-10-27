@@ -16,7 +16,7 @@ body.dark-mode {
 /* Load local OTF font (gamefont.otf) and bold TTF (gamefont-bold.ttf) */
 /* --- Font split: 1.ttf = regular, 2.ttf = bold/number font --- */
 @font-face {
-  font-family: "Game Font";
+  font-family: 'Game Font';
   src: url("1.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -24,7 +24,7 @@ body.dark-mode {
 }
 
 @font-face {
-  font-family: "Game Font";
+  font-family: 'Game Font';
   src: url("2.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
@@ -172,7 +172,7 @@ body.dark-mode {
 }
 
 .loading-timer .loading-text {
-  font-family: "Game Font 1", sans-serif;
+  font-family: 'Game Font', sans-serif;
   font-size: 30px;
   line-height: 1;
   color: #fff;
@@ -877,7 +877,7 @@ body.dark-mode .user-info .building-stats-btn {
 /* Grey label should use 1.ttf */
 .stats-container .stats-label,
 .stats-container .stats-label + .stat-row {
-  font-family: "Game Font 1", sans-serif;
+  font-family: 'Game Font', sans-serif;
   font-weight: 400;
 }
 
