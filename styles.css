@@ -443,20 +443,21 @@ body.dark-mode .segmented-control .seg-icon path {
 }
 
 .mana-icon {
-    width: 26px;
-    height: 26px;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
     display: inline-block;
     vertical-align: middle;
-    filter: drop-shadow(0 2px 0 rgba(0,0,0,0.25));
     user-select: none;
     pointer-events: none;
+    position: relative;
+    left: 14px;
 }
 
 #cookie-count .mana-icon {
-    width: 28px;
-    height: 28px;
-    transform: translateY(-1px);
+    width: 60px;
+    height: 60px;
+    transform: translateY(-2px);
 }
 
 #per-second .mana-icon {
