@@ -1609,7 +1609,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (hours >= 1) {
             return `${hours}h ${mins}m`;
         } else {
-            return `loading`;
+            return `Loading...`;
         }
     }
 
