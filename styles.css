@@ -14,12 +14,21 @@ body.dark-mode {
 }
 
 /* Load local OTF font (gamefont.otf) and bold TTF (gamefont-bold.ttf) */
+/* --- Font split: 1.ttf = regular, 2.ttf = bold/number font --- */
 @font-face {
-    font-family: 'Game Font';
-    src: url('1.ttf') format('truetype');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+  font-family: "Game Font 1";
+  src: url("1.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Game Font 2";
+  src: url("2.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 h1 {
@@ -57,15 +66,6 @@ h4 {
     font-weight: 700;
     unicode-bidi: isolate;
     color: #ff8800;
-}
-
-/* New bold face for 'Game Font' */
-@font-face {
-    font-family: 'Game Font';
-    src: url('2.ttf') format('truetype');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
 }
 
 body {
@@ -163,28 +163,23 @@ body.dark-mode {
     font-size: 20px;
 }
 
-/* Loading timer container & icon */
+/* Loading screen text + icon cleanup */
 .loading-timer {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 28px;
-    font-weight: 700;
-    color: white;
-    margin-top: 12px;
-
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
 }
 
-/* Loading SVG icon styling */
+.loading-timer .loading-text {
+  font-family: "Game Font 1", sans-serif;
+  font-size: 30px;
+  line-height: 1;
+  color: #fff;
+}
+
 .loading-icon {
-    width: 36px;
-    height: 36px;
-    display: inline-block;
-    vertical-align: middle;
-    fill: var(--accent-2); /* decorative color */
-}
-.loading-icon path {
-    fill: var(--accent-2);
+  display: none !important;
 }
 
 /* Dark mode tweak for the loading icon */
@@ -879,16 +874,23 @@ body.dark-mode .user-info .building-stats-btn {
     font-family: 'Game Font', sans-serif;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1)
 }
-.stats-container .stats-label {
-    font-weight: bold;
-    font-size: 15px;
-    margin-bottom: 10px;
-    color: grey;
+/* Grey label should use 1.ttf */
+.stats-container .stats-label,
+.stats-container .stats-label + .stat-row {
+  font-family: "Game Font 1", sans-serif;
+  font-weight: 400;
 }
+
+.stats-container .stats-label {
+  color: rgba(128, 128, 128, 0.9);
+  letter-spacing: 0.02em;
+}
+
+/* Keep stat numbers bold and aligned */
 .stats-container .stat-row {
-    font-size: 18px;
-    margin-top: 6px;
-    margin-bottom: 6px;
+  min-height: 44px;
+  line-height: 1.1;
+  color: #000;
 }
 
 /* Changelog Styles */
