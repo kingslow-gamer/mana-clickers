@@ -315,9 +315,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const emojiSuffixMap = {
         k: 'k',
-        M: 'M',
-        B: 'B',
-        T: 'T',
+        M: 'm',
+        B: 'b',
+        T: 't',
         Qa: 'aa',
         Qi: 'ab',
         Sx: 'ac',
@@ -776,17 +776,17 @@ document.addEventListener('DOMContentLoaded', function () {
         setCost(clickboostButtonElement, clickBoostCost);
 
         if (totalCookiesRow) totalCookiesRow.innerHTML = `${manaEmoji} ${formatNumber(Math.floor(totalMana))}`;
-        if (clicksRow) clicksRow.innerHTML = `👆 ${formatNumber(Math.floor(clickCount))}`;
-        if (totalBuildingsRow) totalBuildingsRow.innerHTML = ` 🏗️ ${formatNumber(Math.floor(computeTotalBuildings()))}`;
+        if (clicksRow) clicksRow.innerHTML = `${formatNumber(Math.floor(clickCount))}`;
+        if (totalBuildingsRow) totalBuildingsRow.innerHTML = `${formatNumber(Math.floor(computeTotalBuildings()))}`;
 
         // Update the new Audio & Appearance rows
         if (musicStatRow) {
             const mv = musicVolumeSlider ? musicVolumeSlider.value : '5';
-            musicStatRow.innerHTML = `Music: ${mv}`;
+            musicStatRow.innerHTML = `Music ${mv}`;
         }
         if (sfxStatRow) {
             const sv = sfxVolumeSlider ? sfxVolumeSlider.value : '5';
-            sfxStatRow.innerHTML = `SFX: ${sv}`;
+            sfxStatRow.innerHTML = `Sound ${sv}`;
         }
         if (appearanceStatRow) {
             const appearance = (document.body.classList.contains('dark-mode')) ? 'Dark' : 'Light';
@@ -813,12 +813,12 @@ document.addEventListener('DOMContentLoaded', function () {
         clone.style.left = `${x}px`;
         document.body.appendChild(clone);
         requestAnimationFrame(() => {
-            clone.style.transform = 'translateY(-30px)';
+            clone.style.transform = 'translateY(-60px)';
             clone.style.opacity = '0';
         });
         setTimeout(() => {
             if (clone.parentNode) clone.parentNode.removeChild(clone);
-        }, 400);
+        }, 200);
     }
 
     function createGoldenCookie(x, y) {
