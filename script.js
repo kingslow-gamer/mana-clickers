@@ -214,46 +214,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const musicVolumeSlider = document.getElementById('music-volume');
     // removed explicit numeric labels for sliders per request
     const sfxVolumeSlider = document.getElementById('sfx-volume');
-    // Add these near the other DOM refs
-    const shopButton = document.getElementById('shop-button');
-    const upgradeModal = document.getElementById('upgrade-modal');
-    const upgradeModalClose = document.getElementById('upgrade-modal-close');
-function openUpgradeModal() {
-    if (!upgradeModal) return;
-    upgradeModal.classList.add('open');
-    upgradeModal.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('modal-open');
-}
-
-function closeUpgradeModal() {
-    if (!upgradeModal) return;
-    upgradeModal.classList.remove('open');
-    upgradeModal.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
-}
-
-if (shopButton) {
-    shopButton.addEventListener('click', openUpgradeModal);
-}
-
-if (upgradeModalClose) {
-    upgradeModalClose.addEventListener('click', closeUpgradeModal);
-}
-
-if (upgradeModal) {
-    upgradeModal.addEventListener('click', (event) => {
-        const target = event.target;
-        if (target === upgradeModal || target.closest('[data-close="true"]')) {
-            closeUpgradeModal();
-        }
-    });
-}
-
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && upgradeModal && upgradeModal.classList.contains('open')) {
-        closeUpgradeModal();
-    }
-});
 
     // ---------------------------
     // Audio / slider helpers
