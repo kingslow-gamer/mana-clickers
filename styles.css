@@ -571,10 +571,9 @@ body.dark-mode .upgrade-item button .btn-cost .cost {
     opacity: 1;
     transition: opacity 0.5s, transform 0.2s;
     font-size: 18px;
-    font-weight: normal;
+    font-weight: 700;
     font-family: 'Game Font', sans-serif;
-    -webkit-text-stroke-width: 0.5px;
-    -webkit-text-stroke-color: var(--accent);
+    color: black;
 }
 
 .golden-cookie {
