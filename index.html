@@ -34,12 +34,13 @@
             <!-- main cookie image changed to the provided Mana PNG -->
             <img id="cookie" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dlyaxmt-560e69d6-5c7f-4398-a1c2-185ea8492e09.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGx5YXhtdC01NjBlNjlkNi01YzdmLTQzOTgtYTFjMi0xODVlYTg0OTJlMDkucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.evf-Y9_EM8dsSuCkPY9RQ2z0n55A9y5sDLTWWaj8PoE" alt="Mana Click">
         </div>
-    <div class="segmented-control" role="tablist" aria-label="Tabs">
-        <button id="buildings-button" class="selected" aria-pressed="true" aria-label="Buildings">
-            <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24" role="img" aria-hidden="true">
-                <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 15 L 14 15 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
-            </svg>
-        </button>
+        <div class="segmented-control" role="tablist" aria-label="Tabs">
+            <!-- Replaced home emoji with inline SVG. Accessible label kept. -->
+            <button id="buildings-button" class="selected" aria-pressed="true" aria-label="Buildings">
+                <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0 0 24 24" role="img" aria-hidden="true">
+                    <path d="M 12 2 A 1 1 0 0 0 11.289062 2.296875 L 1.203125 11.097656 A 0.5 0.5 0 0 0 1 11.5 A 0.5 0.5 0 0 0 1.5 12 L 4 12 L 4 20 C 4 20.552 4.448 21 5 21 L 9 21 C 9.552 21 10 20.552 10 20 L 10 14 L 14 14 L 14 20 C 14 20.552 14.448 21 15 21 L 19 21 C 19.552 21 20 20.552 20 20 L 20 12 L 22.5 12 A 0.5 0.5 0 0 0 23 11.5 A 0.5 0.5 0 0 0 22.796875 11.097656 L 12.716797 2.3027344 A 1 1 0 0 0 12.710938 2.296875 A 1 1 0 0 0 12 2 z"></path>
+                </svg>
+            </button>
 
             <!-- Upgrades button: replaced emoji with provided up-arrow SVG -->
             <button id="upgrades-button" aria-pressed="false" aria-label="Upgrades">
@@ -62,17 +63,7 @@
             <button id="settings-button" aria-pressed="false">⚙</button>
         </div>
 
-<div id="upgrade-modal" class="upgrade-modal" aria-hidden="true">
-    <div class="upgrade-modal-backdrop" data-close="true"></div>
-
-    <div class="upgrade-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="upgrade-modal-title">
-        <div class="upgrade-modal-header">
-            <h2 id="upgrade-modal-title">Upgrades</h2>
-            <button id="upgrade-modal-close" class="upgrade-modal-close" type="button" aria-label="Close upgrades">×</button>
-        </div>
-
-        <div id="upgrade-modal-content">
-            <!-- Reuse the exact existing upgrade content -->
+        <!-- UPGRADE (Buildings) CONTAINER -->
         <div class="upgrade-container" id="upgrade-container">
             <div class="panel-title">Autoclicks</div>
 
@@ -186,21 +177,21 @@
         </div>
         <div class="settings-container" id="settings-container">
             <div class="settings-label">Settings</div>
-            <h1>Audio controls</h1>
+            <h1>Audio</h1>
             <div class="settings-row">
-                <span class="settings-slider-label">Music</span>
+                <span class="settings-slider-label">♫ Music</span>
                 <!-- inline background removed so updateSliderBackground always controls the fill color -->
                 <input type="range" min="0" max="5" value="5" class="settings-slider" id="music-volume">
             </div>
             <div class="settings-row">
-                <span class="settings-slider-label">Sound</span>
+                <span class="settings-slider-label">🕪 Sound</span>
                 <input type="range" min="0" max="5" value="5" class="settings-slider" id="sfx-volume">
             </div>
             <h1>Appearance and Display</h1>
 
             <!-- NEW: Number format dropdown -->
             <div class="settings-row" style="align-items:center; gap:12px;">
-                <span class="settings-slider-label">Number format</span>
+                <span class="settings-slider-label">⚒ Number format</span>
                 <div class="dropdown" id="numberformat-dropdown" style="margin-left: 12px;">
                     <button id="numberformat-button" class="dropbtn" aria-haspopup="true" aria-expanded="false">Normal</button>
                     <div id="numberformatDropdown" class="dropdown-content" role="menu" aria-hidden="true">
@@ -213,18 +204,12 @@
             <h1>Ver. 0.0.320</h1>
             <h4>Game still in development</h4>
         </div>
-    
 
         <audio id="click-sound" src="click.wav"></audio>
         <audio id="upgrade-sound" src="buyUpgrade.wav"></audio>
         <audio id="upgraded-sound" src="upgraded.wav"></audio>
         <audio id="music-audio" src="game_music.ogg" loop preload="auto"></audio>
-            <div class="user-info" style="display: none;">
-                    <button id="shop-button" class="shop-button" type="button" aria-label="Open upgrades">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115.4 122.88" width="18" height="18" aria-hidden="true" focusable="false">
-                <path d="M24.94,67.88A14.66,14.66,0,0,1,4.38,47L47.83,4.21a14.66,14.66,0,0,1,20.56,0L111,46.15A14.66,14.66,0,0,1,90.46,67.06l-18-17.69-.29,59.17c-.10,19.28-29.42,19-29.33-.25L43.14,10.76l-3.06,69.86a14.66,14.66,0,0,1-15.14,13.26Z"/>
-            </svg>
-        </button>
+        <div class="user-info" style="display: none;">
             <img src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" alt="User Profile">
             <span id="username-display"></span>
             <!-- Building Stats button (disabled for now as requested) -->
@@ -238,7 +223,7 @@
             <label for="username-input" class="floating-label">Username</label>
         </div>
         <!-- id changed to notify-btn so it can be used to trigger toast permission as part of click gesture -->
-        <button id="notify-btn">Play</button>
+        <button id="notify-btn">Start playing</button>
     </div>
 
     <script src="script.js" defer></script>
