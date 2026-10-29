@@ -813,12 +813,12 @@ document.addEventListener('DOMContentLoaded', function () {
         clone.style.left = `${x}px`;
         document.body.appendChild(clone);
         requestAnimationFrame(() => {
-            clone.style.transform = 'translateY(-60px)';
+            clone.style.transform = 'translateY(-25px)';
             clone.style.opacity = '0';
         });
         setTimeout(() => {
             if (clone.parentNode) clone.parentNode.removeChild(clone);
-        }, 200);
+        }, 400);
     }
 
     function createGoldenCookie(x, y) {
