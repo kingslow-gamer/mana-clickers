@@ -78,26 +78,26 @@ document.addEventListener('DOMContentLoaded', function () {
     let manaCount = 0;
     let totalMana = 0;
     let cookiesPerClick = 0.01;
-    let upgradeCost = 2.50;
-    let pickaxeCost = 500;
-    let farmCost = 150e3;
-    let mineCost = 60e6;
-    let factoryCost = 31000;
-    let bankCost = 79900;
-    let templeCost = 250000;
-    let wizardCost = 1.01e6;
+    let upgradeCost = 2;
+    let pickaxeCost = 60;
+    let farmCost = 220;
+    let mineCost = 1100;
+    let factoryCost = 3400;
+    let bankCost = 8900;
+    let templeCost = 30000;
+    let wizardCost = 125000;
 
-    let autotapCps = 0.10;
-    let pickaxeCps = 16;
-    let farmCps = 2560;
-    let mineCps = 409600;
-    let factoryCps = 490;
-    let bankCps = 2500;
-    let templeCps = 16000;
-    let wizardCps = 92000;
+    let autotapCps = 0.25;
+    let pickaxeCps = 1.5;
+    let farmCps = 8;
+    let mineCps = 42;
+    let factoryCps = 150;
+    let bankCps = 320;
+    let templeCps = 999;
+    let wizardCps = 2800;
 
-    let clickBoostCost = 0.20;
-    const clickBoostAdd = 0.02;
+    let clickBoostCost = 0.15;
+    const clickBoostAdd = 0.005;
     let ownedClickBoosts = 0;
 
     cookiesPerClick = 0.01 + (clickBoostAdd * ownedClickBoosts);
@@ -223,21 +223,21 @@ document.addEventListener('DOMContentLoaded', function () {
     try { numberFormatMode = localStorage.getItem('cookieClicks_numberFormat') || 'normal'; } catch (e) {}
 
     const emojiSuffixMap = {
-        k: 'k',
-        M: 'm',
-        B: 'b',
-        T: 't',
-        Qa: 'aa',
-        Qi: 'ab',
-        Sx: 'ac',
-        Sp: 'ad',
-        Oc: 'ae',
-        No: 'af',
-        Dc: 'ag',
-        Udc: 'ah',
-        Ddc: 'ai',
-        Tdc: 'aj',
-        Qadc: 'ak'
+        k: 'a',
+        M: 'b',
+        B: 'c',
+        T: 'd',
+        Qa: 'e',
+        Qi: 'f',
+        Sx: 'g',
+        Sp: 'h',
+        Oc: 'i',
+        No: 'j',
+        Dc: 'k',
+        Udc: 'l',
+        Ddc: 'm',
+        Tdc: 'n',
+        Qadc: 'o'
     };
 
     function formatNumberEngineering(number) {
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const exponent = tier * 3;
             const scale = Math.pow(10, exponent);
             const scaled = number / scale;
-            return `${scaled.toFixed(1)}e${exponent}`;
+            return `${scaled.toFixed(2)}e+${exponent}`;
         }
         return Math.floor(number).toLocaleString();
     }
@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const exponent = tier * 3;
             const scale = Math.pow(10, exponent);
             const scaled = number / scale;
-            return `${scaled.toFixed(1)}e${exponent}`;
+            return `${scaled.toFixed(2)}e+${exponent}`;
         }
         if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
         return Math.floor(number).toLocaleString();
@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const nothing = document.createElement('div');
         nothing.className = 'nothing';
-        nothing.textContent = `There's nothing here...`;
+        nothing.textContent = `Upgrades are a work in progress... stay tuned for more updates!`;
         upgradesListElement.appendChild(nothing);
     }
 
@@ -843,7 +843,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= upgradeCost) {
             manaCount -= upgradeCost;
             ownedAutotaps++;
-            upgradeCost = (upgradeCost * 1.3);
+            upgradeCost = (upgradeCost * 1.15);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -855,7 +855,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= pickaxeCost) {
             manaCount -= pickaxeCost;
             ownedPickaxes++;
-            pickaxeCost = (pickaxeCost * 1.5);
+            pickaxeCost = (pickaxeCost * 1.2);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -867,7 +867,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= farmCost) {
             manaCount -= farmCost;
             ownedFarms++;
-            farmCost = (farmCost * 1.7);
+            farmCost = (farmCost * 1.22);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -879,7 +879,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= mineCost) {
             manaCount -= mineCost;
             ownedMines++;
-            mineCost = (mineCost * 1.25);
+            mineCost = (mineCost * 1.27);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -891,7 +891,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= factoryCost) {
             manaCount -= factoryCost;
             ownedFactories++;
-            factoryCost = (factoryCost * 1.25);
+            factoryCost = (factoryCost * 1.2);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -903,7 +903,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= bankCost) {
             manaCount -= bankCost;
             ownedBanks++;
-            bankCost = (bankCost * 1.25);
+            bankCost = (bankCost * 1.18);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -915,7 +915,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= templeCost) {
             manaCount -= templeCost;
             ownedTemples++;
-            templeCost = (templeCost * 1.25);
+            templeCost = (templeCost * 1.3);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -927,7 +927,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (manaCount >= wizardCost) {
             manaCount -= wizardCost;
             ownedWizards++;
-            wizardCost = (wizardCost * 1.25);
+            wizardCost = (wizardCost * 1.2);
             computeCookiesPerSecond();
             updateDisplay();
             startInterval();
@@ -940,7 +940,7 @@ document.addEventListener('DOMContentLoaded', function () {
             manaCount -= clickBoostCost;
             ownedClickBoosts++;
             cookiesPerClick = 0.01 + (clickBoostAdd * ownedClickBoosts);
-            clickBoostCost = (clickBoostCost * 1.7);
+            clickBoostCost = (clickBoostCost * 1.5);
             updateDisplay();
             playSfx(upgradeSoundElement);
         }
