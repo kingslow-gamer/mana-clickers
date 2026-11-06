@@ -619,7 +619,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setCost(wizardButtonElement, wizardCost);
         setCost(clickboostButtonElement, clickBoostCost);
 
-        if (totalCookiesRow) totalCookiesRow.innerHTML = `${manaEmoji} ${formatNumber(Math.floor(totalMana))}`;
+	if (totalCookiesRow) totalCookiesRow.innerHTML = `${manaEmoji} ${formatCookieValue(totalMana)}`;
         if (clicksRow) clicksRow.innerHTML = `${formatNumber(Math.floor(clickCount))}`;
         if (totalBuildingsRow) totalBuildingsRow.innerHTML = `${formatNumber(Math.floor(computeTotalBuildings()))}`;
 
