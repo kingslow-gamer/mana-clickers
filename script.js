@@ -1,5 +1,4 @@
 
-
 document.addEventListener('DOMContentLoaded', function () {
     function createNotification(title, message) {
       if (!("Notification" in window)) {
@@ -436,22 +435,19 @@ document.addEventListener('DOMContentLoaded', function () {
         return cps;
     }
 
-    function ensureButtonStructure(btn) {
-        if (!btn) return;
-        if (btn.querySelector('.btn-cost')) return;
+function ensureButtonStructure(btn) {
+    if (!btn) return;
 
-        if (!btn.hasAttribute('role')) btn.setAttribute('role', 'button');
-        if (!btn.hasAttribute('tabindex')) btn.setAttribute('tabindex', '0');
+    if (!btn.hasAttribute('role')) btn.setAttribute('role', 'button');
+    if (!btn.hasAttribute('tabindex')) btn.setAttribute('tabindex', '0');
 
-        btn.innerHTML = `
-            <span class="btn-left-icon" aria-hidden="true">💧</span>
-            <span class="btn-center" aria-hidden="true"></span>
-            <span class="btn-cost">
-                <span class="inline-cookie"></span>
-                <span class="cost" data-value="0">${formatCookieValue(0)}</span>
-            </span>
-        `;
-    }
+    btn.innerHTML = `
+        <span class="btn-cost">
+            <span class="inline-cookie">💧</span>
+            <span class="cost" data-value="0">${formatCookieValue(0)}</span>
+        </span>
+    `;
+}
 
     function addRippleEffect(btn) {
         if (!btn || btn._rippleAttached) return;
@@ -574,9 +570,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const producingVal = Math.floor(itemTotalCps);
 
                 if (l.id === 'clickboost-label') {
-                    el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formatCookieValue(clickBoostAdd)}/click</span><span class="tooltiptext" id="${l.tooltipId}">Gives ${formatCookieValue(clickBoostAdd)} per upgrade</span>`;
+// Inside the clickboost tooltip
+el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formatCookieValue(clickBoostAdd)}/click</span><span class="tooltiptext" id="${l.tooltipId}">Owned: ${formatCookieValue(l.owned)}<br>Gives ${formatCookieValue(clickBoostAdd)} per upgrade</span>`;
                 } else {
-                    el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formattedCps}/s</span><span class="tooltiptext" id="${l.tooltipId}">${percent}% of mps<br>${manaEmoji}<span class="produced-number" data-value="${producedVal}">${formatNumber(producedVal)}</span> produced<br>Producing <span class="producing-number" data-value="${producingVal}">${formatCookieValue(producingVal)}</span>${manaEmoji}/s</span>`;
+el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formattedCps}/s</span><span class="tooltiptext" id="${l.tooltipId}">Owned: ${formatCookieValue(l.owned)}<br>${percent}% of mps<br>${manaEmoji}<span class="produced-number" data-value="${producedVal}">${formatCookieValue(producedVal)}</span> produced<br>Producing <span class="producing-number" data-value="${producingVal}">${formatCookieValue(producingVal)}</span>${manaEmoji}/s</span>`;
                 }
 
                 const tooltipEl = document.getElementById(l.tooltipId);
@@ -584,7 +581,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const prodSpan = tooltipEl.querySelector('.produced-number');
                     const prodCpsSpan = tooltipEl.querySelector('.producing-number');
                     if (prodSpan) {
-                        animateNumber(prodSpan, producedVal, { duration: 700, formatter: (n) => formatNumber(Math.floor(n)), allowDecrease: false });
+                        animateNumber(prodSpan, producedVal, { duration: 700, formatter: (n) => formatCookieValue(Math.floor(n)), allowDecrease: false });
                     }
                     if (prodCpsSpan) {
                         animateNumber(prodCpsSpan, producingVal, { duration: 700, formatter: (n) => formatCookieValue(Math.floor(n)), allowDecrease: false });
@@ -628,21 +625,31 @@ document.addEventListener('DOMContentLoaded', function () {
         wireUpgradeButtonRipples();
     }
 
-    function createClickerClone(clicks, x, y) {
-        const clone = document.createElement('div');
-        clone.className = 'clicker-clone';
-        clone.innerHTML = `+${formatCookieValue(cookiesPerClick)}`;
-        clone.style.top = `${y}px`;
-        clone.style.left = `${x}px`;
-        document.body.appendChild(clone);
-        requestAnimationFrame(() => {
-            clone.style.transform = 'translateY(-25px)';
-            clone.style.opacity = '0';
-        });
-        setTimeout(() => {
-            if (clone.parentNode) clone.parentNode.removeChild(clone);
-        }, 400);
-    }
+function createClickerClone(clicks, x, y) {
+    const clone = document.createElement('div');
+    clone.className = 'clicker-clone';
+    clone.innerHTML = `+${formatCookieValue(cookiesPerClick)}`;
+    clone.style.top = `${y}px`;
+    clone.style.left = `${x}px`;
+    clone.style.opacity = '1';
+    clone.style.transition =
+        'transform 350ms ease-out, opacity 300ms ease-out';
+    document.body.appendChild(clone);
+
+    requestAnimationFrame(() => {
+        clone.style.transform = 'translateY(-55px)';
+    });
+
+    // Begin fading after the upward animation has lasted 1000ms
+    setTimeout(() => {
+        clone.style.opacity = '0';
+    }, 350);
+
+    // Remove after rise + fade
+    setTimeout(() => {
+        clone.remove();
+    }, 1300);
+}
 
     function createGoldenCookie(x, y) {
         const goldenCookie = document.createElement('img');
