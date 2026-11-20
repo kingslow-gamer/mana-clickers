@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const exponent = tier * 3;
             const scale = Math.pow(10, exponent);
             const scaled = number / scale;
-            return `${scaled.toFixed(2)}e+${exponent}`;
+            return `${scaled.toFixed(2)}e${exponent}`;
         }
         return Math.floor(number).toLocaleString();
     }
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const exponent = tier * 3;
             const scale = Math.pow(10, exponent);
             const scaled = number / scale;
-            return `${scaled.toFixed(2)}e+${exponent}`;
+            return `${scaled.toFixed(2)}e${exponent}`;
         }
         if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
         return Math.floor(number).toLocaleString();
@@ -549,15 +549,15 @@ function ensureButtonStructure(btn) {
         if (perSecondElement) perSecondElement.innerHTML = `${formatPerSecond(cookiesPerSecond)} mps`;
 
         const labels = [
-            { id: 'autotap-label', text: `Autotap: ${ownedAutotaps}`, cps: autotapCps, owned: ownedAutotaps, produced: producedAutotaps, tooltipId: 'autotap-tooltip' },
-            { id: 'clickboost-label', text: `Clickboost: ${ownedClickBoosts}`, cps: 0, owned: ownedClickBoosts, produced: 0, tooltipId: 'clickboost-tooltip' },
-            { id: 'pickaxe-label', text: `Pickaxe: ${ownedPickaxes}`, cps: pickaxeCps, owned: ownedPickaxes, produced: producedPickaxes, tooltipId: 'pickaxe-tooltip' },
-            { id: 'farm-label', text: `Shovel: ${ownedFarms}`, cps: farmCps, owned: ownedFarms, produced: producedFarms, tooltipId: 'farm-tooltip' },
-            { id: 'mine-label', text: `Crystal: ${ownedMines}`, cps: mineCps, owned: ownedMines, produced: producedMines, tooltipId: 'mine-tooltip' },
-            { id: 'factory-label', text: `Factory: ${ownedFactories}`, cps: factoryCps, owned: ownedFactories, produced: producedFactories, tooltipId: 'factory-tooltip' },
-            { id: 'bank-label', text: `Shield: ${ownedBanks}`, cps: bankCps, owned: ownedBanks, produced: producedBanks, tooltipId: 'bank-tooltip' },
-            { id: 'temple-label', text: `Temple: ${ownedTemples}`, cps: templeCps, owned: ownedTemples, produced: producedTemples, tooltipId: 'temple-tooltip' },
-            { id: 'wizard-label', text: `Gametower: ${ownedWizards}`, cps: wizardCps, owned: ownedWizards, produced: producedWizards, tooltipId: 'wizard-tooltip' },
+            { id: 'autotap-label', text: `Autotap`, cps: autotapCps, owned: ownedAutotaps, produced: producedAutotaps, tooltipId: 'autotap-tooltip' },
+            { id: 'clickboost-label', text: `Clickboost`, cps: 0, owned: ownedClickBoosts, produced: 0, tooltipId: 'clickboost-tooltip' },
+            { id: 'pickaxe-label', text: `Pickaxe`, cps: pickaxeCps, owned: ownedPickaxes, produced: producedPickaxes, tooltipId: 'pickaxe-tooltip' },
+            { id: 'farm-label', text: `Shovel`, cps: farmCps, owned: ownedFarms, produced: producedFarms, tooltipId: 'farm-tooltip' },
+            { id: 'mine-label', text: `Crystal`, cps: mineCps, owned: ownedMines, produced: producedMines, tooltipId: 'mine-tooltip' },
+            { id: 'factory-label', text: `Factory`, cps: factoryCps, owned: ownedFactories, produced: producedFactories, tooltipId: 'factory-tooltip' },
+            { id: 'bank-label', text: `Shield`, cps: bankCps, owned: ownedBanks, produced: producedBanks, tooltipId: 'bank-tooltip' },
+            { id: 'temple-label', text: `Temple`, cps: templeCps, owned: ownedTemples, produced: producedTemples, tooltipId: 'temple-tooltip' },
+            { id: 'wizard-label', text: `Gametower`, cps: wizardCps, owned: ownedWizards, produced: producedWizards, tooltipId: 'wizard-tooltip' },
         ];
 
         labels.forEach(l => {
