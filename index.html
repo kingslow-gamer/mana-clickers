@@ -50,16 +50,26 @@
                 </svg>
             </button>
 
-            <button id="stats-button" aria-pressed="false" aria-label="Stats">
-                <svg class="seg-icon seg-stats" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 68.04" width="20" height="20" role="img" aria-hidden="true" focusable="false">
-                    <title>stats</title>
-                    <g>
-                        <path d="M2.03,56.52c-2.66,2.58-2.72,6.83-0.13,9.49c2.58,2.66,6.83,2.72,9.49,0.13l27.65-26.98l23.12,22.31 c2.67,2.57,6.92,2.49,9.49-0.18l37.77-38.22v19.27c0,3.72,3.01,6.73,6.73,6.73s6.73-3.01,6.73-6.73V6.71h-0.02 c0-1.74-0.67-3.47-2-4.78c-1.41-1.39-3.29-2.03-5.13-1.91H82.4c-3.72,0-6.73,3.01-6.73,6.73c0,3.72,3.01,6.73,6.73,6.73h17.63 L66.7,47.2L43.67,24.97c-2.6-2.5-6.73-2.51-9.33,0.03L2.03,56.52L2.03,56.52z"/>
-                    </g>
-                </svg>
+            <button id="settings-button"
+                    type="button"
+                    aria-label="Open menu"
+                    aria-expanded="false"
+                    aria-controls="navigation-menu">☰</button>
+        </div>
+
+        <div id="navigation-menu" class="navigation-menu" hidden>
+            <button class="navigation-menu-item" type="button" data-open-panel="stats">
+                <img
+                    src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eff096d8-b43d-416f-b75c-61bba49442fd/dne9aw0-cc3fe349-501c-4c3f-a45f-f0cdd96a0c89.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9lZmYwOTZkOC1iNDNkLTQxNmYtYjc1Yy02MWJiYTQ5NDQyZmQvZG5lOWF3MC1jYzNmZTM0OS01MDFjLTRjM2YtYTQ1Zi1mMGNkZDk2YTBjODkucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.2rvzDmWIv2q8Y3j_cZ62XqUxYLJFPeAJR1i12U8e3T4"
+                    alt=""
+                    aria-hidden="true">
+                <span>Stats</span>
             </button>
 
-            <button id="settings-button" aria-pressed="false">⚙</button>
+            <button class="navigation-menu-item" type="button" data-open-panel="settings">
+                <span class="menu-settings-icon" aria-hidden="true">⚙</span>
+                <span>Settings</span>
+            </button>
         </div>
 
         <div class="upgrade-container" id="upgrade-container">
@@ -143,19 +153,6 @@
             <div id="upgrades-list"></div>
         </div>
 
-        <div class="stats-container" id="stats-container">
-            <div class="panel-title">Stats</div>
-
-            <div class="stats-label">Mana accumulated</div>
-            <div class="stat-row" id="total-cookies-row">0.00</div>
-
-            <div class="stats-label" style="margin-top:12px;">Clicks</div>
-            <div class="stat-row" id="clicks-row">0</div>
-
-            <div class="stats-label" style="margin-top:12px;">Autoclicks bought</div>
-            <div class="stat-row" id="total-buildings-row">0</div>
-        </div>
-
         <div class="changelog-container" id="changelog-container">
             <div class="changelog-title">Changelog (Will be removed soon)</div>
             <div class="changelog-row"><b>v0.0.3 Major Update (Jan 23, 2026)</b></div>
@@ -169,33 +166,6 @@
             <div class="changelog-row">- New features coming soon!</div>
         </div>
 
-        <div class="settings-container" id="settings-container">
-            <div class="settings-label">Settings</div>
-
-            <h1>Audio</h1>
-            <div class="settings-row">
-                <span class="settings-slider-label">Sound</span>
-                <input type="range" min="0" max="5" value="5" class="settings-slider" id="sfx-volume">
-            </div>
-
-            <h1>Display</h1>
-
-            <div class="settings-row" style="align-items:center; gap:12px;">
-                <span class="settings-slider-label">Number display</span>
-                <div class="dropdown" id="numberformat-dropdown" style="margin-left: 12px;">
-                    <button id="numberformat-button" class="dropbtn" aria-haspopup="true" aria-expanded="false">Normal</button>
-                    <div id="numberformatDropdown" class="dropdown-content" role="menu" aria-hidden="true">
-                        <button role="menuitem" data-format="normal">Normal</button>
-                        <button role="menuitem" data-format="engineering">Engineering</button>
-                        <button role="menuitem" data-format="emojis">Letters</button>
-                    </div>
-                </div>
-            </div>
-
-            <h1>Version 0.0.320 (Work in progress)</h1>
-            <h4>Game still in development</h4>
-        </div>
-
         <audio id="click-sound" src="click.wav" preload="auto"></audio>
         <audio id="upgrade-sound" src="buyUpgrade.wav" preload="auto"></audio>
         <audio id="upgraded-sound" src="upgraded.wav" preload="auto"></audio>
@@ -205,6 +175,55 @@
             <span id="username-display"></span>
             <button id="building-stats-btn" class="building-stats-btn" disabled aria-disabled="true" title="Coming soon">≡</button>
         </div>
+    </div>
+
+    <div id="panel-modal-overlay" class="panel-modal-overlay" hidden>
+        <section class="panel-modal" role="dialog" aria-modal="true" aria-label="Game panel">
+            <button id="close-panel-modal"
+                    class="close-panel-modal"
+                    type="button"
+                    aria-label="Close panel">×</button>
+
+            <div class="stats-container" id="stats-container" hidden>
+                <div class="panel-title">Stats</div>
+
+                <div class="stats-label">Mana accumulated</div>
+                <div class="stat-row" id="total-cookies-row">0.00</div>
+
+                <div class="stats-label" style="margin-top:12px;">Clicks</div>
+                <div class="stat-row" id="clicks-row">0</div>
+
+                <div class="stats-label" style="margin-top:12px;">Autoclicks bought</div>
+                <div class="stat-row" id="total-buildings-row">0</div>
+            </div>
+
+            <div class="settings-container" id="settings-container" hidden>
+                <div class="settings-label">Settings</div>
+
+                <h1>Audio</h1>
+                <div class="settings-row">
+                    <span class="settings-slider-label">Sound</span>
+                    <input type="range" min="0" max="5" value="5" class="settings-slider" id="sfx-volume">
+                </div>
+
+                <h1>Display</h1>
+
+                <div class="settings-row" style="align-items:center; gap:12px;">
+                    <span class="settings-slider-label">Number display</span>
+                    <div class="dropdown" id="numberformat-dropdown" style="margin-left: 12px;">
+                        <button id="numberformat-button" class="dropbtn" aria-haspopup="true" aria-expanded="false">Normal</button>
+                        <div id="numberformatDropdown" class="dropdown-content" role="menu" aria-hidden="true">
+                            <button role="menuitem" data-format="normal">Normal</button>
+                            <button role="menuitem" data-format="engineering">Engineering</button>
+                            <button role="menuitem" data-format="emojis">Letters</button>
+                        </div>
+                    </div>
+                </div>
+
+                <h1>Version 0.0.320 (Work in progress)</h1>
+                <h4>Game still in development</h4>
+            </div>
+        </section>
     </div>
 
     <div class="username-container">
@@ -217,17 +236,16 @@
     </div>
 
     <script src="script.js" defer></script>
-</body>
-<script>
-  window.intercomSettings = {
-    api_base: "https://api-iam.intercom.io",
-    app_id: "k8ut0quz",
-  };
-</script>
 
-<script>
-  // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/k8ut0quz'
-  (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/k8ut0quz';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
-</script>
+    <script>
+      window.intercomSettings = {
+        api_base: "https://api-iam.intercom.io",
+        app_id: "k8ut0quz",
+      };
+    </script>
+
+    <script>
+      (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/k8ut0quz';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+    </script>
 </body>
 </html>

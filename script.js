@@ -1,82 +1,74 @@
-
 document.addEventListener('DOMContentLoaded', function () {
     function createNotification(title, message) {
-      if (!("Notification" in window)) {
-        console.warn("This browser does not support desktop notifications.");
-        return false;
-      }
-      try {
-        const options = {
-          body: message,
-          icon: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl7kpss-efb9b50c-edb4-41ea-ac4e-ca3f93c6c189.png/v1/fit/w_800,h_800/cookie_tappers_icon_by_unknown9394998_dl7kpss-414w-2x.png",
-          badge: "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl7kpss-efb9b50c-edb4-41ea-ac4e-ca3f93c6c189.png/v1/fit/w_800,h_800/cookie_tappers_icon_by_unknown9394998_dl7kpss-414w-2x.png",
-          vibrate: [200, 100, 200],
-          data: { url: window.location.href }
-        };
-        const notification = new Notification(title, options);
-        notification.onclick = (event) => {
-          event.preventDefault();
-          try { window.focus(); } catch (e) {}
-          try { notification.close(); } catch (e) {}
-        };
-        return true;
-      } catch (err) {
-        console.warn("Failed to create Notification:", err);
-        return false;
-      }
+        if (!('Notification' in window)) {
+            console.warn('This browser does not support desktop notifications.');
+            return false;
+        }
+
+        try {
+            const iconUrl = 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dl7kpss-efb9b50c-edb4-41ea-ac4e-ca3f93c6c189.png/v1/fit/w_800,h_800/cookie_tappers_icon_by_unknown9394998_dl7kpss-414w-2x.png';
+            const notification = new Notification(title, {
+                body: message,
+                icon: iconUrl,
+                badge: iconUrl,
+                vibrate: [200, 100, 200],
+                data: { url: window.location.href }
+            });
+
+            notification.onclick = (event) => {
+                event.preventDefault();
+                try { window.focus(); } catch (e) {}
+                try { notification.close(); } catch (e) {}
+            };
+
+            return true;
+        } catch (err) {
+            console.warn('Failed to create Notification:', err);
+            return false;
+        }
     }
 
     function requestPermissionAndNotify(title, message) {
-      if (!("Notification" in window)) {
-        console.warn("Notifications not supported.");
-        try { alert(title + "\n\n" + message); } catch (e) {}
-        return;
-      }
-
-      if (Notification.permission === 'granted') {
-        const ok = createNotification(title, message);
-        if (!ok) {
-          try { alert(title + "\n\n" + message); } catch (e) {}
+        if (!('Notification' in window)) {
+            console.warn('Notifications not supported.');
+            try { alert(title + '\n\n' + message); } catch (e) {}
+            return;
         }
-        return;
-      }
 
-      const handleResult = (perm) => {
-        try {
-          if (perm === 'granted') {
-            const ok = createNotification(title, message);
-            if (!ok) {
-              try { alert(title + "\n\n" + message); } catch (e) {}
+        const handleResult = (permission) => {
+            if (permission !== 'granted') {
+                console.log('Notification permission result:', permission);
+                return;
             }
-          } else {
-            console.log('Notification permission result:', perm);
-          }
-        } catch (err) {
-          console.error('Error handling permission result:', err);
-        }
-      };
 
-      try {
-        const maybePromise = Notification.requestPermission(handleResult);
-        if (maybePromise && typeof maybePromise.then === 'function') {
-          maybePromise.then(handleResult).catch((err) => {
-            console.warn('requestPermission promise rejected:', err);
-          });
+            if (!createNotification(title, message)) {
+                try { alert(title + '\n\n' + message); } catch (e) {}
+            }
+        };
+
+        if (Notification.permission === 'granted') {
+            handleResult('granted');
+            return;
         }
-      } catch (e) {
+
         try {
-          Notification.requestPermission(function (perm) {
-            handleResult(perm);
-          });
+            const result = Notification.requestPermission();
+            if (result && typeof result.then === 'function') {
+                result.then(handleResult).catch((err) => {
+                    console.warn('requestPermission promise rejected:', err);
+                });
+            } else if (typeof result === 'string') {
+                handleResult(result);
+            }
         } catch (err) {
-          console.warn('Notification.requestPermission failed completely:', err);
+            console.warn('Notification.requestPermission failed:', err);
         }
-      }
     }
 
     let manaCount = 0;
     let totalMana = 0;
     let cookiesPerClick = 0.01;
+
     let upgradeCost = 2;
     let pickaxeCost = 60;
     let farmCost = 220;
@@ -99,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const clickBoostAdd = 0.005;
     let ownedClickBoosts = 0;
 
-    cookiesPerClick = 0.01 + (clickBoostAdd * ownedClickBoosts);
+    cookiesPerClick = 0.01 + clickBoostAdd * ownedClickBoosts;
 
     let cookiesPerSecond = 0;
     let lastClickTime = 0;
@@ -126,7 +118,11 @@ document.addEventListener('DOMContentLoaded', function () {
     let clickCount = 0;
     let cursorMultiplier = 1;
 
-    const suffixes = ["k", "M", "B", "T", "Qa", "Qi", "Sx", "Sp", "Oc", "No", "Dc", "Udc", "Ddc", "Tdc", "Qadc"];
+    const suffixes = [
+        'k', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp',
+        'Oc', 'No', 'Dc', 'Udc', 'Ddc', 'Tdc', 'Qadc'
+    ];
+
     const manaIconUrl = 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/af8bc113-d9a4-40cf-9077-06b673c583e0/dlyaxmt-560e69d6-5c7f-4398-a1c2-185ea8492e09.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiIvZi9hZjhiYzExMy1kOWE0LTQwY2YtOTA3Ny0wNmI2NzNjNTgzZTAvZGx5YXhtdC01NjBlNjlkNi01YzdmLTQzOTgtYTFjMi0xODVlYTg0OTJlMDkucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.evf-Y9_EM8dsSuCkPY9RQ2z0n55A9y5sDLTWWaj8PoE';
     const manaEmoji = `<img src="${manaIconUrl}" alt="Mana" class="mana-icon" />`;
 
@@ -136,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const cookieCountElement = document.getElementById('cookie-count');
     const perSecondElement = document.getElementById('per-second');
     const cookieElement = document.getElementById('cookie');
+
     const upgradeButtonElement = document.getElementById('upgrade-button');
     const pickaxeButtonElement = document.getElementById('pickaxe-button');
     const farmButtonElement = document.getElementById('farm-button');
@@ -145,27 +142,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const templeButtonElement = document.getElementById('temple-button');
     const wizardButtonElement = document.getElementById('wizard-button');
     const clickboostButtonElement = document.getElementById('clickboost-button');
-    const clickboostLabelElement = document.getElementById('clickboost-label');
+
     const clickSoundElement = document.getElementById('click-sound');
     const upgradeSoundElement = document.getElementById('upgrade-sound');
     const upgradedSoundElement = document.getElementById('upgraded-sound');
+
     const userInfoElement = document.querySelector('.user-info');
     const usernameDisplayElement = document.getElementById('username-display');
     const notifyButton = document.getElementById('notify-btn');
+
     const buildingsButton = document.getElementById('buildings-button');
     const upgradesButton = document.getElementById('upgrades-button');
-    const statsButton = document.getElementById('stats-button');
     const changelogButton = document.getElementById('changelog-button');
-    const settingsButton = document.getElementById('settings-button');
+    const menuButton = document.getElementById('settings-button');
+
     const upgradeContainer = document.getElementById('upgrade-container');
     const upgradesContainer = document.getElementById('upgrades-container');
     const upgradesListElement = document.getElementById('upgrades-list');
-    const statsContainer = document.getElementById('stats-container');
     const changelogContainer = document.getElementById('changelog-container');
+
+    const statsContainer = document.getElementById('stats-container');
     const settingsContainer = document.getElementById('settings-container');
     const totalCookiesRow = document.getElementById('total-cookies-row');
     const clicksRow = document.getElementById('clicks-row');
     const totalBuildingsRow = document.getElementById('total-buildings-row');
+
+    const navigationMenu = document.getElementById('navigation-menu');
+    const panelModalOverlay = document.getElementById('panel-modal-overlay');
+    const closePanelModalButton = document.getElementById('close-panel-modal');
 
     const themeDropdownRoot = document.getElementById('theme-dropdown');
     const themeDropdownButton = document.getElementById('theme-button');
@@ -176,50 +180,55 @@ document.addEventListener('DOMContentLoaded', function () {
     const numberFormatMenu = document.getElementById('numberformatDropdown');
 
     const sfxVolumeSlider = document.getElementById('sfx-volume');
-
     const AUDIO_MAX = 5;
 
-    function clampNumber(v, min, max) {
-        let n = Number(v) || 0;
-        if (n < min) n = min;
-        if (n > max) n = max;
-        return n;
+    function clampNumber(value, min, max) {
+        let number = Number(value) || 0;
+        if (number < min) number = min;
+        if (number > max) number = max;
+        return number;
     }
 
-    function setSfxVolume(val) {
-        const v = clampNumber(val, 0, AUDIO_MAX) / AUDIO_MAX;
-        if (clickSoundElement) clickSoundElement.volume = v;
-        if (upgradeSoundElement) upgradeSoundElement.volume = v;
-        if (upgradedSoundElement) upgradedSoundElement.volume = v;
+    function setSfxVolume(value) {
+        const volume = clampNumber(value, 0, AUDIO_MAX) / AUDIO_MAX;
+        if (clickSoundElement) clickSoundElement.volume = volume;
+        if (upgradeSoundElement) upgradeSoundElement.volume = volume;
+        if (upgradedSoundElement) upgradedSoundElement.volume = volume;
     }
 
     function getDefaultSliderFillColor() {
         try {
-            const cs = getComputedStyle(document.documentElement);
-            const val = cs.getPropertyValue('--accent-2') || cs.getPropertyValue('--accent');
-            if (val && val.trim()) return val.trim();
+            const styles = getComputedStyle(document.documentElement);
+            const value = styles.getPropertyValue('--accent-2')
+                || styles.getPropertyValue('--accent');
+
+            if (value && value.trim()) return value.trim();
         } catch (e) {}
+
         return '#2a79e0';
     }
 
     function updateSliderBackground(slider, fillColor, emptyColor = '#ededed') {
         if (!slider) return;
-        const fill = (typeof fillColor === 'string' && fillColor.trim()) ? fillColor : getDefaultSliderFillColor();
-        const val = Number(slider.value);
-        const pct = Math.round((val / AUDIO_MAX) * 100);
-        slider.style.background = `linear-gradient(90deg, ${fill} ${pct}%, ${emptyColor} ${pct}%)`;
+
+        const fill = typeof fillColor === 'string' && fillColor.trim()
+            ? fillColor
+            : getDefaultSliderFillColor();
+
+        const percentage = Math.round((Number(slider.value) / AUDIO_MAX) * 100);
+        slider.style.background =
+            `linear-gradient(90deg, ${fill} ${percentage}%, ${emptyColor} ${percentage}%)`;
     }
 
-    if (sfxVolumeSlider) {
-        sfxVolumeSlider.addEventListener('input', (e) => {
-            const value = parseInt(e.target.value, 10);
-            setSfxVolume(value);
-            updateSliderBackground(e.target);
-        });
-    }
+    sfxVolumeSlider?.addEventListener('input', (event) => {
+        setSfxVolume(parseInt(event.target.value, 10));
+        updateSliderBackground(event.target);
+    });
 
     let numberFormatMode = 'normal';
-    try { numberFormatMode = localStorage.getItem('cookieClicks_numberFormat') || 'normal'; } catch (e) {}
+    try {
+        numberFormatMode = localStorage.getItem('cookieClicks_numberFormat') || 'normal';
+    } catch (e) {}
 
     const emojiSuffixMap = {
         k: 'a',
@@ -243,8 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (number >= 1000) {
             const tier = Math.floor(Math.log10(number) / 3);
             const exponent = tier * 3;
-            const scale = Math.pow(10, exponent);
-            const scaled = number / scale;
+            const scaled = number / Math.pow(10, exponent);
             return `${scaled.toFixed(2)}e${exponent}`;
         }
         return Math.floor(number).toLocaleString();
@@ -254,11 +262,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (number >= 1000) {
             const tier = Math.floor(Math.log10(number) / 3);
             const exponent = tier * 3;
-            const scale = Math.pow(10, exponent);
-            const scaled = number / scale;
+            const scaled = number / Math.pow(10, exponent);
             return `${scaled.toFixed(2)}e${exponent}`;
         }
-        if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
+        if (Math.abs(number - Math.round(number)) > 0.0001) {
+            return number.toFixed(2);
+        }
         return Math.floor(number).toLocaleString();
     }
 
@@ -266,8 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (number >= 1000) {
             const tier = Math.floor(Math.log10(number) / 3);
             const suffix = suffixes[tier - 1] || '';
-            const scale = Math.pow(10, tier * 3);
-            const scaled = number / scale;
+            const scaled = number / Math.pow(10, tier * 3);
             const emoji = emojiSuffixMap[suffix] || suffix;
             return `${scaled.toFixed(2)}<span class="num-suffix">${emoji}</span>`;
         }
@@ -278,12 +286,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (number >= 1000) {
             const tier = Math.floor(Math.log10(number) / 3);
             const suffix = suffixes[tier - 1] || '';
-            const scale = Math.pow(10, tier * 3);
-            const scaled = number / scale;
+            const scaled = number / Math.pow(10, tier * 3);
             const emoji = emojiSuffixMap[suffix] || suffix;
             return `${scaled.toFixed(2)}${emoji}`;
         }
-        if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
+        if (Math.abs(number - Math.round(number)) > 0.0001) {
+            return number.toFixed(2);
+        }
         return Math.floor(number).toLocaleString();
     }
 
@@ -291,8 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (number >= 1000) {
             const tier = Math.floor(Math.log10(number) / 3);
             const suffix = suffixes[tier - 1] || '';
-            const scale = Math.pow(10, tier * 3);
-            const scaled = number / scale;
+            const scaled = number / Math.pow(10, tier * 3);
             return `${scaled.toFixed(2)}<span class="num-suffix">${suffix}</span>`;
         }
         return Math.floor(number).toLocaleString();
@@ -302,213 +310,220 @@ document.addEventListener('DOMContentLoaded', function () {
         if (number >= 1000) {
             const tier = Math.floor(Math.log10(number) / 3);
             const suffix = suffixes[tier - 1] || '';
-            const scale = Math.pow(10, tier * 3);
-            const scaled = number / scale;
+            const scaled = number / Math.pow(10, tier * 3);
             return `${scaled.toFixed(2)}${suffix}`;
         }
-        if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
+        if (Math.abs(number - Math.round(number)) > 0.0001) {
+            return number.toFixed(2);
+        }
         return Math.floor(number).toLocaleString();
     }
 
     function formatNumber(number) {
         switch (numberFormatMode) {
-            case 'engineering': return formatNumberEngineering(number);
-            case 'emojis': return formatNumberEmojis(number);
-            default: return formatNumberNormal(number);
+            case 'engineering':
+                return formatNumberEngineering(number);
+            case 'emojis':
+                return formatNumberEmojis(number);
+            default:
+                return formatNumberNormal(number);
         }
     }
 
     function formatNumberPlain(number) {
         switch (numberFormatMode) {
-            case 'engineering': return formatNumberEngineeringPlain(number);
-            case 'emojis': return formatNumberEmojisPlain(number);
-            default: return formatNumberNormalPlain(number);
+            case 'engineering':
+                return formatNumberEngineeringPlain(number);
+            case 'emojis':
+                return formatNumberEmojisPlain(number);
+            default:
+                return formatNumberNormalPlain(number);
         }
     }
 
     function formatCookieValue(number) {
-        if (numberFormatMode === 'engineering' || numberFormatMode === 'emojis' || numberFormatMode === 'normal') {
-            if (number >= 1000) return formatNumber(number);
-            if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
-            return Math.round(number).toLocaleString();
-        } else {
-            if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
-            return Math.round(number).toLocaleString();
+        if (number >= 1000) return formatNumber(number);
+        if (Math.abs(number - Math.round(number)) > 0.0001) {
+            return number.toFixed(2);
         }
+        return Math.round(number).toLocaleString();
     }
 
     function formatPerSecond(number) {
-        if (numberFormatMode === 'engineering' || numberFormatMode === 'emojis' || numberFormatMode === 'normal') {
-            if (number >= 1000) return formatNumber(number);
-            if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
-            return Math.round(number).toLocaleString();
-        } else {
-            if (Math.abs(number - Math.round(number)) > 0.0001) return number.toFixed(2);
-            return Math.round(number).toLocaleString();
+        if (number >= 1000) return formatNumber(number);
+        if (Math.abs(number - Math.round(number)) > 0.0001) {
+            return number.toFixed(2);
         }
+        return Math.round(number).toLocaleString();
     }
 
-    function animateNumber(el, target, opts = {}) {
-        if (!el) return;
-        const duration = (typeof opts.duration === 'number') ? opts.duration : 420;
-        const formatter = opts.formatter || (n => formatNumber(Math.floor(n)));
-        const allowDecrease = !!opts.allowDecrease;
+    function animateNumber(element, target, options = {}) {
+        if (!element) return;
 
-        const targetNum = Math.floor(Number(target) || 0);
+        const duration = typeof options.duration === 'number' ? options.duration : 420;
+        const formatter = options.formatter || (number => formatNumber(Math.floor(number)));
+        const allowDecrease = !!options.allowDecrease;
+        const targetNumber = Math.floor(Number(target) || 0);
 
         let start = 0;
-        if (typeof el._displayedValue === 'number') {
-            start = el._displayedValue;
-        } else if (el.dataset && el.dataset.value) {
-            start = Math.floor(Number(el.dataset.value) || 0);
+
+        if (typeof element._displayedValue === 'number') {
+            start = element._displayedValue;
+        } else if (element.dataset && element.dataset.value) {
+            start = Math.floor(Number(element.dataset.value) || 0);
         } else {
-            const parsed = parseFloat((el.textContent || '').replace(/[^0-9.\-]/g, '')) || 0;
-            start = Math.floor(parsed);
+            start = Math.floor(
+                parseFloat((element.textContent || '').replace(/[^0-9.\-]/g, '')) || 0
+            );
         }
 
-        if (targetNum < start && !allowDecrease) {
-            if (el._animFrame) {
-                cancelAnimationFrame(el._animFrame);
-                el._animFrame = null;
+        if (targetNumber < start && !allowDecrease) {
+            if (element._animFrame) {
+                cancelAnimationFrame(element._animFrame);
+                element._animFrame = null;
             }
-            el._displayedValue = targetNum;
-            if (el.dataset) el.dataset.value = String(targetNum);
-            el.innerHTML = formatter(targetNum);
-            el.classList.add('animating-number');
-            setTimeout(() => { el.classList.remove('animating-number'); }, 120);
+
+            element._displayedValue = targetNumber;
+            if (element.dataset) element.dataset.value = String(targetNumber);
+            element.innerHTML = formatter(targetNumber);
+            element.classList.add('animating-number');
+            setTimeout(() => element.classList.remove('animating-number'), 120);
             return;
         }
 
-        if (start === targetNum) {
-            el._displayedValue = targetNum;
-            if (el.dataset) el.dataset.value = String(targetNum);
-            el.innerHTML = formatter(targetNum);
+        if (start === targetNumber) {
+            element._displayedValue = targetNumber;
+            if (element.dataset) element.dataset.value = String(targetNumber);
+            element.innerHTML = formatter(targetNumber);
             return;
         }
 
-        if (el._animFrame) {
-            cancelAnimationFrame(el._animFrame);
-            el._animFrame = null;
+        if (element._animFrame) {
+            cancelAnimationFrame(element._animFrame);
+            element._animFrame = null;
         }
 
         const startTime = performance.now();
-        el.classList.add('animating-number');
+        element.classList.add('animating-number');
 
-        function easeOutQuad(t) { return t * (2 - t); }
+        function easeOutQuad(value) {
+            return value * (2 - value);
+        }
 
         function step(now) {
-            const t = Math.min(1, (now - startTime) / duration);
-            const eased = easeOutQuad(t);
-            const current = Math.floor(start + (targetNum - start) * eased);
-            el._displayedValue = current;
-            if (el.dataset) el.dataset.value = String(current);
-            el.innerHTML = formatter(current);
-            if (t < 1) {
-                el._animFrame = requestAnimationFrame(step);
+            const progress = Math.min(1, (now - startTime) / duration);
+            const eased = easeOutQuad(progress);
+            const current = Math.floor(start + (targetNumber - start) * eased);
+
+            element._displayedValue = current;
+            if (element.dataset) element.dataset.value = String(current);
+            element.innerHTML = formatter(current);
+
+            if (progress < 1) {
+                element._animFrame = requestAnimationFrame(step);
             } else {
-                el._displayedValue = targetNum;
-                if (el.dataset) el.dataset.value = String(targetNum);
-                el.innerHTML = formatter(targetNum);
-                el._animFrame = null;
-                setTimeout(() => { el.classList.remove('animating-number'); }, 80);
+                element._displayedValue = targetNumber;
+                if (element.dataset) element.dataset.value = String(targetNumber);
+                element.innerHTML = formatter(targetNumber);
+                element._animFrame = null;
+                setTimeout(() => element.classList.remove('animating-number'), 80);
             }
         }
 
-        el._animFrame = requestAnimationFrame(step);
+        element._animFrame = requestAnimationFrame(step);
     }
 
     function computeTotalBuildings() {
-        return ownedAutotaps + ownedClickBoosts + ownedPickaxes + ownedFarms + ownedMines + ownedFactories + ownedBanks + ownedTemples + ownedWizards;
+        return ownedAutotaps + ownedClickBoosts + ownedPickaxes + ownedFarms
+            + ownedMines + ownedFactories + ownedBanks + ownedTemples + ownedWizards;
     }
 
     function computeCookiesPerSecond() {
-        let cps = 0;
-        cps += ownedAutotaps * autotapCps;
-        cps += ownedPickaxes * pickaxeCps;
-        cps += ownedFarms * farmCps;
-        cps += ownedMines * mineCps;
-        cps += ownedFactories * factoryCps;
-        cps += ownedBanks * bankCps;
-        cps += ownedTemples * templeCps;
-        cps += ownedWizards * wizardCps;
-        cookiesPerSecond = cps;
-        return cps;
+        cookiesPerSecond =
+            ownedAutotaps * autotapCps
+            + ownedPickaxes * pickaxeCps
+            + ownedFarms * farmCps
+            + ownedMines * mineCps
+            + ownedFactories * factoryCps
+            + ownedBanks * bankCps
+            + ownedTemples * templeCps
+            + ownedWizards * wizardCps;
+
+        return cookiesPerSecond;
     }
 
-function ensureButtonStructure(btn) {
-    if (!btn) return;
+    function ensureButtonStructure(button) {
+        if (!button) return;
 
-    if (!btn.hasAttribute('role')) btn.setAttribute('role', 'button');
-    if (!btn.hasAttribute('tabindex')) btn.setAttribute('tabindex', '0');
+        if (!button.hasAttribute('role')) button.setAttribute('role', 'button');
+        if (!button.hasAttribute('tabindex')) button.setAttribute('tabindex', '0');
 
-    btn.innerHTML = `
-        <span class="btn-cost">
-            <span class="inline-cookie">💧</span>
-            <span class="cost" data-value="0">${formatCookieValue(0)}</span>
-        </span>
-    `;
-}
+        button.innerHTML = `
+            <span class="btn-cost">
+                <span class="inline-cookie">💧</span>
+                <span class="cost" data-value="0">${formatCookieValue(0)}</span>
+            </span>
+        `;
+    }
 
-    function addRippleEffect(btn) {
-        if (!btn || btn._rippleAttached) return;
-        btn._rippleAttached = true;
+    function addRippleEffect(button) {
+        if (!button || button._rippleAttached) return;
+        button._rippleAttached = true;
 
-        const computedPos = window.getComputedStyle(btn).position;
-        if (computedPos === 'static') btn.style.position = 'relative';
-        btn.style.overflow = 'hidden';
+        if (getComputedStyle(button).position === 'static') {
+            button.style.position = 'relative';
+        }
+        button.style.overflow = 'hidden';
 
         function createRippleAt(x, y) {
-            const rect = btn.getBoundingClientRect();
+            const rect = button.getBoundingClientRect();
             const size = Math.max(rect.width, rect.height) * 1.8;
             const ripple = document.createElement('span');
+
             ripple.className = 'ripple';
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = (x - rect.left - size / 2) + 'px';
-            ripple.style.top = (y - rect.top - size / 2) + 'px';
-            btn.appendChild(ripple);
+            ripple.style.width = `${size}px`;
+            ripple.style.height = `${size}px`;
+            ripple.style.left = `${x - rect.left - size / 2}px`;
+            ripple.style.top = `${y - rect.top - size / 2}px`;
+            button.appendChild(ripple);
 
-            requestAnimationFrame(() => {
-                ripple.classList.add('ripple-active');
-            });
-
-            setTimeout(() => {
-                try { ripple.remove(); } catch (e) {}
-            }, 750);
+            requestAnimationFrame(() => ripple.classList.add('ripple-active'));
+            setTimeout(() => ripple.remove(), 750);
         }
 
-        btn.addEventListener('pointerdown', function (ev) {
-            if (ev.button !== undefined && ev.button !== 0) return;
-            createRippleAt(ev.clientX, ev.clientY);
+        button.addEventListener('pointerdown', (event) => {
+            if (event.button !== undefined && event.button !== 0) return;
+            createRippleAt(event.clientX, event.clientY);
         });
 
-        btn.addEventListener('keydown', function (ev) {
-            if (ev.key === 'Enter' || ev.key === ' ') {
-                ev.preventDefault();
-                const rect = btn.getBoundingClientRect();
-                createRippleAt(rect.left + rect.width / 2, rect.top + rect.height / 2);
-                try { btn.click(); } catch (e) {}
-            }
+        button.addEventListener('keydown', (event) => {
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+
+            event.preventDefault();
+            const rect = button.getBoundingClientRect();
+            createRippleAt(rect.left + rect.width / 2, rect.top + rect.height / 2);
+            button.click();
         });
     }
 
     function wireUpgradeButtonRipples() {
-        const btns = Array.from(document.querySelectorAll('.upgrade-item button'));
-        btns.forEach(b => addRippleEffect(b));
+        document.querySelectorAll('.upgrade-item button').forEach(addRippleEffect);
     }
 
     function initUpgradeButtons() {
-        ensureButtonStructure(upgradeButtonElement);
-        ensureButtonStructure(pickaxeButtonElement);
-        ensureButtonStructure(farmButtonElement);
-        ensureButtonStructure(mineButtonElement);
-        ensureButtonStructure(factoryButtonElement);
-        ensureButtonStructure(bankButtonElement);
-        ensureButtonStructure(templeButtonElement);
-        ensureButtonStructure(wizardButtonElement);
-        ensureButtonStructure(clickboostButtonElement);
-
-        [upgradeButtonElement, pickaxeButtonElement, farmButtonElement, mineButtonElement, factoryButtonElement, bankButtonElement, templeButtonElement, wizardButtonElement, clickboostButtonElement].forEach(btn => {
-            if (btn && !btn.classList.contains('glowing-btn')) btn.classList.add('glowing-btn');
+        [
+            upgradeButtonElement,
+            pickaxeButtonElement,
+            farmButtonElement,
+            mineButtonElement,
+            factoryButtonElement,
+            bankButtonElement,
+            templeButtonElement,
+            wizardButtonElement,
+            clickboostButtonElement
+        ].forEach((button) => {
+            ensureButtonStructure(button);
+            if (button) button.classList.add('glowing-btn');
         });
 
         wireUpgradeButtonRipples();
@@ -516,93 +531,100 @@ function ensureButtonStructure(btn) {
 
     function updateUpgradesPanel() {
         if (!upgradesListElement) return;
-        upgradesListElement.innerHTML = '';
 
+        upgradesListElement.innerHTML = '';
         const nothing = document.createElement('div');
         nothing.className = 'nothing';
-        nothing.textContent = `Upgrades are a work in progress... stay tuned for more updates!`;
+        nothing.textContent = 'Upgrades are a work in progress... stay tuned for more updates!';
         upgradesListElement.appendChild(nothing);
     }
 
     function updateDisplay() {
         if (cookieCountElement) {
-            const existingNumber = cookieCountElement.querySelector('.cookie-number');
-            const targetMana = manaCount;
+            let numberElement = cookieCountElement.querySelector('.cookie-number');
 
-            if (!existingNumber) {
+            if (!numberElement) {
                 cookieCountElement.innerHTML = `
                     <span class="inline-cookie">${manaEmoji}</span>
-                    <span class="cookie-number" data-value="${targetMana}">${formatCookieValue(targetMana)}</span>
+                    <span class="cookie-number" data-value="${manaCount}">${formatCookieValue(manaCount)}</span>
                 `;
-                const el = cookieCountElement.querySelector('.cookie-number');
-                if (el) {
-                    el._displayedValue = targetMana;
-                    if (el.dataset) el.dataset.value = String(targetMana);
+                numberElement = cookieCountElement.querySelector('.cookie-number');
+                if (numberElement) {
+                    numberElement._displayedValue = manaCount;
+                    numberElement.dataset.value = String(manaCount);
                 }
             } else {
-                existingNumber._displayedValue = Math.floor(targetMana);
-                if (existingNumber.dataset) existingNumber.dataset.value = String(Math.floor(targetMana));
-                existingNumber.innerHTML = formatCookieValue(targetMana);
+                numberElement._displayedValue = Math.floor(manaCount);
+                numberElement.dataset.value = String(Math.floor(manaCount));
+                numberElement.innerHTML = formatCookieValue(manaCount);
             }
         }
 
-        if (perSecondElement) perSecondElement.innerHTML = `${formatPerSecond(cookiesPerSecond)} mps`;
+        if (perSecondElement) {
+            perSecondElement.innerHTML = `${formatPerSecond(cookiesPerSecond)} mps`;
+        }
 
         const labels = [
-            { id: 'autotap-label', text: `Autotap`, cps: autotapCps, owned: ownedAutotaps, produced: producedAutotaps, tooltipId: 'autotap-tooltip' },
-            { id: 'clickboost-label', text: `Clickboost`, cps: 0, owned: ownedClickBoosts, produced: 0, tooltipId: 'clickboost-tooltip' },
-            { id: 'pickaxe-label', text: `Pickaxe`, cps: pickaxeCps, owned: ownedPickaxes, produced: producedPickaxes, tooltipId: 'pickaxe-tooltip' },
-            { id: 'farm-label', text: `Shovel`, cps: farmCps, owned: ownedFarms, produced: producedFarms, tooltipId: 'farm-tooltip' },
-            { id: 'mine-label', text: `Crystal`, cps: mineCps, owned: ownedMines, produced: producedMines, tooltipId: 'mine-tooltip' },
-            { id: 'factory-label', text: `Factory`, cps: factoryCps, owned: ownedFactories, produced: producedFactories, tooltipId: 'factory-tooltip' },
-            { id: 'bank-label', text: `Shield`, cps: bankCps, owned: ownedBanks, produced: producedBanks, tooltipId: 'bank-tooltip' },
-            { id: 'temple-label', text: `Temple`, cps: templeCps, owned: ownedTemples, produced: producedTemples, tooltipId: 'temple-tooltip' },
-            { id: 'wizard-label', text: `Gametower`, cps: wizardCps, owned: ownedWizards, produced: producedWizards, tooltipId: 'wizard-tooltip' },
+            { id: 'autotap-label', text: 'Autotap', cps: autotapCps, owned: ownedAutotaps, produced: producedAutotaps, tooltipId: 'autotap-tooltip' },
+            { id: 'clickboost-label', text: 'Clickboost', cps: 0, owned: ownedClickBoosts, produced: 0, tooltipId: 'clickboost-tooltip' },
+            { id: 'pickaxe-label', text: 'Pickaxe', cps: pickaxeCps, owned: ownedPickaxes, produced: producedPickaxes, tooltipId: 'pickaxe-tooltip' },
+            { id: 'farm-label', text: 'Shovel', cps: farmCps, owned: ownedFarms, produced: producedFarms, tooltipId: 'farm-tooltip' },
+            { id: 'mine-label', text: 'Crystal', cps: mineCps, owned: ownedMines, produced: producedMines, tooltipId: 'mine-tooltip' },
+            { id: 'factory-label', text: 'Factory', cps: factoryCps, owned: ownedFactories, produced: producedFactories, tooltipId: 'factory-tooltip' },
+            { id: 'bank-label', text: 'Shield', cps: bankCps, owned: ownedBanks, produced: producedBanks, tooltipId: 'bank-tooltip' },
+            { id: 'temple-label', text: 'Temple', cps: templeCps, owned: ownedTemples, produced: producedTemples, tooltipId: 'temple-tooltip' },
+            { id: 'wizard-label', text: 'Gametower', cps: wizardCps, owned: ownedWizards, produced: producedWizards, tooltipId: 'wizard-tooltip' }
         ];
 
-        labels.forEach(l => {
-            const el = document.getElementById(l.id);
-            if (el) {
-                const formattedCps = formatPerSecond(l.cps);
-                const itemTotalCps = l.owned * l.cps;
-                const percent = (cookiesPerSecond > 0) ? ((itemTotalCps / cookiesPerSecond) * 100).toFixed(2) : '0.00';
-                const producedVal = Math.floor(l.produced);
-                const producingVal = Math.floor(itemTotalCps);
+        labels.forEach((item) => {
+            const label = document.getElementById(item.id);
+            if (!label) return;
 
-                if (l.id === 'clickboost-label') {
-// Inside the clickboost tooltip
-el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formatCookieValue(clickBoostAdd)}/click</span><span class="tooltiptext" id="${l.tooltipId}">Owned: ${formatCookieValue(l.owned)}<br>Gives ${formatCookieValue(clickBoostAdd)} per upgrade</span>`;
-                } else {
-el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formattedCps}/s</span><span class="tooltiptext" id="${l.tooltipId}">Owned: ${formatCookieValue(l.owned)}<br>${percent}% of mps<br>${manaEmoji}<span class="produced-number" data-value="${producedVal}">${formatCookieValue(producedVal)}</span> produced<br>Producing <span class="producing-number" data-value="${producingVal}">${formatCookieValue(producingVal)}</span>${manaEmoji}/s</span>`;
-                }
+            const formattedCps = formatPerSecond(item.cps);
+            const itemTotalCps = item.owned * item.cps;
+            const percent = cookiesPerSecond > 0
+                ? ((itemTotalCps / cookiesPerSecond) * 100).toFixed(2)
+                : '0.00';
+            const producedValue = Math.floor(item.produced);
+            const producingValue = Math.floor(itemTotalCps);
 
-                const tooltipEl = document.getElementById(l.tooltipId);
-                if (tooltipEl) {
-                    const prodSpan = tooltipEl.querySelector('.produced-number');
-                    const prodCpsSpan = tooltipEl.querySelector('.producing-number');
-                    if (prodSpan) {
-                        animateNumber(prodSpan, producedVal, { duration: 700, formatter: (n) => formatCookieValue(Math.floor(n)), allowDecrease: false });
-                    }
-                    if (prodCpsSpan) {
-                        animateNumber(prodCpsSpan, producingVal, { duration: 700, formatter: (n) => formatCookieValue(Math.floor(n)), allowDecrease: false });
-                    }
-                }
+            if (item.id === 'clickboost-label') {
+                label.innerHTML = `<strong>${item.text}</strong><span class="subtitle">+${formatCookieValue(clickBoostAdd)}/click</span><span class="tooltiptext" id="${item.tooltipId}">Owned: ${formatCookieValue(item.owned)}<br>Gives ${formatCookieValue(clickBoostAdd)} per upgrade</span>`;
+            } else {
+                label.innerHTML = `<strong>${item.text}</strong><span class="subtitle">+${formattedCps}/s</span><span class="tooltiptext" id="${item.tooltipId}">Owned: ${formatCookieValue(item.owned)}<br>${percent}% of mps<br>${manaEmoji}<span class="produced-number" data-value="${producedValue}">${formatCookieValue(producedValue)}</span> produced<br>Producing <span class="producing-number" data-value="${producingValue}">${formatCookieValue(producingValue)}</span>${manaEmoji}/s</span>`;
+            }
+
+            const tooltip = document.getElementById(item.tooltipId);
+            const producedElement = tooltip?.querySelector('.produced-number');
+            const producingElement = tooltip?.querySelector('.producing-number');
+
+            if (producedElement) {
+                animateNumber(producedElement, producedValue, {
+                    duration: 700,
+                    formatter: value => formatCookieValue(Math.floor(value))
+                });
+            }
+
+            if (producingElement) {
+                animateNumber(producingElement, producingValue, {
+                    duration: 700,
+                    formatter: value => formatCookieValue(Math.floor(value))
+                });
             }
         });
 
-        const setCost = (btn, value) => {
-            if (!btn) return;
-            const span = btn.querySelector('.cost');
-            if (span) {
-                span.innerHTML = formatCookieValue(value);
-                if (span.dataset) span.dataset.value = String(value);
-            } else {
-                ensureButtonStructure(btn);
-                const s = btn.querySelector('.cost');
-                if (s) {
-                    s.innerHTML = formatCookieValue(value);
-                    if (s.dataset) s.dataset.value = String(value);
-                }
+        const setCost = (button, value) => {
+            if (!button) return;
+
+            let costElement = button.querySelector('.cost');
+            if (!costElement) {
+                ensureButtonStructure(button);
+                costElement = button.querySelector('.cost');
+            }
+
+            if (costElement) {
+                costElement.innerHTML = formatCookieValue(value);
+                costElement.dataset.value = String(value);
             }
         };
 
@@ -616,40 +638,41 @@ el.innerHTML = `<strong>${l.text}</strong><span class="subtitle">+${formattedCps
         setCost(wizardButtonElement, wizardCost);
         setCost(clickboostButtonElement, clickBoostCost);
 
-	if (totalCookiesRow) totalCookiesRow.innerHTML = `${manaEmoji} ${formatCookieValue(totalMana)}`;
-        if (clicksRow) clicksRow.innerHTML = `${formatNumber(Math.floor(clickCount))}`;
-        if (totalBuildingsRow) totalBuildingsRow.innerHTML = `${formatNumber(Math.floor(computeTotalBuildings()))}`;
+        if (totalCookiesRow) {
+            totalCookiesRow.innerHTML = `${manaEmoji} ${formatCookieValue(totalMana)}`;
+        }
+        if (clicksRow) {
+            clicksRow.innerHTML = formatNumber(Math.floor(clickCount));
+        }
+        if (totalBuildingsRow) {
+            totalBuildingsRow.innerHTML = formatNumber(Math.floor(computeTotalBuildings()));
+        }
 
         updateUpgradesPanel();
         wireTooltipsInBuildings();
         wireUpgradeButtonRipples();
     }
 
-function createClickerClone(clicks, x, y) {
-    const clone = document.createElement('div');
-    clone.className = 'clicker-clone';
-    clone.innerHTML = `+${formatCookieValue(cookiesPerClick)}`;
-    clone.style.top = `${y}px`;
-    clone.style.left = `${x}px`;
-    clone.style.opacity = '1';
-    clone.style.transition =
-        'transform 350ms ease-out, opacity 300ms ease-out';
-    document.body.appendChild(clone);
+    function createClickerClone(clicks, x, y) {
+        const clone = document.createElement('div');
+        clone.className = 'clicker-clone';
+        clone.innerHTML = `+${formatCookieValue(cookiesPerClick)}`;
+        clone.style.top = `${y}px`;
+        clone.style.left = `${x}px`;
+        clone.style.opacity = '1';
+        clone.style.transition = 'transform 350ms ease-out, opacity 300ms ease-out';
+        document.body.appendChild(clone);
 
-    requestAnimationFrame(() => {
-        clone.style.transform = 'translateY(-55px)';
-    });
+        requestAnimationFrame(() => {
+            clone.style.transform = 'translateY(-55px)';
+        });
 
-    // Begin fading after the upward animation has lasted 1000ms
-    setTimeout(() => {
-        clone.style.opacity = '0';
-    }, 350);
+        setTimeout(() => {
+            clone.style.opacity = '0';
+        }, 350);
 
-    // Remove after rise + fade
-    setTimeout(() => {
-        clone.remove();
-    }, 1300);
-}
+        setTimeout(() => clone.remove(), 1300);
+    }
 
     function createGoldenCookie(x, y) {
         const goldenCookie = document.createElement('img');
@@ -657,35 +680,36 @@ function createClickerClone(clicks, x, y) {
         goldenCookie.className = 'golden-cookie';
         goldenCookie.style.top = `${y}px`;
         goldenCookie.style.left = `${x}px`;
+
         goldenCookie.addEventListener('click', () => {
-            const bonus = 200 + (cookiesPerSecond / 10);
+            const bonus = 200 + cookiesPerSecond / 10;
             manaCount += bonus;
             totalMana += bonus;
             updateDisplay();
-            if (goldenCookie.parentNode) goldenCookie.parentNode.removeChild(goldenCookie);
+            goldenCookie.remove();
         });
+
         document.body.appendChild(goldenCookie);
-        setTimeout(() => {
-            if (document.body.contains(goldenCookie)) document.body.removeChild(goldenCookie);
-        }, 5000);
+        setTimeout(() => goldenCookie.remove(), 5000);
     }
 
     function startInterval() {
         if (intervalId) clearInterval(intervalId);
-        const perTick = 1;
+
         intervalId = setInterval(() => {
             computeCookiesPerSecond();
 
-            const autoContrib = ownedAutotaps * autotapCps * perTick;
-            const pickContrib = ownedPickaxes * pickaxeCps * perTick;
-            const farmContrib = ownedFarms * farmCps * perTick;
-            const mineContrib = ownedMines * mineCps * perTick;
-            const factoryContrib = ownedFactories * factoryCps * perTick;
-            const bankContrib = ownedBanks * bankCps * perTick;
-            const templeContrib = ownedTemples * templeCps * perTick;
-            const wizardContrib = ownedWizards * wizardCps * perTick;
+            const autoContrib = ownedAutotaps * autotapCps;
+            const pickContrib = ownedPickaxes * pickaxeCps;
+            const farmContrib = ownedFarms * farmCps;
+            const mineContrib = ownedMines * mineCps;
+            const factoryContrib = ownedFactories * factoryCps;
+            const bankContrib = ownedBanks * bankCps;
+            const templeContrib = ownedTemples * templeCps;
+            const wizardContrib = ownedWizards * wizardCps;
 
-            const totalTick = autoContrib + pickContrib + farmContrib + mineContrib + factoryContrib + bankContrib + templeContrib + wizardContrib;
+            const totalTick = autoContrib + pickContrib + farmContrib + mineContrib
+                + factoryContrib + bankContrib + templeContrib + wizardContrib;
 
             manaCount += totalTick / 60;
             totalMana += totalTick / 60;
@@ -705,13 +729,34 @@ function createClickerClone(clicks, x, y) {
     }
 
     function checkUpgrades() {
-        if (ownedAutotaps >= 1) { const el = document.getElementById('pickaxe-upgrade'); if (el) el.style.display = 'flex'; }
-        if (ownedPickaxes >= 1) { const el = document.getElementById('farm-upgrade'); if (el) el.style.display = 'flex'; }
-        if (ownedFarms >= 1) { const el = document.getElementById('mine-upgrade'); if (el) el.style.display = 'flex'; }
-        if (ownedMines >= 1) { const el = document.getElementById('factory-upgrade'); if (el) el.style.display = 'flex'; }
-        if (ownedFactories >= 1) { const el = document.getElementById('bank-upgrade'); if (el) el.style.display = 'flex'; }
-        if (ownedBanks >= 1) { const el = document.getElementById('temple-upgrade'); if (el) el.style.display = 'flex'; }
-        if (ownedTemples >= 1) { const el = document.getElementById('wizard-upgrade'); if (el) el.style.display = 'flex'; }
+        if (ownedAutotaps >= 1) {
+            const element = document.getElementById('pickaxe-upgrade');
+            if (element) element.style.display = 'flex';
+        }
+        if (ownedPickaxes >= 1) {
+            const element = document.getElementById('farm-upgrade');
+            if (element) element.style.display = 'flex';
+        }
+        if (ownedFarms >= 1) {
+            const element = document.getElementById('mine-upgrade');
+            if (element) element.style.display = 'flex';
+        }
+        if (ownedMines >= 1) {
+            const element = document.getElementById('factory-upgrade');
+            if (element) element.style.display = 'flex';
+        }
+        if (ownedFactories >= 1) {
+            const element = document.getElementById('bank-upgrade');
+            if (element) element.style.display = 'flex';
+        }
+        if (ownedBanks >= 1) {
+            const element = document.getElementById('temple-upgrade');
+            if (element) element.style.display = 'flex';
+        }
+        if (ownedTemples >= 1) {
+            const element = document.getElementById('wizard-upgrade');
+            if (element) element.style.display = 'flex';
+        }
     }
 
     function saveProgress(username) {
@@ -749,50 +794,68 @@ function createClickerClone(clicks, x, y) {
             producedTemples,
             producedWizards
         };
-        try { localStorage.setItem(`cookieClicks_${username}`, JSON.stringify(progress)); } catch (e) {}
+
+        try {
+            localStorage.setItem(`cookieClicks_${username}`, JSON.stringify(progress));
+        } catch (e) {}
     }
 
     function loadProgress(username) {
         try {
             const saved = localStorage.getItem(`cookieClicks_${username}`);
+
             if (saved) {
-                const p = JSON.parse(saved);
-                manaCount = (typeof p.manaCount !== 'undefined') ? p.manaCount : (typeof p.cookieCount !== 'undefined' ? p.cookieCount : 0);
-                cookiesPerClick = p.cookiesPerClick || cookiesPerClick;
-                cookiesPerSecond = p.cookiesPerSecond || 0;
-                upgradeCost = p.upgradeCost || upgradeCost;
-                pickaxeCost = p.pickaxeCost || pickaxeCost;
-                farmCost = p.farmCost || farmCost;
-                mineCost = p.mineCost || mineCost;
-                factoryCost = p.factoryCost || factoryCost;
-                bankCost = p.bankCost || bankCost;
-                templeCost = p.templeCost || templeCost;
-                wizardCost = p.wizardCost || wizardCost;
-                ownedAutotaps = p.ownedAutotaps || 0;
-                ownedClickBoosts = p.ownedClickBoosts || 0;
-                ownedPickaxes = p.ownedPickaxes || 0;
-                ownedFarms = p.ownedFarms || 0;
-                ownedMines = p.ownedMines || 0;
-                ownedFactories = p.ownedFactories || 0;
-                ownedBanks = p.ownedBanks || 0;
-                ownedTemples = p.ownedTemples || 0;
-                ownedWizards = p.ownedWizards || 0;
-                totalMana = (typeof p.totalMana !== 'undefined') ? p.totalMana : (typeof p.totalCookies !== 'undefined' ? p.totalCookies : manaCount);
-                clickCount = p.clickCount || 0;
-                autotapCps = (typeof p.autotapCps !== 'undefined') ? p.autotapCps : autotapCps;
-                cursorMultiplier = (typeof p.cursorMultiplier !== 'undefined') ? p.cursorMultiplier : cursorMultiplier;
-                producedAutotaps = p.producedAutotaps || 0;
-                producedPickaxes = p.producedPickaxes || 0;
-                producedFarms = p.producedFarms || 0;
-                producedMines = p.producedMines || 0;
-                producedFactories = p.producedFactories || 0;
-                producedBanks = p.producedBanks || 0;
-                producedTemples = p.producedTemples || 0;
-                producedWizards = p.producedWizards || 0;
+                const progress = JSON.parse(saved);
+
+                manaCount = typeof progress.manaCount !== 'undefined'
+                    ? progress.manaCount
+                    : (typeof progress.cookieCount !== 'undefined' ? progress.cookieCount : 0);
+
+                cookiesPerClick = progress.cookiesPerClick || cookiesPerClick;
+                cookiesPerSecond = progress.cookiesPerSecond || 0;
+                upgradeCost = progress.upgradeCost || upgradeCost;
+                pickaxeCost = progress.pickaxeCost || pickaxeCost;
+                farmCost = progress.farmCost || farmCost;
+                mineCost = progress.mineCost || mineCost;
+                factoryCost = progress.factoryCost || factoryCost;
+                bankCost = progress.bankCost || bankCost;
+                templeCost = progress.templeCost || templeCost;
+                wizardCost = progress.wizardCost || wizardCost;
+
+                ownedAutotaps = progress.ownedAutotaps || 0;
+                ownedClickBoosts = progress.ownedClickBoosts || 0;
+                ownedPickaxes = progress.ownedPickaxes || 0;
+                ownedFarms = progress.ownedFarms || 0;
+                ownedMines = progress.ownedMines || 0;
+                ownedFactories = progress.ownedFactories || 0;
+                ownedBanks = progress.ownedBanks || 0;
+                ownedTemples = progress.ownedTemples || 0;
+                ownedWizards = progress.ownedWizards || 0;
+
+                totalMana = typeof progress.totalMana !== 'undefined'
+                    ? progress.totalMana
+                    : (typeof progress.totalCookies !== 'undefined' ? progress.totalCookies : manaCount);
+
+                clickCount = progress.clickCount || 0;
+                autotapCps = typeof progress.autotapCps !== 'undefined'
+                    ? progress.autotapCps
+                    : autotapCps;
+                cursorMultiplier = typeof progress.cursorMultiplier !== 'undefined'
+                    ? progress.cursorMultiplier
+                    : cursorMultiplier;
+
+                producedAutotaps = progress.producedAutotaps || 0;
+                producedPickaxes = progress.producedPickaxes || 0;
+                producedFarms = progress.producedFarms || 0;
+                producedMines = progress.producedMines || 0;
+                producedFactories = progress.producedFactories || 0;
+                producedBanks = progress.producedBanks || 0;
+                producedTemples = progress.producedTemples || 0;
+                producedWizards = progress.producedWizards || 0;
             }
         } catch (e) {}
 
-        cookiesPerClick = 0.01 + (clickBoostAdd * ownedClickBoosts);
+        cookiesPerClick = 0.01 + clickBoostAdd * ownedClickBoosts;
         computeCookiesPerSecond();
         updateDisplay();
         startInterval();
@@ -806,10 +869,7 @@ function createClickerClone(clicks, x, y) {
             sound.volume = audioElement.volume;
             sound.currentTime = 0;
 
-            sound.addEventListener('ended', () => {
-                if (sound.parentNode) sound.parentNode.removeChild(sound);
-            }, { once: true });
-
+            sound.addEventListener('ended', () => sound.remove(), { once: true });
             sound.style.position = 'absolute';
             sound.style.left = '-9999px';
             document.body.appendChild(sound);
@@ -831,135 +891,135 @@ function createClickerClone(clicks, x, y) {
         }
     }
 
-    if (cookieElement) {
-        cookieElement.addEventListener('click', (event) => {
-            const now = Date.now();
-            if (now - lastClickTime >= 10) {
-                lastClickTime = now;
-                manaCount += cookiesPerClick;
-                totalMana += cookiesPerClick;
-                clickCount += 1;
-                createClickerClone(cookiesPerClick, event.clientX, event.clientY);
-                updateDisplay();
-                playSfx(clickSoundElement);
-            }
-        });
-    }
+    cookieElement?.addEventListener('click', (event) => {
+        const now = Date.now();
 
-    upgradeButtonElement && upgradeButtonElement.addEventListener('click', () => {
-        if (manaCount >= upgradeCost) {
-            manaCount -= upgradeCost;
-            ownedAutotaps++;
-            upgradeCost = (upgradeCost * 1.15);
-            computeCookiesPerSecond();
-            updateDisplay();
-            startInterval();
-            playSfx(upgradeSoundElement);
-        }
+        if (now - lastClickTime < 10) return;
+
+        lastClickTime = now;
+        manaCount += cookiesPerClick;
+        totalMana += cookiesPerClick;
+        clickCount += 1;
+        createClickerClone(cookiesPerClick, event.clientX, event.clientY);
+        updateDisplay();
+        playSfx(clickSoundElement);
     });
 
-    pickaxeButtonElement && pickaxeButtonElement.addEventListener('click', () => {
-        if (manaCount >= pickaxeCost) {
-            manaCount -= pickaxeCost;
-            ownedPickaxes++;
-            pickaxeCost = (pickaxeCost * 1.2);
-            computeCookiesPerSecond();
-            updateDisplay();
-            startInterval();
-            playSfx(upgradeSoundElement);
-        }
+    upgradeButtonElement?.addEventListener('click', () => {
+        if (manaCount < upgradeCost) return;
+
+        manaCount -= upgradeCost;
+        ownedAutotaps++;
+        upgradeCost *= 1.15;
+        computeCookiesPerSecond();
+        updateDisplay();
+        startInterval();
+        playSfx(upgradeSoundElement);
     });
 
-    farmButtonElement && farmButtonElement.addEventListener('click', () => {
-        if (manaCount >= farmCost) {
-            manaCount -= farmCost;
-            ownedFarms++;
-            farmCost = (farmCost * 1.22);
-            computeCookiesPerSecond();
-            updateDisplay();
-            startInterval();
-            playSfx(upgradeSoundElement);
-        }
+    pickaxeButtonElement?.addEventListener('click', () => {
+        if (manaCount < pickaxeCost) return;
+
+        manaCount -= pickaxeCost;
+        ownedPickaxes++;
+        pickaxeCost *= 1.2;
+        computeCookiesPerSecond();
+        updateDisplay();
+        startInterval();
+        playSfx(upgradeSoundElement);
     });
 
-    mineButtonElement && mineButtonElement.addEventListener('click', () => {
-        if (manaCount >= mineCost) {
-            manaCount -= mineCost;
-            ownedMines++;
-            mineCost = (mineCost * 1.27);
-            computeCookiesPerSecond();
-            updateDisplay();
-            startInterval();
-            playSfx(upgradeSoundElement);
-        }
+    farmButtonElement?.addEventListener('click', () => {
+        if (manaCount < farmCost) return;
+
+        manaCount -= farmCost;
+        ownedFarms++;
+        farmCost *= 1.22;
+        computeCookiesPerSecond();
+        updateDisplay();
+        startInterval();
+        playSfx(upgradeSoundElement);
     });
 
-    factoryButtonElement && factoryButtonElement.addEventListener('click', () => {
-        if (manaCount >= factoryCost) {
-            manaCount -= factoryCost;
-            ownedFactories++;
-            factoryCost = (factoryCost * 1.2);
-            computeCookiesPerSecond();
-            updateDisplay();
-            startInterval();
-            playSfx(upgradeSoundElement);
-        }
+    mineButtonElement?.addEventListener('click', () => {
+        if (manaCount < mineCost) return;
+
+        manaCount -= mineCost;
+        ownedMines++;
+        mineCost *= 1.27;
+        computeCookiesPerSecond();
+        updateDisplay();
+        startInterval();
+        playSfx(upgradeSoundElement);
     });
 
-    bankButtonElement && bankButtonElement.addEventListener('click', () => {
-        if (manaCount >= bankCost) {
-            manaCount -= bankCost;
-            ownedBanks++;
-            bankCost = (bankCost * 1.18);
-            computeCookiesPerSecond();
-            updateDisplay();
-            startInterval();
-            playSfx(upgradeSoundElement);
-        }
+    factoryButtonElement?.addEventListener('click', () => {
+        if (manaCount < factoryCost) return;
+
+        manaCount -= factoryCost;
+        ownedFactories++;
+        factoryCost *= 1.2;
+        computeCookiesPerSecond();
+        updateDisplay();
+        startInterval();
+        playSfx(upgradeSoundElement);
     });
 
-    templeButtonElement && templeButtonElement.addEventListener('click', () => {
-        if (manaCount >= templeCost) {
-            manaCount -= templeCost;
-            ownedTemples++;
-            templeCost = (templeCost * 1.3);
-            computeCookiesPerSecond();
-            updateDisplay();
-            startInterval();
-            playSfx(upgradeSoundElement);
-        }
+    bankButtonElement?.addEventListener('click', () => {
+        if (manaCount < bankCost) return;
+
+        manaCount -= bankCost;
+        ownedBanks++;
+        bankCost *= 1.18;
+        computeCookiesPerSecond();
+        updateDisplay();
+        startInterval();
+        playSfx(upgradeSoundElement);
     });
 
-    wizardButtonElement && wizardButtonElement.addEventListener('click', () => {
-        if (manaCount >= wizardCost) {
-            manaCount -= wizardCost;
-            ownedWizards++;
-            wizardCost = (wizardCost * 1.2);
-            computeCookiesPerSecond();
-            updateDisplay();
-            startInterval();
-            playSfx(upgradeSoundElement);
-        }
+    templeButtonElement?.addEventListener('click', () => {
+        if (manaCount < templeCost) return;
+
+        manaCount -= templeCost;
+        ownedTemples++;
+        templeCost *= 1.3;
+        computeCookiesPerSecond();
+        updateDisplay();
+        startInterval();
+        playSfx(upgradeSoundElement);
     });
 
-    clickboostButtonElement && clickboostButtonElement.addEventListener('click', () => {
-        if (manaCount >= clickBoostCost) {
-            manaCount -= clickBoostCost;
-            ownedClickBoosts++;
-            cookiesPerClick = 0.01 + (clickBoostAdd * ownedClickBoosts);
-            clickBoostCost = (clickBoostCost * 1.5);
-            updateDisplay();
-            playSfx(upgradeSoundElement);
-        }
+    wizardButtonElement?.addEventListener('click', () => {
+        if (manaCount < wizardCost) return;
+
+        manaCount -= wizardCost;
+        ownedWizards++;
+        wizardCost *= 1.2;
+        computeCookiesPerSecond();
+        updateDisplay();
+        startInterval();
+        playSfx(upgradeSoundElement);
+    });
+
+    clickboostButtonElement?.addEventListener('click', () => {
+        if (manaCount < clickBoostCost) return;
+
+        manaCount -= clickBoostCost;
+        ownedClickBoosts++;
+        cookiesPerClick = 0.01 + clickBoostAdd * ownedClickBoosts;
+        clickBoostCost *= 1.5;
+        updateDisplay();
+        playSfx(upgradeSoundElement);
     });
 
     function setDarkMode(enabled) {
-        if (enabled) document.body.classList.add('dark-mode'); else document.body.classList.remove('dark-mode');
+        document.body.classList.toggle('dark-mode', enabled);
 
         if (themeDropdownButton) {
             themeDropdownButton.textContent = `${enabled ? 'Dark ▼' : 'Light ▼'}`;
             themeDropdownButton.setAttribute('aria-expanded', 'false');
         }
+
         try {
             localStorage.setItem('cookieClicks_darkMode', enabled ? '1' : '0');
         } catch (e) {}
@@ -967,21 +1027,21 @@ function createClickerClone(clicks, x, y) {
 
     (function initDarkModeFromStorage() {
         try {
-            const val = localStorage.getItem('cookieClicks_darkMode');
-            const enabled = val === '1';
-            setDarkMode(enabled);
+            setDarkMode(localStorage.getItem('cookieClicks_darkMode') === '1');
         } catch (e) {}
     })();
 
     function closeAllDropdownsExcept(exceptRoot) {
-        const roots = [themeDropdownRoot, numberFormatRoot];
-        roots.forEach(root => {
+        [themeDropdownRoot, numberFormatRoot].forEach((root) => {
             if (!root || root === exceptRoot) return;
+
             root.classList.remove('open');
+
             if (root === themeDropdownRoot && themeDropdownButton && themeDropdownMenu) {
                 themeDropdownButton.setAttribute('aria-expanded', 'false');
                 themeDropdownMenu.setAttribute('aria-hidden', 'true');
             }
+
             if (root === numberFormatRoot && numberFormatButton && numberFormatMenu) {
                 numberFormatButton.setAttribute('aria-expanded', 'false');
                 numberFormatMenu.setAttribute('aria-hidden', 'true');
@@ -990,185 +1050,267 @@ function createClickerClone(clicks, x, y) {
     }
 
     if (themeDropdownRoot && themeDropdownButton && themeDropdownMenu) {
-        themeDropdownButton.addEventListener('click', (e) => {
+        themeDropdownButton.addEventListener('click', () => {
             closeAllDropdownsExcept(themeDropdownRoot);
             const open = themeDropdownRoot.classList.toggle('open');
-            themeDropdownButton.setAttribute('aria-expanded', open ? 'true' : 'false');
-            themeDropdownMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+            themeDropdownButton.setAttribute('aria-expanded', String(open));
+            themeDropdownMenu.setAttribute('aria-hidden', String(!open));
         });
 
-        themeDropdownMenu.addEventListener('click', (e) => {
-            const btn = e.target.closest('[data-theme]');
-            if (!btn) return;
-            const theme = btn.getAttribute('data-theme');
-            if (theme === 'dark') {
-                setDarkMode(true);
-            } else {
-                setDarkMode(false);
-            }
+        themeDropdownMenu.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-theme]');
+            if (!button) return;
+
+            setDarkMode(button.getAttribute('data-theme') === 'dark');
             themeDropdownRoot.classList.remove('open');
             themeDropdownButton.setAttribute('aria-expanded', 'false');
             themeDropdownMenu.setAttribute('aria-hidden', 'true');
             updateDisplay();
         });
 
-        themeDropdownButton.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                closeAllDropdownsExcept(themeDropdownRoot);
-                themeDropdownRoot.classList.add('open');
-                themeDropdownMenu.setAttribute('aria-hidden', 'false');
-                themeDropdownButton.setAttribute('aria-expanded', 'true');
-                const first = themeDropdownMenu.querySelector('[data-theme]');
-                if (first) first.focus();
-            }
+        themeDropdownButton.addEventListener('keydown', (event) => {
+            if (!['ArrowDown', 'Enter', ' '].includes(event.key)) return;
+
+            event.preventDefault();
+            closeAllDropdownsExcept(themeDropdownRoot);
+            themeDropdownRoot.classList.add('open');
+            themeDropdownButton.setAttribute('aria-expanded', 'true');
+            themeDropdownMenu.setAttribute('aria-hidden', 'false');
+            themeDropdownMenu.querySelector('[data-theme]')?.focus();
         });
 
-        themeDropdownMenu.addEventListener('keydown', (e) => {
+        themeDropdownMenu.addEventListener('keydown', (event) => {
             const items = Array.from(themeDropdownMenu.querySelectorAll('[data-theme]'));
-            const idx = items.indexOf(document.activeElement);
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                const next = items[(idx + 1) % items.length];
-                if (next) next.focus();
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                const prev = items[(idx - 1 + items.length) % items.length];
-                if (prev) prev.focus();
-            } else if (e.key === 'Escape') {
-                themeDropdownRoot.classList.remove('open');
-                themeDropdownButton.focus();
-            } else if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                document.activeElement.click();
-            }
-        });
+            const index = items.indexOf(document.activeElement);
 
-        document.addEventListener('click', (ev) => {
-            if (!ev.target.closest || (!ev.target.closest('.dropdown'))) {
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                items[(index + 1) % items.length]?.focus();
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                items[(index - 1 + items.length) % items.length]?.focus();
+            } else if (event.key === 'Escape') {
                 themeDropdownRoot.classList.remove('open');
                 themeDropdownButton.setAttribute('aria-expanded', 'false');
                 themeDropdownMenu.setAttribute('aria-hidden', 'true');
+                themeDropdownButton.focus();
+            } else if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                document.activeElement.click();
             }
         });
     }
 
     (function initNumberFormatDropdown() {
         if (numberFormatButton) {
-            const label = numberFormatMode === 'engineering' ? 'Engineering ▼' : (numberFormatMode === 'emojis' ? 'Letters ▼' : 'Normal ▼');
-            numberFormatButton.textContent = `${label}`;
+            const label = numberFormatMode === 'engineering'
+                ? 'Engineering ▼'
+                : numberFormatMode === 'emojis'
+                    ? 'Letters ▼'
+                    : 'Normal ▼';
+
+            numberFormatButton.textContent = label;
         }
 
         if (!numberFormatRoot || !numberFormatButton || !numberFormatMenu) return;
 
-        numberFormatButton.addEventListener('click', (e) => {
+        numberFormatButton.addEventListener('click', () => {
             closeAllDropdownsExcept(numberFormatRoot);
             const open = numberFormatRoot.classList.toggle('open');
-            numberFormatButton.setAttribute('aria-expanded', open ? 'true' : 'false');
-            numberFormatMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+            numberFormatButton.setAttribute('aria-expanded', String(open));
+            numberFormatMenu.setAttribute('aria-hidden', String(!open));
         });
 
-        numberFormatMenu.addEventListener('click', (e) => {
-            const btn = e.target.closest('[data-format]');
-            if (!btn) return;
-            const fmt = btn.getAttribute('data-format');
-            if (!fmt) return;
-            numberFormatMode = fmt;
-            try { localStorage.setItem('cookieClicks_numberFormat', numberFormatMode); } catch (err) {}
-            numberFormatButton.textContent = (fmt === 'engineering') ? 'Engineering ▼' : (fmt === 'emojis' ? 'Letters ▼' : 'Normal ▼');
+        numberFormatMenu.addEventListener('click', (event) => {
+            const button = event.target.closest('[data-format]');
+            if (!button) return;
+
+            const format = button.getAttribute('data-format');
+            if (!format) return;
+
+            numberFormatMode = format;
+
+            try {
+                localStorage.setItem('cookieClicks_numberFormat', numberFormatMode);
+            } catch (e) {}
+
+            numberFormatButton.textContent = format === 'engineering'
+                ? 'Engineering ▼'
+                : format === 'emojis'
+                    ? 'Letters ▼'
+                    : 'Normal ▼';
 
             numberFormatRoot.classList.remove('open');
             numberFormatButton.setAttribute('aria-expanded', 'false');
             numberFormatMenu.setAttribute('aria-hidden', 'true');
-
             updateDisplay();
         });
 
-        numberFormatButton.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                closeAllDropdownsExcept(numberFormatRoot);
-                numberFormatRoot.classList.add('open');
-                numberFormatMenu.setAttribute('aria-hidden', 'false');
-                numberFormatButton.setAttribute('aria-expanded', 'true');
-                const first = numberFormatMenu.querySelector('[data-format]');
-                if (first) first.focus();
-            }
+        numberFormatButton.addEventListener('keydown', (event) => {
+            if (!['ArrowDown', 'Enter', ' '].includes(event.key)) return;
+
+            event.preventDefault();
+            closeAllDropdownsExcept(numberFormatRoot);
+            numberFormatRoot.classList.add('open');
+            numberFormatButton.setAttribute('aria-expanded', 'true');
+            numberFormatMenu.setAttribute('aria-hidden', 'false');
+            numberFormatMenu.querySelector('[data-format]')?.focus();
         });
 
-        numberFormatMenu.addEventListener('keydown', (e) => {
+        numberFormatMenu.addEventListener('keydown', (event) => {
             const items = Array.from(numberFormatMenu.querySelectorAll('[data-format]'));
-            const idx = items.indexOf(document.activeElement);
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                const next = items[(idx + 1) % items.length];
-                if (next) next.focus();
-            } else if (e.key === 'ArrowUp') {
-                e.preventDefault();
-                const prev = items[(idx - 1 + items.length) % items.length];
-                if (prev) prev.focus();
-            } else if (e.key === 'Escape') {
-                numberFormatRoot.classList.remove('open');
-                numberFormatButton.focus();
-            } else if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                document.activeElement.click();
-            }
-        });
+            const index = items.indexOf(document.activeElement);
 
-        document.addEventListener('click', (ev) => {
-            if (!ev.target.closest || (!ev.target.closest('.dropdown'))) {
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                items[(index + 1) % items.length]?.focus();
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                items[(index - 1 + items.length) % items.length]?.focus();
+            } else if (event.key === 'Escape') {
                 numberFormatRoot.classList.remove('open');
                 numberFormatButton.setAttribute('aria-expanded', 'false');
                 numberFormatMenu.setAttribute('aria-hidden', 'true');
+                numberFormatButton.focus();
+            } else if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                document.activeElement.click();
             }
         });
     })();
 
     function clearSelectedTabs() {
-        [buildingsButton, upgradesButton, statsButton, changelogButton, settingsButton].forEach(btn => {
-            if (btn) { btn.classList.remove('selected'); btn.setAttribute('aria-pressed', 'false'); }
+        [buildingsButton, upgradesButton].forEach((button) => {
+            if (!button) return;
+            button.classList.remove('selected');
+            button.setAttribute('aria-pressed', 'false');
         });
     }
 
     function hideAllPanels() {
         if (upgradeContainer) upgradeContainer.style.display = 'none';
         if (upgradesContainer) upgradesContainer.style.display = 'none';
-        if (statsContainer) statsContainer.style.display = 'none';
         if (changelogContainer) changelogContainer.style.display = 'none';
-        if (settingsContainer) settingsContainer.style.display = 'none';
     }
 
     function showTab(tabName) {
         hideAllPanels();
         clearSelectedTabs();
-        switch (tabName) {
-            case 'buildings': if (upgradeContainer) upgradeContainer.style.display = 'flex'; if (buildingsButton) { buildingsButton.classList.add('selected'); buildingsButton.setAttribute('aria-pressed','true'); } break;
-            case 'upgrades': if (upgradesContainer) upgradesContainer.style.display = 'flex'; if (upgradesButton) { upgradesButton.classList.add('selected'); upgradesButton.setAttribute('aria-pressed','true'); } break;
-            case 'stats': if (statsContainer) statsContainer.style.display = 'flex'; if (statsButton) { statsButton.classList.add('selected'); statsButton.setAttribute('aria-pressed','true'); } break;
-            case 'changelog': if (changelogContainer) changelogContainer.style.display = 'flex'; if (changelogButton) { changelogButton.classList.add('selected'); changelogButton.setAttribute('aria-pressed','true'); } break;
-            case 'settings': if (settingsContainer) settingsContainer.style.display = 'flex'; if (settingsButton) { settingsButton.classList.add('selected'); settingsButton.setAttribute('aria-pressed','true'); } break;
+
+        if (tabName === 'buildings') {
+            if (upgradeContainer) upgradeContainer.style.display = 'flex';
+            buildingsButton?.classList.add('selected');
+            buildingsButton?.setAttribute('aria-pressed', 'true');
+        } else if (tabName === 'upgrades') {
+            if (upgradesContainer) upgradesContainer.style.display = 'flex';
+            upgradesButton?.classList.add('selected');
+            upgradesButton?.setAttribute('aria-pressed', 'true');
+        } else if (tabName === 'changelog' && changelogContainer) {
+            changelogContainer.style.display = 'flex';
         }
     }
 
-    buildingsButton && buildingsButton.addEventListener('click', () => showTab('buildings'));
-    upgradesButton && upgradesButton.addEventListener('click', () => showTab('upgrades'));
-    statsButton && statsButton.addEventListener('click', () => showTab('stats'));
-    changelogButton && changelogButton.addEventListener('click', () => showTab('changelog'));
-    settingsButton && settingsButton.addEventListener('click', () => showTab('settings'));
+    buildingsButton?.addEventListener('click', () => showTab('buildings'));
+    upgradesButton?.addEventListener('click', () => showTab('upgrades'));
 
-    const segButtons = [buildingsButton, upgradesButton, statsButton, changelogButton, settingsButton].filter(Boolean);
-    segButtons.forEach((btn, idx) => {
-        btn.tabIndex = 0;
-        btn.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                const next = segButtons[(idx + 1) % segButtons.length]; next && next.focus(); next && next.click();
-            } else if (e.key === 'ArrowLeft') {
-                const prev = segButtons[(idx - 1 + segButtons.length) % segButtons.length]; prev && prev.focus(); prev && prev.click();
-            } else if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault(); btn.click();
+    [buildingsButton, upgradesButton].filter(Boolean).forEach((button, index, buttons) => {
+        button.tabIndex = 0;
+
+        button.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+                event.preventDefault();
+                const direction = event.key === 'ArrowRight' ? 1 : -1;
+                const next = buttons[(index + direction + buttons.length) % buttons.length];
+                next.focus();
+                next.click();
+            } else if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                button.click();
             }
         });
+    });
+
+    function closeNavigationMenu({ returnFocus = false } = {}) {
+        if (!navigationMenu || !menuButton) return;
+
+        navigationMenu.hidden = true;
+        menuButton.setAttribute('aria-expanded', 'false');
+
+        if (returnFocus) menuButton.focus();
+    }
+
+    function openPanelModal(panelName) {
+        if (!panelModalOverlay) return;
+
+        const panel = panelName === 'settings' ? settingsContainer : statsContainer;
+        const otherPanel = panelName === 'settings' ? statsContainer : settingsContainer;
+
+        if (!panel) return;
+
+        closeNavigationMenu();
+
+        if (otherPanel) otherPanel.hidden = true;
+        panel.hidden = false;
+        panelModalOverlay.hidden = false;
+        closePanelModalButton?.focus();
+    }
+
+    function closePanelModal({ returnFocus = true } = {}) {
+        if (!panelModalOverlay) return;
+
+        panelModalOverlay.hidden = true;
+
+        if (statsContainer) statsContainer.hidden = true;
+        if (settingsContainer) settingsContainer.hidden = true;
+
+        if (returnFocus) menuButton?.focus();
+    }
+
+    menuButton?.addEventListener('click', () => {
+        if (!navigationMenu) return;
+
+        const opening = navigationMenu.hidden;
+        navigationMenu.hidden = !opening;
+        menuButton.setAttribute('aria-expanded', String(opening));
+
+        if (opening) {
+            navigationMenu.querySelector('[data-open-panel]')?.focus();
+        }
+    });
+
+    navigationMenu?.addEventListener('click', (event) => {
+        const menuItem = event.target.closest('[data-open-panel]');
+        if (!menuItem) return;
+
+        openPanelModal(menuItem.dataset.openPanel);
+    });
+
+    closePanelModalButton?.addEventListener('click', () => closePanelModal());
+
+    panelModalOverlay?.addEventListener('click', (event) => {
+        if (event.target === panelModalOverlay) closePanelModal();
+    });
+
+    document.addEventListener('click', (event) => {
+        if (
+            navigationMenu &&
+            menuButton &&
+            !navigationMenu.hidden &&
+            !navigationMenu.contains(event.target) &&
+            !menuButton.contains(event.target)
+        ) {
+            closeNavigationMenu();
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+
+        if (panelModalOverlay && !panelModalOverlay.hidden) {
+            closePanelModal();
+        } else {
+            closeNavigationMenu({ returnFocus: true });
+        }
     });
 
     showTab('buildings');
@@ -1178,10 +1320,11 @@ function createClickerClone(clicks, x, y) {
     (function wireFloatingLabel() {
         const wrapper = document.querySelector('.username-container .input-wrapper');
         if (!usernameInput || !wrapper) return;
+
         const update = () => {
-            if (usernameInput.value && usernameInput.value.trim() !== '') wrapper.classList.add('has-value');
-            else wrapper.classList.remove('has-value');
+            wrapper.classList.toggle('has-value', usernameInput.value.trim() !== '');
         };
+
         usernameInput.addEventListener('input', update);
         usernameInput.addEventListener('blur', update);
         usernameInput.addEventListener('focus', () => wrapper.classList.add('has-value'));
@@ -1190,9 +1333,11 @@ function createClickerClone(clicks, x, y) {
 
     async function enterGame(usernameRaw) {
         let username = (usernameRaw || '').trim();
-        if (!username || username.match(/^\s*$/)) {
+
+        if (!username) {
             username = `player${Math.floor(Math.random() * 1000000000)}`;
         }
+
         username = username.replace(/[^a-zA-Z0-9_.]/g, '');
         if (!username) return;
 
@@ -1201,31 +1346,28 @@ function createClickerClone(clicks, x, y) {
         if (userInfoElement) userInfoElement.style.display = 'flex';
         if (usernameDisplayElement) usernameDisplayElement.textContent = username;
 
-        if ("Notification" in window && Notification.permission === 'granted') {
+        if ('Notification' in window && Notification.permission === 'granted') {
             createNotification('Notification', 'Welcome!');
         }
 
         loadProgress(username);
     }
 
-    usernameInput && usernameInput.addEventListener('keypress', async (event) => {
-        if (event.key === 'Enter') {
-            const val = usernameInput ? usernameInput.value || '' : '';
-            requestPermissionAndNotify('Notification', 'Welcome!');
-            await enterGame(val);
-        }
+    usernameInput?.addEventListener('keypress', async (event) => {
+        if (event.key !== 'Enter') return;
+
+        requestPermissionAndNotify('Notification', 'Welcome!');
+        await enterGame(usernameInput.value || '');
     });
 
-    const notifyButtonAction = async () => {
-        const val = usernameInput ? usernameInput.value || '' : '';
+    notifyButton?.addEventListener('click', async () => {
         requestPermissionAndNotify('Notification', 'Welcome!');
-        await enterGame(val);
-    };
-    notifyButton && notifyButton.addEventListener('click', notifyButtonAction);
+        await enterGame(usernameInput?.value || '');
+    });
 
     setInterval(() => {
         try {
-            const username = usernameInput ? usernameInput.value.trim() : '';
+            const username = usernameInput?.value.trim();
             if (username) saveProgress(username);
         } catch (e) {}
     }, 3000);
@@ -1234,144 +1376,140 @@ function createClickerClone(clicks, x, y) {
 
     function showTooltipForWrapper(wrapper) {
         if (!wrapper) return;
-        const tooltipEl = wrapper.querySelector('.tooltiptext');
-        if (!tooltipEl) return;
 
-        tooltipEl.classList.add('tooltip-visible');
-        tooltipEl.style.visibility = 'hidden';
-        tooltipEl.style.display = 'block';
+        const tooltip = wrapper.querySelector('.tooltiptext');
+        if (!tooltip) return;
 
-        tooltipEl.classList.add('fixed-position');
-        const tw = tooltipEl.offsetWidth;
-        const th = tooltipEl.offsetHeight;
+        tooltip.classList.add('tooltip-visible', 'fixed-position');
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.display = 'block';
 
-        let img = wrapper.querySelector('img');
-        if (!img) {
-            const parent = wrapper.closest('.upgrade-item');
-            img = parent ? parent.querySelector('img') : null;
-        }
-        const anchorRect = img ? img.getBoundingClientRect() : wrapper.getBoundingClientRect();
+        const width = tooltip.offsetWidth;
+        const height = tooltip.offsetHeight;
 
-        let left = Math.round(anchorRect.left + (anchorRect.width / 2) - (tw / 2));
-        const pad = 8;
-        if (left < pad) left = pad;
-        if (left + tw > window.innerWidth - pad) left = window.innerWidth - pad - tw;
-
-        const spaceBelow = window.innerHeight - anchorRect.bottom;
-        let top = Math.round(anchorRect.bottom + 8);
-        if (spaceBelow < th + 12) {
-            top = Math.round(anchorRect.top - th - 8);
-            if (top < pad) top = pad;
+        let image = wrapper.querySelector('img');
+        if (!image) {
+            image = wrapper.closest('.upgrade-item')?.querySelector('img');
         }
 
-        tooltipEl.style.left = left + 'px';
-        tooltipEl.style.top = top + 'px';
-        tooltipEl.style.visibility = 'visible';
-        tooltipEl.style.display = 'block';
-        tooltipEl.classList.add('tooltip-visible');
+        const anchor = image
+            ? image.getBoundingClientRect()
+            : wrapper.getBoundingClientRect();
 
-        wrapper._activeTooltip = tooltipEl;
+        const padding = 8;
+        let left = Math.round(anchor.left + anchor.width / 2 - width / 2);
+        left = Math.max(padding, Math.min(left, window.innerWidth - padding - width));
+
+        const spaceBelow = window.innerHeight - anchor.bottom;
+        let top = Math.round(anchor.bottom + 8);
+
+        if (spaceBelow < height + 12) {
+            top = Math.max(padding, Math.round(anchor.top - height - 8));
+        }
+
+        tooltip.style.left = `${left}px`;
+        tooltip.style.top = `${top}px`;
+        tooltip.style.visibility = 'visible';
+        tooltip.style.display = 'block';
+        wrapper._activeTooltip = tooltip;
     }
 
     function hideTooltipForWrapper(wrapper) {
         if (!wrapper) return;
-        const tooltipEl = wrapper._activeTooltip || wrapper.querySelector('.tooltiptext');
-        if (!tooltipEl) return;
 
-        tooltipEl.classList.remove('tooltip-visible', 'fixed-position');
-        tooltipEl.style.left = '';
-        tooltipEl.style.top = '';
-        tooltipEl.style.visibility = '';
-        tooltipEl.style.display = '';
+        const tooltip = wrapper._activeTooltip || wrapper.querySelector('.tooltiptext');
+        if (!tooltip) return;
+
+        tooltip.classList.remove('tooltip-visible', 'fixed-position');
+        tooltip.style.left = '';
+        tooltip.style.top = '';
+        tooltip.style.visibility = '';
+        tooltip.style.display = '';
         wrapper._activeTooltip = null;
     }
 
     function wireTooltipsInBuildings() {
-        const containers = [];
-        if (upgradeContainer) containers.push(upgradeContainer);
-        if (upgradesContainer) containers.push(upgradesContainer);
+        const tooltipContainers = [upgradeContainer, upgradesContainer].filter(Boolean);
 
-        containers.forEach((containerEl) => {
-            const wrappers = containerEl.querySelectorAll('.tooltip');
-            wrappers.forEach(w => {
-                let img = w.querySelector('img');
-                if (!img) {
-                    const parent = w.closest('.upgrade-item');
-                    img = parent ? parent.querySelector('img') : null;
+        tooltipContainers.forEach((panel) => {
+            panel.querySelectorAll('.tooltip').forEach((wrapper) => {
+                let image = wrapper.querySelector('img');
+
+                if (!image) {
+                    image = wrapper.closest('.upgrade-item')?.querySelector('img');
                 }
-                if (!img) return;
+                if (!image) return;
 
-                if (!img.hasAttribute('tabindex')) img.setAttribute('tabindex', '0');
+                if (!image.hasAttribute('tabindex')) image.setAttribute('tabindex', '0');
 
-                img.removeEventListener('mouseenter', w._enterHandler || (()=>{}));
-                img.removeEventListener('mouseleave', w._leaveHandler || (()=>{}));
-                img.removeEventListener('focus', w._focusHandler || (()=>{}));
-                img.removeEventListener('blur', w._blurHandler || (()=>{}));
-                img.removeEventListener('touchstart', w._touchHandler || (()=>{}));
+                image.removeEventListener('mouseenter', wrapper._enterHandler || (() => {}));
+                image.removeEventListener('mouseleave', wrapper._leaveHandler || (() => {}));
+                image.removeEventListener('focus', wrapper._focusHandler || (() => {}));
+                image.removeEventListener('blur', wrapper._blurHandler || (() => {}));
+                image.removeEventListener('touchstart', wrapper._touchHandler || (() => {}));
 
                 const open = () => {
-                    document.querySelectorAll('.tooltip').forEach(other => {
-                        if (other !== w) hideTooltipForWrapper(other);
+                    document.querySelectorAll('.tooltip').forEach((other) => {
+                        if (other !== wrapper) hideTooltipForWrapper(other);
                     });
-                    showTooltipForWrapper(w);
-                };
-                const close = () => hideTooltipForWrapper(w);
-
-                w._enterHandler = open;
-                w._leaveHandler = close;
-                w._focusHandler = open;
-                w._blurHandler = close;
-                w._touchHandler = function (ev) {
-                    if (!w._touchedOpen) {
-                        ev.preventDefault();
-                        open();
-                        w._touchedOpen = true;
-                        setTimeout(() => { w._touchedOpen = false; }, 1200);
-                    }
+                    showTooltipForWrapper(wrapper);
                 };
 
-                img.addEventListener('mouseenter', w._enterHandler);
-                img.addEventListener('mouseleave', w._leaveHandler);
-                img.addEventListener('focus', w._focusHandler);
-                img.addEventListener('blur', w._blurHandler);
-                img.addEventListener('touchstart', w._touchHandler, { passive: false });
+                const close = () => hideTooltipForWrapper(wrapper);
+
+                wrapper._enterHandler = open;
+                wrapper._leaveHandler = close;
+                wrapper._focusHandler = open;
+                wrapper._blurHandler = close;
+                wrapper._touchHandler = (event) => {
+                    if (wrapper._touchedOpen) return;
+
+                    event.preventDefault();
+                    open();
+                    wrapper._touchedOpen = true;
+                    setTimeout(() => {
+                        wrapper._touchedOpen = false;
+                    }, 1200);
+                };
+
+                image.addEventListener('mouseenter', wrapper._enterHandler);
+                image.addEventListener('mouseleave', wrapper._leaveHandler);
+                image.addEventListener('focus', wrapper._focusHandler);
+                image.addEventListener('blur', wrapper._blurHandler);
+                image.addEventListener('touchstart', wrapper._touchHandler, { passive: false });
             });
         });
 
         document.removeEventListener('click', document._tooltipOutsideHandler);
-        document._tooltipOutsideHandler = function (e) {
-            if (!e.target.closest('.tooltip') && !e.target.closest('.tooltiptext')) {
-                document.querySelectorAll('.tooltip').forEach(w => hideTooltipForWrapper(w));
+
+        document._tooltipOutsideHandler = (event) => {
+            if (!event.target.closest('.tooltip') && !event.target.closest('.tooltiptext')) {
+                document.querySelectorAll('.tooltip').forEach(hideTooltipForWrapper);
             }
         };
+
         document.addEventListener('click', document._tooltipOutsideHandler);
     }
 
     wireTooltipsInBuildings();
 
-    const loadingTimerEl = document.getElementById('loading-timer');
+    const loadingTimerElement = document.getElementById('loading-timer');
     const loadingEndTimestamp = new Date(2026, 2, 26, 9, 0, 0).getTime();
-    const MIN_LOADING_MS = 2000;
+    const minimumLoadingMs = 2000;
     const loadingStartTimestamp = Date.now();
     let loadingFinishScheduled = false;
-
-    function formatLoadingRemaining(msRemaining) {
-        const totalSec = Math.max(0, Math.floor(msRemaining / 1000));
-        const days = Math.floor(totalSec / 86400);
-        const hours = Math.floor((totalSec % 86400) / 3600);
-        const mins = Math.floor((totalSec % 3600) / 60);
-        const secs = totalSec % 60;
-
-        if (days >= 1) {
-            return `${days}d ${hours}h`;
-        } else if (hours >= 1) {
-            return `${hours}h ${mins}m`;
-        } else {
-            return `Loading...`;
-        }
-    }
-
     let loadingIntervalId = null;
+
+    function formatLoadingRemaining(milliseconds) {
+        const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+        if (days >= 1) return `${days}d ${hours}h`;
+        if (hours >= 1) return `${hours}h ${minutes}m`;
+        return 'Loading...';
+    }
 
     function finishLoading() {
         try {
@@ -1379,40 +1517,41 @@ function createClickerClone(clicks, x, y) {
                 clearInterval(loadingIntervalId);
                 loadingIntervalId = null;
             }
+
             if (loadingScreen) loadingScreen.style.display = 'none';
             if (usernameContainer) usernameContainer.style.display = 'block';
-            try { if (usernameInput) usernameInput.focus(); } catch (e) {}
-        } catch (e) {
-            console.error('finishLoading error', e);
+
+            try {
+                usernameInput?.focus();
+            } catch (e) {}
+        } catch (error) {
+            console.error('finishLoading error', error);
         }
     }
 
     function updateLoadingTimerNow() {
-        if (!loadingTimerEl) return;
-        const now = Date.now();
-        const rem = loadingEndTimestamp - now;
-        const textTarget = (rem <= 0) ? formatLoadingRemaining(0) : formatLoadingRemaining(rem);
+        if (!loadingTimerElement) return;
 
-        const textSpan = loadingTimerEl.querySelector('.loading-text');
-        if (textSpan) {
-            textSpan.textContent = textTarget;
+        const remaining = loadingEndTimestamp - Date.now();
+        const text = formatLoadingRemaining(Math.max(0, remaining));
+        const textElement = loadingTimerElement.querySelector('.loading-text');
+
+        if (textElement) {
+            textElement.textContent = text;
         } else {
-            loadingTimerEl.textContent = textTarget;
+            loadingTimerElement.textContent = text;
         }
 
-        if (rem <= 0) {
-            if (loadingFinishScheduled) return;
-            const elapsed = Date.now() - loadingStartTimestamp;
-            const remainingMin = Math.max(0, MIN_LOADING_MS - elapsed);
-            loadingFinishScheduled = true;
-            if (remainingMin === 0) {
-                finishLoading();
-            } else {
-                setTimeout(() => {
-                    finishLoading();
-                }, remainingMin);
-            }
-            return;
+        if (remaining > 0 || loadingFinishScheduled) return;
+
+        const elapsed = Date.now() - loadingStartTimestamp;
+        const remainingMinimum = Math.max(0, minimumLoadingMs - elapsed);
+        loadingFinishScheduled = true;
+
+        if (remainingMinimum === 0) {
+            finishLoading();
+        } else {
+            setTimeout(finishLoading, remainingMinimum);
         }
     }
 
@@ -1420,9 +1559,15 @@ function createClickerClone(clicks, x, y) {
     loadingIntervalId = setInterval(updateLoadingTimerNow, 1000);
 
     startInterval();
-    setInterval(() => { document.title = `${formatNumberPlain((manaCount))} Mana`; }, 1000);
 
-    if (sfxVolumeSlider) { setSfxVolume(sfxVolumeSlider.value); updateSliderBackground(sfxVolumeSlider); }
+    setInterval(() => {
+        document.title = `${formatNumberPlain(manaCount)} Mana`;
+    }, 1000);
+
+    if (sfxVolumeSlider) {
+        setSfxVolume(sfxVolumeSlider.value);
+        updateSliderBackground(sfxVolumeSlider);
+    }
 
     computeCookiesPerSecond();
     updateDisplay();
